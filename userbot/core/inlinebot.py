@@ -46,19 +46,20 @@ MEDIA_PATH_REGEX = re.compile(r"(:?\<\bmedia:(:?(?:.*?)+)\>)")
 tr = Config.COMMAND_HAND_LER
 
 
-def get_thumb(name):
-    url = f"https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Inline/{name}?raw=true"
+def get_thumb(name=None, url=None):
+    if url is None:
+        url = f"https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Inline/{name}?raw=true"
     return types.InputWebDocument(url=url, size=0, mime_type="image/png", attributes=[])
 
 
-def ibuild_keyboard(buttons):
-    keyb = []
+def build_inline_keyboard(buttons):
+    keyboard = []
     for btn in buttons:
-        if btn[2] and keyb:
-            keyb[-1].append(Button.url(btn[0], btn[1]))
+        if btn[2] and keyboard:
+            keyboard[-1].append(Button.url(btn[0], btn[1]))
         else:
-            keyb.append([Button.url(btn[0], btn[1])])
-    return keyb
+            keyboard.append([Button.url(btn[0], btn[1])])
+    return keyboard
 
 
 def main_menu():
@@ -98,11 +99,49 @@ def main_menu():
     return text, buttons
 
 
-async def article_builder(event, method):
-    media = thumb = photo = None
+def build_article(
+    event,
+    media=None,
+    title=None,
+    text=None,
+    description=None,
+    buttons=None,
+    thumbnail=None,
+):
     builder = event.builder
-    title = "Cat Userbot"
-    description = "Button menu for CatUserbot"
+    photo_document = None
+
+    if media:
+        if not media.endswith((".jpg", ".jpeg", ".png")):
+            # Return a document object with the provided media URL
+            return builder.document(
+                media,
+                title=title,
+                description=description,
+                text=text,
+                buttons=buttons,
+            )
+
+        # Create an InputWebDocument object for the media file
+        photo_document = get_thumb(url=photo_document)
+    if thumbnail and isinstance(thumbnail, str):
+        thumbnail = get_thumb(url=thumbnail)
+    # Return an article object with the provided properties
+    return builder.article(
+        title=title,
+        description=description,
+        type="photo" if photo_document else "article",
+        file=media,
+        thumb=thumbnail or photo_document,
+        content=photo_document,
+        text=text,
+        buttons=buttons,
+        link_preview=False,
+    )
+
+
+async def article_builder(event, method):
+    media = thumb = None
     if method == "help":
         help_info = main_menu()
         title = "Help Menu"
@@ -110,7 +149,7 @@ async def article_builder(event, method):
         thumb = get_thumb("help.png")
         query = help_info[0]
         buttons = help_info[1]
-    if method == "ls":
+    elif method == "ls":
         try:
             _, path_ = (event.text).split(" ", 1)
             path = Path(path_) if path_ else os.getcwd()
@@ -238,32 +277,16 @@ async def article_builder(event, method):
         else:
             note_data += markdown_note[prev:]
         query = note_data.strip()
-        buttons = ibuild_keyboard(buttons_list)
-    if media and not media.endswith((".jpg", ".jpeg", ".png")):
-        return builder.document(
-            media,
+        buttons = build_inline_keyboard(buttons_list)
+        return build_article(
+            event,
             title=title,
-            description=description,
             text=query,
             buttons=buttons,
+            description=description,
+            media=media,
+            thumbnail=thumb,
         )
-    mediaType = "article"
-    if media and media.endswith((".jpg", ".jpeg", ".png")):
-        photo = types.InputWebDocument(
-            url=media, size=0, mime_type="image/jpeg", attributes=[]
-        )
-        mediaType = "photo"
-    return builder.article(
-        title=title,
-        description=description,
-        type=mediaType,
-        file=media,
-        thumb=thumb or photo,
-        content=photo,
-        text=query,
-        buttons=buttons,
-        link_preview=False,
-    )
 
 
 def command_in_category(cname):
