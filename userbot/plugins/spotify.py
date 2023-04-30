@@ -26,7 +26,7 @@ import requests
 import ujson
 from PIL import Image, ImageEnhance, ImageFilter
 from telegraph import upload_file
-from telethon import events
+from telethon import events, Button
 from telethon.errors import AboutTooLongError, FloodWaitError
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.account import UpdateProfileRequest
@@ -572,30 +572,35 @@ def sp_data(API):
     oauth = {"Authorization": f"Bearer {SP_DATABASE.return_token()}"}
     spdata = requests.get(API, headers=oauth)
     if spdata.status_code == 401:
-        data = {
-            "client_id": SPOTIFY_CLIENT_ID,
-            "client_secret": SPOTIFY_CLIENT_SECRET,
-            "grant_type": "refresh_token",
-            "refresh_token": SP_DATABASE.return_refresh(),
-        }
-        r = requests.post("https://accounts.spotify.com/api/token", data=data)
-        received = r.json()
-        # if a new refresh is token as well, we save it here
-        with contextlib.suppress(KeyError):
-            SP_DATABASE.save_refresh(received["refresh_token"])
-        SP_DATABASE.save_token(received["access_token"])
-        glob_db.add_collection(
-            "SP_DATA",
-            {
-                "data": {
-                    "access_token": SP_DATABASE.return_token(),
-                    "refresh_token": SP_DATABASE.return_refresh(),
-                }
-            },
-        )
-        oauth2 = {"Authorization": f"Bearer {SP_DATABASE.return_token()}"}
-        spdata = requests.get(API, headers=oauth2)
+        # if token expire, generate again
+        spdata = refreshed_data(API)
     return spdata
+
+
+def refreshed_data(API):
+    data = {
+        "client_id": SPOTIFY_CLIENT_ID,
+        "client_secret": SPOTIFY_CLIENT_SECRET,
+        "grant_type": "refresh_token",
+        "refresh_token": SP_DATABASE.return_refresh(),
+    }
+    r = requests.post("https://accounts.spotify.com/api/token", data=data)
+    received = r.json()
+    # if a new refresh is token as well, we save it here
+    with contextlib.suppress(KeyError):
+        SP_DATABASE.save_refresh(received["refresh_token"])
+    SP_DATABASE.save_token(received["access_token"])
+    glob_db.add_collection(
+        "SP_DATA",
+        {
+            "data": {
+                "access_token": SP_DATABASE.return_token(),
+                "refresh_token": SP_DATABASE.return_refresh(),
+            }
+        },
+    )
+    oauth2 = {"Authorization": f"Bearer {SP_DATABASE.return_token()}"}
+    return requests.get(API, headers=oauth2)
 
 
 async def make_thumb(url, client, song, artist, now, full):
@@ -666,6 +671,39 @@ async def get_spotify(response):
     return f"https://graph.org{url[0]}", tittle, dic, lyrics, symbol
 
 
+async def spotify_inline_article():
+    thumb = None
+    media = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/spotify_off.png"
+    if (
+        not Config.SPOTIFY_CLIENT_ID
+        or not Config.SPOTIFY_CLIENT_SECRET
+        or SP_DATABASE is None
+    ):
+        query = "__Spotify is not setup properly. \nDo `.help spsetup` and follow the tutorial.__"
+        buttons = [
+            Button.url(
+                "Tutorial",
+                "https://graph.org/Steps-of-setting-Spotify-Vars-in-Catuserbot-04-24-2",
+            )
+        ]
+    else:
+        response = sp_data("https://api.spotify.com/v1/me/player/currently-playing")
+        if response.status_code == 204:
+            query = "__Currently not listening to any music on spotify...__"
+            buttons = [Button.url("Open Spotify", "https://open.spotify.com/")]
+        else:
+            media, tittle, dic, lyrics, symbol = await get_spotify(response)
+            thumb = "spotify_on.png"
+            query = f'**🎶 Track :- ** `{tittle}`\n**🎤 Artist :- ** `{dic["interpret"]}`'
+            buttons = [
+                (
+                    Button.url("🎧 Spotify", dic["link"]),
+                    Button.url(f"{symbol} Lyrics", lyrics),
+                )
+            ]
+    return query, buttons, media, thumb, "Spotify", "Get currently playing song."
+
+
 @catub.cat_cmd(
     pattern="spnow$",
     command=("spnow", plugin_category),
@@ -675,7 +713,7 @@ async def get_spotify(response):
         "usage": "{tr}spnow",
     },
 )
-async def spotify_now(event):
+async def spotify_player(event):
     "Spotify Now Playing"
     if not await sp_var_check(event):
         return
@@ -703,7 +741,7 @@ async def spotify_now(event):
         "usage": "{tr}spinfo",
     },
 )
-async def spotify_now(event):
+async def spotify_info(event):
     "Spotify Info"
     if not await sp_var_check(event):
         return
@@ -739,7 +777,7 @@ async def spotify_now(event):
         "usage": "{tr}sprecent",
     },
 )
-async def spotify_now(event):
+async def spotify_recent(event):
     "Spotify recently played songs"
     if not await sp_var_check(event):
         return
@@ -770,7 +808,7 @@ async def spotify_now(event):
         ],
     },
 )
-async def spotify_now(event):  # sourcery skip: remove-duplicate-dict-key
+async def spotify_now(event):
     "Send spotify song"
     chat = "@CatMusicRobot"
     await reply_id(event)
