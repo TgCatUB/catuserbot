@@ -278,15 +278,16 @@ async def article_builder(event, method):
             note_data += markdown_note[prev:]
         query = note_data.strip()
         buttons = build_inline_keyboard(buttons_list)
-        return build_article(
-            event,
-            title=title,
-            text=query,
-            buttons=buttons,
-            description=description,
-            media=media,
-            thumbnail=thumb,
-        )
+
+    return build_article(
+        event,
+        title=title,
+        text=query,
+        buttons=buttons,
+        description=description,
+        media=media,
+        thumbnail=thumb,
+    )
 
 
 def command_in_category(cname):
