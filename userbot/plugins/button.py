@@ -34,7 +34,6 @@ def build_inline_keyboard(buttons):
 
 
 def inline_button_aricle(method):
-    global media, query, buttons
     markdown_note = method[14:]
     prev = 0
     note_data = ""
@@ -60,8 +59,9 @@ def inline_button_aricle(method):
             break
     else:
         note_data += markdown_note[prev:]
-    query = note_data.strip()
+    text = note_data.strip()
     buttons = build_inline_keyboard(buttons_list)
+    return (text, buttons, media)
 
 
 @catub.cat_cmd(

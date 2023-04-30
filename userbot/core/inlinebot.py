@@ -241,7 +241,7 @@ async def article_builder(event, method):
     elif method.startswith("Inline buttons"):
         from userbot.plugins.button import inline_button_aricle
 
-        inline_button_aricle(method)
+        query, buttons, media = inline_button_aricle(method)
 
     return await build_article(
         event,
