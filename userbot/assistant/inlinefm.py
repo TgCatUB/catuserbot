@@ -61,7 +61,7 @@ def add_s(msg, num: int):
 
 def get_manager(path, num: int):
     if os.path.isdir(path):
-        return _extracted_from_get_manager_3(path, num)
+        return manage_dir(path, num)
     size = os.stat(path).st_size
     msg = "The details of given file :\n"
     if str(path).endswith((".mp3", ".flac", ".wav", ".m4a")):
@@ -105,8 +105,7 @@ def get_manager(path, num: int):
     return msg, buttons
 
 
-# TODO Rename this here and in `get_manager`
-def _extracted_from_get_manager_3(path, num):
+def manage_dir(path, num):
     msg = f"Folders and Files in `{path}` :\n"
     lists = sorted(os.listdir(path))
     files = ""

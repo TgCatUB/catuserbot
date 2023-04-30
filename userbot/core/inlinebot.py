@@ -40,9 +40,6 @@ from .cmdinfo import cmdinfo, get_key, getkey, plugininfo
 from .logger import logging
 
 LOGS = logging.getLogger(__name__)
-
-BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
-MEDIA_PATH_REGEX = re.compile(r"(:?\<\bmedia:(:?(?:.*?)+)\>)")
 tr = Config.COMMAND_HAND_LER
 
 
@@ -52,16 +49,6 @@ def get_thumb(name=None, url=None):
     return types.InputWebDocument(
         url=url, size=0, mime_type="image/jpeg", attributes=[]
     )
-
-
-def build_inline_keyboard(buttons):
-    keyboard = []
-    for btn in buttons:
-        if btn[2] and keyboard:
-            keyboard[-1].append(Button.url(btn[0], btn[1]))
-        else:
-            keyboard.append([Button.url(btn[0], btn[1])])
-    return keyboard
 
 
 def main_menu():
@@ -252,34 +239,9 @@ async def article_builder(event, method):
             return None
 
     elif method.startswith("Inline buttons"):
-        markdown_note = method[14:]
-        prev = 0
-        note_data = ""
-        buttons_list = []
-        if catmedia := MEDIA_PATH_REGEX.search(markdown_note):
-            media = catmedia.group(2)
-            markdown_note = markdown_note.replace(catmedia.group(0), "")
-        for match in BTN_URL_REGEX.finditer(markdown_note):
-            n_escapes = 0
-            to_check = match.start(1) - 1
-            while to_check > 0 and markdown_note[to_check] == "\\":
-                n_escapes += 1
-                to_check -= 1
-            if n_escapes % 2 == 0:
-                buttons_list.append(
-                    (match.group(2), match.group(3), bool(match.group(4)))
-                )
-                note_data += markdown_note[prev : match.start(1)]
-                prev = match.end(1)
-            elif n_escapes % 2 == 1:
-                note_data += markdown_note[prev:to_check]
-                prev = match.start(1) - 1
-            else:
-                break
-        else:
-            note_data += markdown_note[prev:]
-        query = note_data.strip()
-        buttons = build_inline_keyboard(buttons_list)
+        from userbot.plugins.button import inline_button_aricle
+
+        inline_button_aricle(method)
 
     return await build_article(
         event,
@@ -438,7 +400,7 @@ async def inline_handler(event):  # sourcery no-metrics
         if string == "ialive":
             result = await article_builder(event, string)
             await event.answer([result] if result else None)
-        if str_y[0].lower() == "ls":
+        elif str_y[0].lower() == "ls":
             result = await article_builder(event, str_y[0].lower())
             await event.answer([result] if result else None)
         elif query.startswith("Inline buttons"):
