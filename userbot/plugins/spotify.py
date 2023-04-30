@@ -26,7 +26,7 @@ import requests
 import ujson
 from PIL import Image, ImageEnhance, ImageFilter
 from telegraph import upload_file
-from telethon import events, Button
+from telethon import Button, events
 from telethon.errors import AboutTooLongError, FloodWaitError
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.account import UpdateProfileRequest
