@@ -49,7 +49,9 @@ tr = Config.COMMAND_HAND_LER
 def get_thumb(name=None, url=None):
     if url is None:
         url = f"https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Inline/{name}?raw=true"
-    return types.InputWebDocument(url=url, size=0, mime_type="image/png", attributes=[])
+    return types.InputWebDocument(
+        url=url, size=0, mime_type="image/jpeg", attributes=[]
+    )
 
 
 def build_inline_keyboard(buttons):
@@ -99,7 +101,7 @@ def main_menu():
     return text, buttons
 
 
-def build_article(
+async def build_article(
     event,
     media=None,
     title=None,
@@ -279,7 +281,7 @@ async def article_builder(event, method):
         query = note_data.strip()
         buttons = build_inline_keyboard(buttons_list)
 
-    return build_article(
+    return await build_article(
         event,
         title=title,
         text=query,
