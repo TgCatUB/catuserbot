@@ -142,6 +142,8 @@ def build_article(
 
 async def article_builder(event, method):
     media = thumb = None
+    title = "Cat Userbot"
+    description = "Button menu for CatUserbot"
     if method == "help":
         help_info = main_menu()
         title = "Help Menu"
