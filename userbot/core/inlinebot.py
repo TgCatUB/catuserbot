@@ -255,6 +255,17 @@ async def article_builder(event, method):
         except Exception:
             return None
 
+    elif method == "vcplayer":
+        try:
+            from catvc.inlinevc import buttons
+
+            title = "CatVc Player"
+            description = "Manange Vc and its settings."
+            query = "** | VC PLAYER | **"
+            thumb = get_thumb("vcplayer.jpg")
+        except Exception:
+            return None
+
     elif method.startswith("Inline buttons"):
         from userbot.plugins.button import inline_button_aricle
 
@@ -439,6 +450,9 @@ async def inline_handler(event):
         elif string == "spotify":
             result = await article_builder(event, string)
             await event.answer([result] if result else None)
+        elif string == "vcplayer":
+            result = await article_builder(event, string)
+            await event.answer([result] if result else None)
         elif str_y[0].lower() == "s" and len(str_y) == 2:
             result = await inline_search(event, str_y[1].strip())
             await event.answer(result or None)
@@ -592,6 +606,8 @@ async def inline_popup_info(event, builder):
     results.append(help_menu) if help_menu else None
     spotify_menu = await article_builder(event, "spotify")
     results.append(spotify_menu) if spotify_menu else None
+    vcplayer_menu = await article_builder(event, "vcplayer")
+    results.append(vcplayer_menu) if vcplayer_menu else None
     file_manager = await filemanager_article(event)
     results.append(file_manager) if file_manager else None
     results.extend(
