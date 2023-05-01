@@ -210,35 +210,34 @@ async def age_verification_article(event):
 async def vcplayer_article(event):
     try:
         from catvc.helper.function import vc_player
-        from catvc.helper.inlinevc import buttons, mbuttons, vcimg
+        from catvc.helper.inlinevc import buttons, vcimg
 
-        if play := vc_player.PLAYING:
-            title = play["title"]
-            duration = play["duration"]
-            url = play["url"]
-            vcimg = play["img"]
-            msg = f"**🎧 Playing:** [{title}]({url})\n"
-            msg += f"**⏳ Duration:** `{duration}`\n"
-            msg += f"**💭 Chat:** `{vc_player.CHAT_NAME}`"
-            return await build_article(
-                event,
-                title="CatVc Player",
-                media=vcimg,
-                text=msg,
-                description="Manange Vc Stream.",
-                buttons=buttons,
-                thumbnail=get_thumb("vcplayer.jpg"),
-            )
-        else:
+        if not (play := vc_player.PLAYING):
             return await build_article(
                 event,
                 title="CatVc Player",
                 media="https://github.com/TgCatUB/CatVCPlayer/raw/beta/resources/vcimg.jpg",
                 text="** | VC Menu | **",
                 description="Manange Vc and its settings.",
-                buttons=mbuttons,
+                buttons=buttons[0],
                 thumbnail=get_thumb("vcplayer.jpg"),
             )
+        title = play["title"]
+        duration = play["duration"]
+        url = play["url"]
+        vcimg = play["img"]
+        msg = f"**🎧 Playing:** [{title}]({url})\n"
+        msg += f"**⏳ Duration:** `{duration}`\n"
+        msg += f"**💭 Chat:** `{vc_player.CHAT_NAME}`"
+        return await build_article(
+            event,
+            title="CatVc Player",
+            media=vcimg,
+            text=msg,
+            description="Manange Vc Stream.",
+            buttons=buttons[1],
+            thumbnail=get_thumb("vcplayer.jpg"),
+        )
     except Exception:
         return None
 
