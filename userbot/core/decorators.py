@@ -16,17 +16,20 @@ from ..Config import Config
 from ..sql_helper.globals import gvarstatus
 from .data import _vcusers_list
 
+class check_owner:
+    def __init__(self, func=None, vc=False):
+        self.func = func
+        self.vc = vc
 
-def check_owner(vc=False):
-    def decorator(func):
+    def __call__(self,):
         async def wrapper(c_q: CallbackQuery):
             if c_q.query.user_id and (
                 c_q.query.user_id == Config.OWNER_ID
                 or c_q.query.user_id in Config.SUDO_USERS
-                or (vc and c_q.query.user_id in _vcusers_list)
+                or (self.vc and c_q.query.user_id in _vcusers_list)
             ):
                 try:
-                    await func(c_q)
+                    await self.func(c_q)
                 except FloodWaitError as e:
                     await asyncio.sleep(e.seconds + 5)
                 except MessageNotModifiedError:
@@ -42,5 +45,5 @@ def check_owner(vc=False):
                 )
 
         return wrapper
-
-    return decorator
+    
+    
