@@ -209,16 +209,50 @@ async def age_verification_article(event):
 
 async def vcplayer_article(event):
     try:
-        from catvc.helper.inlinevc import buttons
-
-        return await build_article(
+        from catvc.helper.function import vc_player
+        from catvc.helper.inlinevc import buttons, vcimg
+        if play := vc_player.PLAYING:
+            buttons = [
+                [
+                    Button.inline("⏮ Prev", data="previousvc"),
+                    Button.inline("⏸ Pause", data="pausevc"),
+                    Button.inline("⏭ Next", data="skipvc"),
+                ],
+                [
+                    Button.inline("🔁 repeat", data="repeatvc"),
+                    Button.inline("≡ Mainmenu", data="menuvc"),
+                ],
+                [
+                    Button.inline("🗑 close", data="vc_close0"),
+                ],
+            ]
+            title = play["title"]
+            duration = play["duration"]
+            url = play["url"]
+            vcimg = play["img"]
+            msg = f"**🎧 Playing:** [{title}]({url})\n"
+            msg += f"**⏳ Duration:** `{duration}`\n"
+            msg += f"**💭 Chat:** `{vc_player.CHAT_NAME}`"
+            article = await build_article(
             event,
             title="CatVc Player",
-            text="** | VC PLAYER | **",
+            file=vcimg,
+            text=msg,
+            description="Manange Vc Stream.",
+            buttons=buttons,
+            thumbnail=get_thumb("vcplayer.jpg"),
+        )
+        else:
+            article = await build_article(
+            event,
+            title="CatVc Player",
+            file=vcimg,
+            text="** | VC Menu | **",
             description="Manange Vc and its settings.",
             buttons=buttons,
             thumbnail=get_thumb("vcplayer.jpg"),
         )
+        return article
     except Exception:
         return None
 
