@@ -255,7 +255,7 @@ async def article_builder(event, method):
 
     elif method == "vcplayer":
         try:
-            from catvc.inlinevc import buttons
+            # from catvc.inlinevc import buttons
 
             title = "CatVc Player"
             description = "Manange Vc and its settings."
