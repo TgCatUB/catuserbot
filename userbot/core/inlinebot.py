@@ -255,7 +255,7 @@ async def article_builder(event, method):
 
     elif method == "vcplayer":
         try:
-            from catvc.inlinevc import button
+            pass
         except Exception:
             return None
 
