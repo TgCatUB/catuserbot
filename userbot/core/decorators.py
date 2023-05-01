@@ -22,7 +22,7 @@ class check_owner:
         self.func = func
         self.vc = vc
 
-    def __call__(self, query: CallbackQuery):
+    def __call__(self, *args, **kwargs):
         async def wrapper(c_q: CallbackQuery):
             if c_q.query.user_id and (
                 c_q.query.user_id == Config.OWNER_ID
@@ -45,4 +45,4 @@ class check_owner:
                     alert=True,
                 )
 
-        return wrapper(query)
+        return wrapper(*args, **kwargs)
