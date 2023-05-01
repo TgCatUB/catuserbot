@@ -207,6 +207,22 @@ async def age_verification_article(event):
     )
 
 
+async def vcplayer_article(event):
+    try:
+        from catvc.helper.inlinevc import buttons
+
+        return await build_article(
+            event,
+            title="CatVc Player",
+            text="** | VC PLAYER | **",
+            description="Manange Vc and its settings.",
+            buttons=buttons,
+            thumbnail=get_thumb("vcplayer.jpg"),
+        )
+    except Exception:
+        return None
+
+
 async def article_builder(event, method):
     media = thumb = None
     title = "Cat Userbot"
@@ -252,17 +268,6 @@ async def article_builder(event, method):
             ) = await spotify_inline_article()
         except Exception:
             return None
-
-    elif method == "vcplayer":
-        try:
-            pass
-        except Exception:
-            return None
-
-        title = "CatVc Player"
-        description = "Manange Vc and its settings."
-        query = "** | VC PLAYER | **"
-        thumb = get_thumb("vcplayer.jpg")
 
     elif method.startswith("Inline buttons"):
         from userbot.plugins.button import inline_button_aricle
@@ -449,7 +454,7 @@ async def inline_handler(event):
             result = await article_builder(event, string)
             await event.answer([result] if result else None)
         elif string == "vcplayer":
-            result = await article_builder(event, string)
+            result = await vcplayer_article(event)
             await event.answer([result] if result else None)
         elif str_y[0].lower() == "s" and len(str_y) == 2:
             result = await inline_search(event, str_y[1].strip())
@@ -592,7 +597,7 @@ async def inline_popup_info(event, builder):
     results.append(help_menu) if help_menu else None
     spotify_menu = await article_builder(event, "spotify")
     results.append(spotify_menu) if spotify_menu else None
-    vcplayer_menu = await article_builder(event, "vcplayer")
+    vcplayer_menu = await vcplayer_article(event)
     results.append(vcplayer_menu) if vcplayer_menu else None
     file_manager = await filemanager_article(event)
     results.append(file_manager) if file_manager else None
