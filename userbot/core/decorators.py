@@ -35,7 +35,7 @@ class check_owner:
                 try:
                     await self.func(c_q)
                 except FloodWaitError as e:
-                    await asyncio.sleep(e.seconds + 5)
+                    await asyncio.sleep(e.seconds + 3)
                 except MessageNotModifiedError:
                     pass
             else:
