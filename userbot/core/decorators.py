@@ -22,15 +22,17 @@ class check_owner:
         self.vc = vc
 
     def __call__(self, *args, **kwargs):
+        if not self.func:
+            return self.__class__(args[0], vc=self.vc)
         async def wrapper(*args, **kwargs):
             c_q = args[0]
             if c_q.query.user_id and (
                 c_q.query.user_id == Config.OWNER_ID
                 or c_q.query.user_id in Config.SUDO_USERS
-                or (self.vc and c_q.query.user_id in _vcusers_list)
+                or (self.vc and c_q.query.user_id in _vcusers_list())
             ):
                 try:
-                    await self.func(*args, **kwargs)
+                    await self.func(c_q)
                 except FloodWaitError as e:
                     await asyncio.sleep(e.seconds + 5)
                 except MessageNotModifiedError:
@@ -45,4 +47,4 @@ class check_owner:
                     alert=True,
                 )
 
-        return wrapper
+        return wrapper(*args, **kwargs)
