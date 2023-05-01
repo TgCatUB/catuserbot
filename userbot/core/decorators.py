@@ -16,12 +16,15 @@ from ..Config import Config
 from ..sql_helper.globals import gvarstatus
 from .data import _vcusers_list
 
+
 class check_owner:
     def __init__(self, func=None, vc=False):
         self.func = func
         self.vc = vc
 
-    def __call__(self,):
+    def __call__(
+        self,
+    ):
         async def wrapper(c_q: CallbackQuery):
             if c_q.query.user_id and (
                 c_q.query.user_id == Config.OWNER_ID
@@ -45,5 +48,3 @@ class check_owner:
                 )
 
         return wrapper
-    
-    
