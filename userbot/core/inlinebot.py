@@ -213,20 +213,6 @@ async def vcplayer_article(event):
         from catvc.helper.inlinevc import buttons, vcimg
 
         if play := vc_player.PLAYING:
-            buttons = [
-                [
-                    Button.inline("⏮ Prev", data="previousvc"),
-                    Button.inline("⏸ Pause", data="pausevc"),
-                    Button.inline("⏭ Next", data="skipvc"),
-                ],
-                [
-                    Button.inline("🔁 repeat", data="repeatvc"),
-                    Button.inline("≡ Mainmenu", data="menuvc"),
-                ],
-                [
-                    Button.inline("🗑 close", data="vc_close0"),
-                ],
-            ]
             title = play["title"]
             duration = play["duration"]
             url = play["url"]
@@ -244,6 +230,19 @@ async def vcplayer_article(event):
                 thumbnail=get_thumb("vcplayer.jpg"),
             )
         else:
+            buttons = [
+                [
+                    Button.inline("👾 Join VC", data="joinvc"),
+                    Button.inline("🍃 Leave VC", data="leavevc"),
+                ],
+                [
+                    Button.inline("🎛 Player", data="playervc"),
+                    Button.inline("⚙️ Settings", data="settingvc"),
+                ],
+                [
+                    Button.inline("🗑 close", data="vc_close"),
+                ],
+            ]
             article = await build_article(
                 event,
                 title="CatVc Player",
