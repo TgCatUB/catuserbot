@@ -24,6 +24,7 @@ class check_owner:
     def __call__(self, *args, **kwargs):
         if not self.func:
             return self.__class__(args[0], vc=self.vc)
+
         async def wrapper(*args, **kwargs):
             c_q = args[0]
             if c_q.query.user_id and (
