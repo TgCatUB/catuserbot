@@ -436,7 +436,7 @@ async def inline_handler(event):
             await event.answer([result] if result else None)
         elif match or match2 or match3:
             result, old_msg, jsondata, new_msg = await hide_toll_secret(
-                event, builder, query, match, match3
+                event, query, match, match3
             )
             await event.answer([result] if result else None)
             if jsondata:
@@ -457,73 +457,8 @@ async def inline_handler(event):
             result = await inline_search(event, str_y[1].strip())
             await event.answer(result or None)
         elif str_y[0].lower() == "ytdl" and len(str_y) == 2:
-            link = get_yt_video_id(str_y[1].strip())
-            found_ = True
-            if link is None:
-                search = VideosSearch(str_y[1].strip(), limit=15)
-                resp = (search.result()).get("result")
-                if len(resp) == 0:
-                    found_ = False
-                else:
-                    outdata = await result_formatter(resp)
-                    key_ = rand_key()
-                    ytsearch_data.store_(key_, outdata)
-                    buttons = [
-                        Button.inline(
-                            f"1 / {len(outdata)}",
-                            data=f"ytdl_next_{key_}_1",
-                        ),
-                        Button.inline(
-                            "📜  List all",
-                            data=f"ytdl_listall_{key_}_1",
-                        ),
-                        Button.inline(
-                            "⬇️  Download",
-                            data=f'ytdl_download_{outdata[1]["video_id"]}_0',
-                        ),
-                    ]
-                    caption = outdata[1]["message"]
-                    photo = await get_ytthumb(outdata[1]["video_id"])
-            else:
-                caption, buttons = await download_button(link, body=True)
-                photo = await get_ytthumb(link)
-            if found_:
-                markup = event.client.build_reply_markup(buttons)
-                photo = types.InputWebDocument(
-                    url=photo, size=0, mime_type="image/jpeg", attributes=[]
-                )
-                text, msg_entities = await event.client._parse_message_text(
-                    caption, "html"
-                )
-                result = types.InputBotInlineResult(
-                    id=str(uuid4()),
-                    type="photo",
-                    title=link,
-                    description="⬇️ Click to Download",
-                    thumb=photo,
-                    content=photo,
-                    send_message=types.InputBotInlineMessageMediaAuto(
-                        reply_markup=markup, message=text, entities=msg_entities
-                    ),
-                )
-            else:
-                result = builder.article(
-                    title="Not Found",
-                    text=f"No Results found for `{str_y[1]}`",
-                    description="INVALID",
-                )
-            try:
-                await event.answer([result] if result else None)
-            except QueryIdInvalidError:
-                await event.answer(
-                    [
-                        builder.article(
-                            title="Not Found",
-                            text=f"No Results found for `{str_y[1]}`",
-                            description="INVALID",
-                        )
-                    ]
-                )
+            result = await youtube_data_article(event, str_y)
+            await event.answer([result] if result else None)
         elif string == "age_verification_alert":
             result = await age_verification_article(event)
             await event.answer([result] if result else None)
@@ -538,7 +473,59 @@ async def inline_handler(event):
         await event.answer([result] if result else None)
 
 
-async def hide_toll_secret(event, builder, query, match, match3):
+async def youtube_data_article(event, str_y):
+    link = get_yt_video_id(str_y[1].strip())
+    found_ = True
+    if link is None:
+        search = VideosSearch(str_y[1].strip(), limit=15)
+        resp = (search.result()).get("result")
+        if len(resp) == 0:
+            found_ = False
+        else:
+            outdata = await result_formatter(resp)
+            key_ = rand_key()
+            ytsearch_data.store_(key_, outdata)
+            buttons = [
+                Button.inline(
+                    f"1 / {len(outdata)}",
+                    data=f"ytdl_next_{key_}_1",
+                ),
+                Button.inline(
+                    "📜  List all",
+                    data=f"ytdl_listall_{key_}_1",
+                ),
+                Button.inline(
+                    "⬇️  Download",
+                    data=f'ytdl_download_{outdata[1]["video_id"]}_0',
+                ),
+            ]
+            caption = outdata[1]["message"]
+            photo = await get_ytthumb(outdata[1]["video_id"])
+    else:
+        caption, buttons = await download_button(link, body=True)
+        photo = await get_ytthumb(link)
+    if found_:
+        result = await build_article(
+            event,
+            title=link,
+            description="⬇️ Click to Download",
+            thumbnail=photo,
+            media=photo,
+            text=caption,
+            buttons=buttons,
+            parse_mode="html",
+        )
+    else:
+        result = await build_article(
+            event,
+            title="Not Found",
+            text=f"No Results found for `{str_y[1]}`",
+            description="INVALID",
+        )
+    return result
+
+
+async def hide_toll_secret(event, query, match, match3):
     user_list = []
     if match3:
         sandy = "Chat"
@@ -583,18 +570,19 @@ async def hide_toll_secret(event, builder, query, match, match3):
         else {"userid": user_list, "text": query}
     }
     buttons = [Button.inline(info_type[2], data=f"{info_type[0]}_{timestamp}")]
-    result = builder.article(
+
+    result = await build_article(
+        event,
         title=f"{info_type[0].title()} message  to {sandy}.",
         description="Send hidden text in chat."
         if match3
         else f"Only he/she/they {info_type[1]} open it.",
-        thumb=get_thumb(f"{info_type[0]}.png"),
+        thumbnail=get_thumb(f"{info_type[0]}.png"),
         text="✖✖✖"
         if match3
         else f"🔒 A whisper message to {sandy}, Only he/she can open it.",
         buttons=buttons,
     )
-
     return result, old_msg, jsondata, new_msg
 
 
