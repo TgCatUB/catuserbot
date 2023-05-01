@@ -22,9 +22,7 @@ class check_owner:
         self.func = func
         self.vc = vc
 
-    def __call__(
-        self,
-    ):
+    def __call__(self):
         async def wrapper(c_q: CallbackQuery):
             if c_q.query.user_id and (
                 c_q.query.user_id == Config.OWNER_ID
