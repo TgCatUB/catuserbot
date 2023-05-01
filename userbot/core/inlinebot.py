@@ -237,7 +237,7 @@ async def vcplayer_article(event):
             article = await build_article(
                 event,
                 title="CatVc Player",
-                file=vcimg,
+                media=vcimg,
                 text=msg,
                 description="Manange Vc Stream.",
                 buttons=buttons,
@@ -247,7 +247,7 @@ async def vcplayer_article(event):
             article = await build_article(
                 event,
                 title="CatVc Player",
-                file=vcimg,
+                media=vcimg,
                 text="** | VC Menu | **",
                 description="Manange Vc and its settings.",
                 buttons=buttons,
