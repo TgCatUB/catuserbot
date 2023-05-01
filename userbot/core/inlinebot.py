@@ -210,7 +210,7 @@ async def age_verification_article(event):
 async def vcplayer_article(event):
     try:
         from catvc.helper.function import vc_player
-        from catvc.helper.inlinevc import buttons, vcimg
+        from catvc.helper.inlinevc import buttons
 
         if play := vc_player.PLAYING:
             title = play["title"]
@@ -246,7 +246,7 @@ async def vcplayer_article(event):
             return await build_article(
                 event,
                 title="CatVc Player",
-                media=vcimg,
+                media=get_thumb("spotify_off.png"),
                 text="** | VC Menu | **",
                 description="Manange Vc and its settings.",
                 buttons=buttons,
