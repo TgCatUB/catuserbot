@@ -210,7 +210,7 @@ async def age_verification_article(event):
 async def vcplayer_article(event):
     try:
         from catvc.helper.function import vc_player
-        from catvc.helper.inlinevc import buttons
+        from catvc.helper.inlinevc import vcimg, buttons, mbuttons
 
         if play := vc_player.PLAYING:
             title = play["title"]
@@ -230,26 +230,13 @@ async def vcplayer_article(event):
                 thumbnail=get_thumb("vcplayer.jpg"),
             )
         else:
-            buttons = [
-                [
-                    Button.inline("👾 Join VC", data="joinvc"),
-                    Button.inline("🍃 Leave VC", data="leavevc"),
-                ],
-                [
-                    Button.inline("🎛 Player", data="playervc"),
-                    Button.inline("⚙️ Settings", data="settingvc"),
-                ],
-                [
-                    Button.inline("🗑 close", data="vc_close"),
-                ],
-            ]
             return await build_article(
                 event,
                 title="CatVc Player",
                 media="https://github.com/TgCatUB/CatVCPlayer/raw/beta/resources/vcimg.jpg",
                 text="** | VC Menu | **",
                 description="Manange Vc and its settings.",
-                buttons=buttons,
+                buttons=mbuttons,
                 thumbnail=get_thumb("vcplayer.jpg"),
             )
     except Exception:
