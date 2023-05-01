@@ -45,4 +45,4 @@ class check_owner:
                     alert=True,
                 )
 
-        return wrapper(*args, **kwargs)
+        return wrapper
