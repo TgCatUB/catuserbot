@@ -211,6 +211,7 @@ async def vcplayer_article(event):
     try:
         from catvc.helper.function import vc_player
         from catvc.helper.inlinevc import buttons, vcimg
+
         if play := vc_player.PLAYING:
             buttons = [
                 [
@@ -234,24 +235,24 @@ async def vcplayer_article(event):
             msg += f"**⏳ Duration:** `{duration}`\n"
             msg += f"**💭 Chat:** `{vc_player.CHAT_NAME}`"
             article = await build_article(
-            event,
-            title="CatVc Player",
-            file=vcimg,
-            text=msg,
-            description="Manange Vc Stream.",
-            buttons=buttons,
-            thumbnail=get_thumb("vcplayer.jpg"),
-        )
+                event,
+                title="CatVc Player",
+                file=vcimg,
+                text=msg,
+                description="Manange Vc Stream.",
+                buttons=buttons,
+                thumbnail=get_thumb("vcplayer.jpg"),
+            )
         else:
             article = await build_article(
-            event,
-            title="CatVc Player",
-            file=vcimg,
-            text="** | VC Menu | **",
-            description="Manange Vc and its settings.",
-            buttons=buttons,
-            thumbnail=get_thumb("vcplayer.jpg"),
-        )
+                event,
+                title="CatVc Player",
+                file=vcimg,
+                text="** | VC Menu | **",
+                description="Manange Vc and its settings.",
+                buttons=buttons,
+                thumbnail=get_thumb("vcplayer.jpg"),
+            )
         return article
     except Exception:
         return None
