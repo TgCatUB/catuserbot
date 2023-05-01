@@ -220,7 +220,7 @@ async def vcplayer_article(event):
             msg = f"**🎧 Playing:** [{title}]({url})\n"
             msg += f"**⏳ Duration:** `{duration}`\n"
             msg += f"**💭 Chat:** `{vc_player.CHAT_NAME}`"
-            article = await build_article(
+            return await build_article(
                 event,
                 title="CatVc Player",
                 media=vcimg,
@@ -243,7 +243,7 @@ async def vcplayer_article(event):
                     Button.inline("🗑 close", data="vc_close"),
                 ],
             ]
-            article = await build_article(
+            return await build_article(
                 event,
                 title="CatVc Player",
                 media=vcimg,
@@ -252,7 +252,6 @@ async def vcplayer_article(event):
                 buttons=buttons,
                 thumbnail=get_thumb("vcplayer.jpg"),
             )
-        return article
     except Exception:
         return None
 
