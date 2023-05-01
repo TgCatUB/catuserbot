@@ -27,7 +27,7 @@ class check_owner:
             if c_q.query.user_id and (
                 c_q.query.user_id == Config.OWNER_ID
                 or c_q.query.user_id in Config.SUDO_USERS
-                or (self.vc and c_q.query.user_id in _vcusers_list())
+                or (self.vc and c_q.query.user_id in _vcusers_list)
             ):
                 try:
                     await self.func(*args, **kwargs)
