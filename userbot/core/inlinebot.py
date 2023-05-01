@@ -255,14 +255,14 @@ async def article_builder(event, method):
 
     elif method == "vcplayer":
         try:
-            # from catvc.inlinevc import buttons
-
-            title = "CatVc Player"
-            description = "Manange Vc and its settings."
-            query = "** | VC PLAYER | **"
-            thumb = get_thumb("vcplayer.jpg")
+            from catvc.inlinevc import button
         except Exception:
             return None
+
+        title = "CatVc Player"
+        description = "Manange Vc and its settings."
+        query = "** | VC PLAYER | **"
+        thumb = get_thumb("vcplayer.jpg")
 
     elif method.startswith("Inline buttons"):
         from userbot.plugins.button import inline_button_aricle
