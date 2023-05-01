@@ -14,13 +14,15 @@ from telethon.events import CallbackQuery
 
 from ..Config import Config
 from ..sql_helper.globals import gvarstatus
+from .data import _vcusers_list
 
 
-def check_owner(func):
+def check_owner(func, vc=False):
     async def wrapper(c_q: CallbackQuery):
         if c_q.query.user_id and (
             c_q.query.user_id == Config.OWNER_ID
             or c_q.query.user_id in Config.SUDO_USERS
+            or (vc and c_q.query.user_id in _vcusers_list)
         ):
             try:
                 await func(c_q)
