@@ -215,7 +215,7 @@ async def vcplayer_article(event):
             media=get_thumb("vcplayer.jpg"),
             text="| VC PLAYER |",
             description="Manange Vc Stream.",
-#             buttons=buttons[1],
+            #             buttons=buttons[1],
             thumbnail=get_thumb("vcplayer.jpg"),
         )
     except Exception:
