@@ -217,6 +217,7 @@ async def vcplayer_article(event):
                 event,
                 title="CatVc Player",
                 media=vcimg,
+                text="** | VC Menu | **",
                 description="Manange Vc and its settings.",
                 buttons=buttons[0],
                 thumbnail=get_thumb("vcplayer.jpg"),
