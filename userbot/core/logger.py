@@ -15,3 +15,5 @@ logging.basicConfig(
     level=logging.INFO,
     datefmt="%H:%M:%S",
 )
+
+logging.getLogger("telethon.client.updates").setLevel(logging.WARNING)
