@@ -119,7 +119,7 @@ async def build_article(
         description=description,
         type="photo" if photo_document else "article",
         file=media,
-        thumb=thumbnail,
+        thumb=thumbnail or photo_document,
         content=photo_document,
         text=text,
         buttons=buttons,
@@ -238,8 +238,7 @@ async def vcplayer_article(event):
             buttons=buttons[1],
             thumbnail=get_thumb("vcplayer.jpg"),
         )
-    except Exception as e:
-        print(e)
+    except Exception:
         return None
 
 
