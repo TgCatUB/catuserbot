@@ -212,7 +212,7 @@ async def vcplayer_article(event):
         return await build_article(
             event,
             title="CatVc Player",
-            media=get_thumb("vcplayer.jpg"),
+            media="https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/vcplayer.jpg",
             text="| VC PLAYER |",
             description="Manange Vc Stream.",
             thumbnail=get_thumb("vcplayer.jpg"),
