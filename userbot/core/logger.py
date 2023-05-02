@@ -9,16 +9,9 @@
 
 import logging
 
-
-class IgnoreSpecificMessageFilter(logging.Filter):
-    def filter(self, record):
-        return "Got difference for" not in record.getMessage()
-
-
 logging.basicConfig(
     format="[%(levelname)s- %(asctime)s]- %(name)s- %(message)s",
     handlers=[logging.FileHandler("catub.log"), logging.StreamHandler()],
     level=logging.INFO,
     datefmt="%H:%M:%S",
-    filters=[IgnoreSpecificMessageFilter()],
 )
