@@ -216,7 +216,7 @@ async def vcplayer_article(event):
             return await build_article(
                 event,
                 title="CatVc Player",
-                media="https://github.com/TgCatUB/CatVCPlayer/raw/beta/resources/vcimg.jpg",
+                media=vcimg,
                 text="** | VC Menu | **",
                 description="Manange Vc and its settings.",
                 buttons=buttons[0],
