@@ -119,7 +119,7 @@ async def build_article(
         description=description,
         type="photo" if photo_document else "article",
         file=media,
-        thumb=thumbnail or photo_document,
+        thumb=thumbnail,
         content=photo_document,
         text=text,
         buttons=buttons,
