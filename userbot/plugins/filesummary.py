@@ -21,7 +21,7 @@ TYPES = [
     "Sticker",
     "Gif",
     "Voice",
-    "Round",
+    "Round Video",
 ]
 
 
