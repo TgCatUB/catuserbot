@@ -607,4 +607,4 @@ async def merge_save(event):
         await edit_or_reply(catevent, "Uploading...")
         await event.client.send_file(event.chat_id, file=output)
         await catevent.delete()
-    await _catutils.runcmd(f"rm -rf {MERGER_DIR")
+    await _catutils.runcmd(f"rm -rf {MERGER_DIR}")
