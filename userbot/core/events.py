@@ -309,7 +309,7 @@ async def send_file(
     video_note: bool = False,
     buttons: typing.Optional["hints.MarkupLike"] = None,
     silent: bool = None,
-    spoiler: bool = False,
+    spoiler: bool = False or gvarstatus("GLOBAL_SPOILER_MEDIA"),
     background: bool = None,
     supports_streaming: bool = False,
     schedule: "hints.DateLike" = None,
