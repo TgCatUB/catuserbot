@@ -19,6 +19,7 @@ from telethon.tl.types import (
 )
 
 from ..Config import Config
+from ..sql_helper.globals import gvarstatus
 from .managers import edit_or_reply
 
 
@@ -157,7 +158,7 @@ async def send_message(
     attributes: "typing.Sequence[types.TypeDocumentAttribute]" = None,
     parse_mode: typing.Optional[str] = (),
     formatting_entities: typing.Optional[typing.List[types.TypeMessageEntity]] = None,
-    link_preview: bool = False,
+    link_preview: bool = False or gvarstatus("GLOBAL_LINK_PREVIEW"),
     file: "typing.Union[hints.FileLike, typing.Sequence[hints.FileLike]]" = None,
     thumb: "hints.FileLike" = None,
     force_document: bool = False,
@@ -171,7 +172,7 @@ async def send_message(
     supports_streaming: bool = False,
     schedule: "hints.DateLike" = None,
     comment_to: "typing.Union[int, types.Message]" = None,
-    spoiler: bool = False,
+    spoiler: bool = False or gvarstatus("GLOBAL_SPOILER_MEDIA"),
     nosound_video: bool = None,
 ):
     chatid = entity
