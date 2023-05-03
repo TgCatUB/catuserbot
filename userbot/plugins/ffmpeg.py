@@ -4,9 +4,9 @@ import contextlib
 import io
 import math
 import os
+import pathlib
 import re
 import time
-import pathlib
 from datetime import datetime
 
 from userbot import catub
@@ -116,6 +116,7 @@ async def cult_small_video(
     await process.communicate()
     return out_put_file_name if os.path.lexists(out_put_file_name) else None
 
+
 async def tg_dl(mone, reply):
     "To download the replied telegram file"
     name = NAME
@@ -184,7 +185,7 @@ async def tg_dl(mone, reply):
 
 async def merger(output_name=f"{MERGER_DIR}/MineisZarox.mp4"):
     process = await asyncio.create_subprocess_shell(
-        f'ffmpeg -f concat -safe 0 -i {MERGER_DIR}/join.txt -c copy {output_name}',
+        f"ffmpeg -f concat -safe 0 -i {MERGER_DIR}/join.txt -c copy {output_name}",
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE,
     )
@@ -556,6 +557,7 @@ async def ff_mpeg_trim_cmd(event):
             "`The media saved in bot for triming is deleted now . you can save now new one `",
         )
 
+
 # VIDEO MERGER
 @catub.cat_cmd(
     pattern="merge$",
@@ -564,7 +566,7 @@ async def ff_mpeg_trim_cmd(event):
         "header": "Merge the videos together",
         "description": "Will download the replied video into the bot.",
         "usage": "{tr}merge <reply>",
-        "Note": "Videos will be merged in a sequence you download them."
+        "Note": "Videos will be merged in a sequence you download them.",
     },
 )
 async def merge_save(event):
@@ -572,17 +574,46 @@ async def merge_save(event):
     reply = await event.get_reply_message()
     catevent = await edit_or_reply(event, "`Downloading....`")
     count = 0
-    async for messages in event.client.iter_messages(event.chat_id, from_user=reply.sender_id, min_id=reply.id-1, max_id=event.id, reverse=True):
+    async for messages in event.client.iter_messages(
+        event.chat_id,
+        from_user=reply.sender_id,
+        min_id=reply.id - 1,
+        max_id=event.id,
+        reverse=True,
+    ):
         if not messages.video:
             continue
         file_ = await tg_dl(catevent, reply)
         video_file, file_name = file_
-        ffprobe_cmd = ['ffprobe', '-v', 'quiet', '-print_format', 'json', '-show_format', '-show_streams', video_file]
+        ffprobe_cmd = [
+            "ffprobe",
+            "-v",
+            "quiet",
+            "-print_format",
+            "json",
+            "-show_format",
+            "-show_streams",
+            video_file,
+        ]
         output = subprocess.check_output(ffprobe_cmd)
         metadata = json.loads(output)
-        if metadata['streams'][0]['codec_name'] != 'h264':
+        if metadata["streams"][0]["codec_name"] != "h264":
             await edit_or_reply(catevent, "Converting...  __This might take a while__")
-            ffmpeg_cmd = ['ffmpeg', '-i', video_file, '-c:v', 'libx264', '-preset', 'medium', '-crf', '23', '-c:a', 'copy', f"/temp/{file_name}", "-y"]
+            ffmpeg_cmd = [
+                "ffmpeg",
+                "-i",
+                video_file,
+                "-c:v",
+                "libx264",
+                "-preset",
+                "medium",
+                "-crf",
+                "23",
+                "-c:a",
+                "copy",
+                f"/temp/{file_name}",
+                "-y",
+            ]
             subprocess.call(ffmpeg_cmd)
             process = await asyncio.create_subprocess_shell(
                 " ".join(ffmpeg_cmd),
@@ -595,7 +626,7 @@ async def merge_save(event):
         with open(f"{MERGER_DIR}/join.txt", "a+") as join_file:
             join_file.write(f"file {file_name}\n")
         count += 1
-    if count == 0 :
+    if count == 0:
         await edit_delete(catevent, "`Found Zero videos to merge. Aborting...`")
     elif count == 1:
         await edit_delete(catevent, "`Found Single video. Aborting...`")
