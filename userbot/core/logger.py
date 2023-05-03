@@ -17,3 +17,4 @@ logging.basicConfig(
 )
 
 logging.getLogger("telethon.client.updates").setLevel(logging.WARNING)
+logging.getLogger("telethon.network").setLevel(logging.WARNING)
