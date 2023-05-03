@@ -213,7 +213,7 @@ async def age_verification_article(event):
     )
 
 
-async def vcplayer_article(event, thumb=None):
+async def vcplayer_article(event):
     try:
         from catvc.helper.function import vc_player
         from catvc.helper.inlinevc import buttons
@@ -227,6 +227,7 @@ async def vcplayer_article(event, thumb=None):
                 description="Manange Vc and its settings.",
                 buttons=buttons[0],
             )
+        thumb = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/vcplayer.jpg"
         title = play["title"]
         duration = play["duration"]
         url = play["url"]
@@ -237,10 +238,11 @@ async def vcplayer_article(event, thumb=None):
         return await build_article(
             event,
             title="CatVc Player",
-            media=thumb or vcimg,
+            media=vcimg,
             text=msg,
             description="Manange Vc Stream.",
             buttons=buttons[1],
+            thumbnail=thumb,
         )
     except Exception:
         return None
@@ -620,10 +622,7 @@ async def inline_popup_info(event, builder):
     results.append(help_menu) if help_menu else None
     spotify_menu = await article_builder(event, "spotify")
     results.append(spotify_menu) if spotify_menu else None
-    vcplayer_menu = await vcplayer_article(
-        event,
-        thumb="https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/vcplayer.jpg",
-    )
+    vcplayer_menu = await vcplayer_article(event)
     results.append(vcplayer_menu) if vcplayer_menu else None
     file_manager = await filemanager_article(event)
     results.append(file_manager) if file_manager else None
