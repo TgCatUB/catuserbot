@@ -227,7 +227,7 @@ async def vcplayer_article(event):
             media=vcimg,
             text=text,
             description="Manange Vc Stream.",
-            buttons=buttons[1],
+            buttons=buttons,
             thumbnail="https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/vcplayer.jpg",
         )
     except Exception:
