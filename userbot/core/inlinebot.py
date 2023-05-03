@@ -227,7 +227,7 @@ async def vcplayer_article(event):
                 description="Manange Vc and its settings.",
                 buttons=buttons[0],
             )
-        thumb = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/vcplayer.jpg"
+        thumb = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/spotify_off.png"
         title = play["title"]
         duration = play["duration"]
         url = play["url"]
