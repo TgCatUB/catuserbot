@@ -207,6 +207,33 @@ async def age_verification_article(event):
     )
 
 
+async def vcplayer_article(event):
+    try:
+        from catvc.helper.function import vc_player
+        from catvc.helper.inlinevc import buttons, vcimg
+
+        text = "** | VC Menu | **"
+        buttons = buttons[0]
+        if play := vc_player.PLAYING:
+            vcimg = play["img"]
+            text = f"**🎧 Playing:** [{play['title']}]({play['url']})\n"
+            text += f"**⏳ Duration:** `{play['duration']}`\n"
+            text += f"**💭 Chat:** `{vc_player.CHAT_NAME}`"
+            buttons = buttons[1]
+
+        return await build_article(
+            event,
+            title="CatVc Player",
+            media=vcimg,
+            text=text,
+            description="Manange Vc Stream.",
+            buttons=buttons[1],
+            thumbnail="https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/vcplayer.jpg",
+        )
+    except Exception:
+        return None
+
+
 async def article_builder(event, method):
     media = thumb = None
     title = "Cat Userbot"
@@ -250,15 +277,6 @@ async def article_builder(event, method):
                 title,
                 description,
             ) = await spotify_inline_article()
-        except Exception:
-            return None
-
-    elif method == "vcplayer":
-        try:
-            from catvc.helper.inlinevc import vcplayer_data
-
-            title, query, description, media, buttons = await vcplayer_data()
-            thumb = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/vcplayer.jpg"
         except Exception:
             return None
 
@@ -447,7 +465,7 @@ async def inline_handler(event):
             result = await article_builder(event, string)
             await event.answer([result] if result else None)
         elif string == "vcplayer":
-            result = await article_builder(event, string)
+            result = await vcplayer_article(event)
             await event.answer([result] if result else None)
         elif str_y[0].lower() == "s" and len(str_y) == 2:
             result = await inline_search(event, str_y[1].strip())
@@ -590,7 +608,7 @@ async def inline_popup_info(event, builder):
     results.append(help_menu) if help_menu else None
     spotify_menu = await article_builder(event, "spotify")
     results.append(spotify_menu) if spotify_menu else None
-    vcplayer_menu = await article_builder(event, "vcplayer")
+    vcplayer_menu = await vcplayer_article(event)
     results.append(vcplayer_menu) if vcplayer_menu else None
     file_manager = await filemanager_article(event)
     results.append(file_manager) if file_manager else None
