@@ -118,14 +118,14 @@ async def build_article(
     print()
     print(f"PD: {photo_document}")
     print()
-    thumb=thumbnail or photo_document
+    thumb = thumbnail or photo_document
     print(f"thumb: {thumb}")
     return builder.article(
         title=title,
         description=description,
         type="photo" if photo_document else "article",
         file=media,
-        thumb = thumb,
+        thumb=thumb,
         content=photo_document,
         text=text,
         buttons=buttons,
