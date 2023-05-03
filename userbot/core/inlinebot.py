@@ -207,22 +207,20 @@ async def age_verification_article(event):
     )
 
 
-async def vcplayer_article(event, media=None):
+async def vcplayer_article(event, thumb=None):
     try:
         from catvc.helper.function import vc_player
-        from catvc.helper.inlinevc import buttons, vcimg
+        from catvc.helper.inlinevc import buttons
 
         if not (play := vc_player.PLAYING):
             return await build_article(
                 event,
                 title="CatVc Player",
-                media=vcimg,
+                media="https://github.com/TgCatUB/CatVCPlayer/raw/beta/resources/vcfileW.mp4",
                 text="** | VC Menu | **",
                 description="Manange Vc and its settings.",
                 buttons=buttons[0],
             )
-        if media is None:
-            media = vcimg
         title = play["title"]
         duration = play["duration"]
         url = play["url"]
@@ -233,7 +231,7 @@ async def vcplayer_article(event, media=None):
         return await build_article(
             event,
             title="CatVc Player",
-            media=media,
+            media=thumb or vcimg,
             text=msg,
             description="Manange Vc Stream.",
             buttons=buttons[1],
@@ -618,7 +616,7 @@ async def inline_popup_info(event, builder):
     results.append(spotify_menu) if spotify_menu else None
     vcplayer_menu = await vcplayer_article(
         event,
-        media="https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/vcplayer.jpg",
+        thumb="https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/vcplayer.jpg",
     )
     results.append(vcplayer_menu) if vcplayer_menu else None
     file_manager = await filemanager_article(event)
