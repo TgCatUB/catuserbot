@@ -114,15 +114,18 @@ async def build_article(
     if thumbnail and isinstance(thumbnail, str):
         thumbnail = get_thumb(url=thumbnail)
     # Return an article object with the provided properties
-    print(media)
+    print(f"media: {media}")
     print()
-    print(photo_document)
+    print(f"PD: {photo_document}")
+    print()
+    thumb=thumbnail or photo_document
+    print(f"thumb: {thumb}")
     return builder.article(
         title=title,
         description=description,
         type="photo" if photo_document else "article",
         file=media,
-        thumb=thumbnail or photo_document,
+        thumb = thumb,
         content=photo_document,
         text=text,
         buttons=buttons,
@@ -301,6 +304,7 @@ async def article_builder(event, method):
         buttons=buttons,
         description=description,
         media=media,
+        thumbnail=thumb,
     )
 
 
