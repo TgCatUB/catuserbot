@@ -22,6 +22,9 @@ from ..Config import Config
 from ..sql_helper.globals import gvarstatus
 from .managers import edit_or_reply
 
+Link_Preview = gvarstatus("GLOBAL_LINK_PREVIEW")
+Spoiler_Media = gvarstatus("GLOBAL_SPOILER_MEDIA")
+
 
 @events.common.name_inner_event
 class NewMessage(events.NewMessage):
@@ -158,7 +161,7 @@ async def send_message(
     attributes: "typing.Sequence[types.TypeDocumentAttribute]" = None,
     parse_mode: typing.Optional[str] = (),
     formatting_entities: typing.Optional[typing.List[types.TypeMessageEntity]] = None,
-    link_preview: bool = False or gvarstatus("GLOBAL_LINK_PREVIEW"),
+    link_preview: bool = False or Link_Preview,
     file: "typing.Union[hints.FileLike, typing.Sequence[hints.FileLike]]" = None,
     thumb: "hints.FileLike" = None,
     force_document: bool = False,
@@ -172,7 +175,7 @@ async def send_message(
     supports_streaming: bool = False,
     schedule: "hints.DateLike" = None,
     comment_to: "typing.Union[int, types.Message]" = None,
-    spoiler: bool = False or gvarstatus("GLOBAL_SPOILER_MEDIA"),
+    spoiler: bool = False or Spoiler_Media,
     nosound_video: bool = None,
 ):
     chatid = entity
@@ -309,7 +312,7 @@ async def send_file(
     video_note: bool = False,
     buttons: typing.Optional["hints.MarkupLike"] = None,
     silent: bool = None,
-    spoiler: bool = False or gvarstatus("GLOBAL_SPOILER_MEDIA"),
+    spoiler: bool = False or Spoiler_Media,
     background: bool = None,
     supports_streaming: bool = False,
     schedule: "hints.DateLike" = None,
