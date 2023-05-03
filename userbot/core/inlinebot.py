@@ -257,7 +257,7 @@ async def article_builder(event, method):
         try:
             from catvc.helper.inlinevc import vcplayer_data
 
-            title, query, description, media, buttons = vcplayer_data()
+            title, query, description, media, buttons = await vcplayer_data()
             thumb = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/vcplayer.jpg"
         except Exception:
             return None
