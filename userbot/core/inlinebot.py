@@ -114,18 +114,12 @@ async def build_article(
     if thumbnail and isinstance(thumbnail, str):
         thumbnail = get_thumb(url=thumbnail)
     # Return an article object with the provided properties
-    print(f"media: {media}")
-    print()
-    print(f"PD: {photo_document}")
-    print()
-    thumb = thumbnail or photo_document
-    print(f"thumb: {thumb}")
     return builder.article(
         title=title,
         description=description,
         type="photo" if photo_document else "article",
         file=media,
-        thumb=thumb,
+        thumb=thumbnail or photo_document,
         content=photo_document,
         text=text,
         buttons=buttons,
@@ -213,41 +207,6 @@ async def age_verification_article(event):
     )
 
 
-async def vcplayer_article(event):
-    try:
-        from catvc.helper.function import vc_player
-        from catvc.helper.inlinevc import buttons
-
-        if not (play := vc_player.PLAYING):
-            return await build_article(
-                event,
-                title="CatVc Player",
-                media="https://github.com/TgCatUB/CatVCPlayer/raw/beta/resources/vcfileW.mp4",
-                text="** | VC Menu | **",
-                description="Manange Vc and its settings.",
-                buttons=buttons[0],
-            )
-        thumb = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/spotify_off.png"
-        title = play["title"]
-        duration = play["duration"]
-        url = play["url"]
-        vcimg = play["img"]
-        msg = f"**🎧 Playing:** [{title}]({url})\n"
-        msg += f"**⏳ Duration:** `{duration}`\n"
-        msg += f"**💭 Chat:** `{vc_player.CHAT_NAME}`"
-        return await build_article(
-            event,
-            title="CatVc Player",
-            media=vcimg,
-            text=msg,
-            description="Manange Vc Stream.",
-            buttons=buttons[1],
-            thumbnail=thumb,
-        )
-    except Exception:
-        return None
-
-
 async def article_builder(event, method):
     media = thumb = None
     title = "Cat Userbot"
@@ -291,6 +250,15 @@ async def article_builder(event, method):
                 title,
                 description,
             ) = await spotify_inline_article()
+        except Exception:
+            return None
+
+    elif method == "vcplayer":
+        try:
+            from catvc.helper.inlinevc import vcplayer_data
+
+            title, query, description, media, buttons = vcplayer_data()
+            thumb = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/vcplayer.jpg"
         except Exception:
             return None
 
@@ -479,7 +447,7 @@ async def inline_handler(event):
             result = await article_builder(event, string)
             await event.answer([result] if result else None)
         elif string == "vcplayer":
-            result = await vcplayer_article(event)
+            result = await article_builder(event, string)
             await event.answer([result] if result else None)
         elif str_y[0].lower() == "s" and len(str_y) == 2:
             result = await inline_search(event, str_y[1].strip())
@@ -622,7 +590,7 @@ async def inline_popup_info(event, builder):
     results.append(help_menu) if help_menu else None
     spotify_menu = await article_builder(event, "spotify")
     results.append(spotify_menu) if spotify_menu else None
-    vcplayer_menu = await vcplayer_article(event)
+    vcplayer_menu = await article_builder(event, "vcplayer")
     results.append(vcplayer_menu) if vcplayer_menu else None
     file_manager = await filemanager_article(event)
     results.append(file_manager) if file_manager else None
