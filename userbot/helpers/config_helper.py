@@ -34,8 +34,6 @@ var_list = [
     "DEFAULT_PIC",
     "DEFAULT_USER",
     "DIGITAL_PIC",
-    "GLOBAL_LINK_PREVIEW",
-    "GLOBAL_SPOILER_MEDIA",
     "HELP_EMOJI",
     "HELP_TEXT",
     "IALIVE_PIC",
@@ -47,6 +45,7 @@ var_list = [
     "PM_PIC",
     "PM_TEXT",
     "PM_BLOCK",
+    "SPOILER_MEDIA",
     "START_TEXT",
 ]
 
