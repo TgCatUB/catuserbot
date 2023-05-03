@@ -231,15 +231,15 @@ async def vcplayer_article(event):
         msg += f"**⏳ Duration:** `{duration}`\n"
         msg += f"**💭 Chat:** `{vc_player.CHAT_NAME}`"
         return event.builder.article(
-                title="CatVc Player",
-                description="Manange Vc Stream.",
-                file=vcimg,
-                thumb=get_thumb("vcplayer.jpg"),
-                text=msg,
-                buttons=buttons[0],
-                link_preview=False,
-                parse_mode="md",
-            )
+            title="CatVc Player",
+            description="Manange Vc Stream.",
+            file=vcimg,
+            thumb=get_thumb("vcplayer.jpg"),
+            text=msg,
+            buttons=buttons[0],
+            link_preview=False,
+            parse_mode="md",
+        )
     except Exception:
         return None
 
