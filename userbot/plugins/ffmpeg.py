@@ -9,9 +9,10 @@ import re
 import time
 from datetime import datetime
 
+from telethon.tl import types
+from telethon.utils import get_extension
 from userbot import catub
 from userbot.core.logger import logging
-
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import (
