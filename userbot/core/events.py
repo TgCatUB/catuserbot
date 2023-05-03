@@ -162,7 +162,7 @@ async def send_message(
     thumb: "hints.FileLike" = None,
     force_document: bool = False,
     clear_draft: bool = False,
-    buttons: "hints.MarkupLike" = None,
+    buttons: typing.Optional["hints.MarkupLike"] = None,
     silent: bool = None,
     album: bool = False,
     allow_cache: bool = False,
@@ -171,6 +171,8 @@ async def send_message(
     supports_streaming: bool = False,
     schedule: "hints.DateLike" = None,
     comment_to: "typing.Union[int, types.Message]" = None,
+    spoiler: bool = False,
+    nosound_video: bool = None,
 ):
     chatid = entity
     if str(chatid) in [
@@ -198,6 +200,8 @@ async def send_message(
             noforwards=noforwards,
             supports_streaming=supports_streaming,
             schedule=schedule,
+            nosound_video=nosound_video,
+            spoiler=spoiler,
             comment_to=comment_to,
         )
     msg = message
@@ -225,6 +229,8 @@ async def send_message(
                 noforwards=noforwards,
                 supports_streaming=supports_streaming,
                 schedule=schedule,
+                nosound_video=nosound_video,
+                spoiler=spoiler,
                 comment_to=comment_to,
             )
         msglink = await client.get_msg_link(response)
@@ -250,6 +256,8 @@ async def send_message(
             noforwards=noforwards,
             supports_streaming=supports_streaming,
             schedule=schedule,
+            nosound_video=nosound_video,
+            spoiler=spoiler,
             comment_to=comment_to,
         )
     return await client.sendmessage(
@@ -273,6 +281,8 @@ async def send_message(
         noforwards=noforwards,
         supports_streaming=supports_streaming,
         schedule=schedule,
+        nosound_video=nosound_video,
+        spoiler=spoiler,
         comment_to=comment_to,
     )
 
@@ -283,10 +293,10 @@ async def send_file(
     file: "typing.Union[hints.FileLike, typing.Sequence[hints.FileLike]]",
     *,
     caption: typing.Union[str, typing.Sequence[str]] = None,
+    checker: "typing.Union[hints.FileLike, typing.Sequence[hints.FileLike]]" = None,
     force_document: bool = False,
     file_size: int = None,
     clear_draft: bool = False,
-    checker: "typing.Union[hints.FileLike, typing.Sequence[hints.FileLike]]" = None,
     progress_callback: "hints.ProgressCallback" = None,
     reply_to: "hints.MessageIDLike" = None,
     attributes: "typing.Sequence[types.TypeDocumentAttribute]" = None,
@@ -296,13 +306,15 @@ async def send_file(
     formatting_entities: typing.Optional[typing.List[types.TypeMessageEntity]] = None,
     voice_note: bool = False,
     video_note: bool = False,
-    buttons: "hints.MarkupLike" = None,
+    buttons: typing.Optional["hints.MarkupLike"] = None,
     silent: bool = None,
+    spoiler: bool = False,
     background: bool = None,
     supports_streaming: bool = False,
     schedule: "hints.DateLike" = None,
     comment_to: "typing.Union[int, types.Message]" = None,
     ttl: int = None,
+    nosound_video: bool = None,
     **kwargs,
 ):
     if isinstance(file, MessageMediaWebPage):
@@ -342,6 +354,8 @@ async def send_file(
             supports_streaming=supports_streaming,
             schedule=schedule,
             comment_to=comment_to,
+            nosound_video=nosound_video,
+            spoiler=spoiler,
             ttl=ttl,
             **kwargs,
         )
@@ -379,6 +393,8 @@ async def send_file(
                 background=background,
                 supports_streaming=supports_streaming,
                 schedule=schedule,
+                nosound_video=nosound_video,
+                spoiler=spoiler,
                 comment_to=comment_to,
                 ttl=ttl,
                 **kwargs,
@@ -415,6 +431,8 @@ async def send_file(
         background=background,
         supports_streaming=supports_streaming,
         schedule=schedule,
+        nosound_video=nosound_video,
+        spoiler=spoiler,
         comment_to=comment_to,
         ttl=ttl,
         **kwargs,
@@ -434,7 +452,7 @@ async def edit_message(
     file: "hints.FileLike" = None,
     thumb: "hints.FileLike" = None,
     force_document: bool = False,
-    buttons: "hints.MarkupLike" = None,
+    buttons: typing.Optional["hints.MarkupLike"] = None,
     supports_streaming: bool = False,
     schedule: "hints.DateLike" = None,
 ):  # sourcery skip: use-assigned-variable
