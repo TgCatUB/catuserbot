@@ -1,4 +1,4 @@
-# Steps of setting Spotify Vars in Catuserbot
+# Steps of setting Spotify Vars
 
 1\) At first click on the link 👉🏻 [Link](https://developer.spotify.com/dashboard/login)
 
