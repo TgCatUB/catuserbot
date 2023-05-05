@@ -17,11 +17,3 @@
 ## Tutorials
 
 * [Setup](tutorials/setup.md)
-* [Colors](tutorials/colors.md)
-* [Typography](tutorials/typography.md)
-
-## Components
-
-* [Icons](components/icons.md)
-* [Buttons](components/buttons.md)
-* [Inputs](components/inputs.md)
