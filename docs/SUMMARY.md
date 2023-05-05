@@ -18,6 +18,7 @@
 
 * [Setup](tutorials/setup.md)
 * [G-Drive](tutorials/g-drive.md)
+* [Github Commit](tutorials/github-commit.md)
 * [IBM](tutorials/ibm.md)
 * [Heroku Vars](tutorials/heroku-vars.md)
 * [LastFM](tutorials/lastfm.md)

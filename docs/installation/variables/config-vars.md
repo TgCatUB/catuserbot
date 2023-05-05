@@ -176,7 +176,8 @@ A string value that represents the username for the Last.fm account that the plu
 
 ### 〣 `IBM_WATSON_CRED_PASSWORD`
 
-A string value that represents the password for the IBM Watson speech-to-text plugin. You can obtain this value from the IBM Watson website. Refer IBM tutorial for getting the values
+A string value that represents the password for the IBM Watson speech-to-text plugin. You can obtain this value from the IBM Watson website. Refer IBM tutorial for getting the values. \
+Refer [IBM guide](../../tutorials/ibm.md) for more info.
 
 ### 〣 `IBM_WATSON_CRED_URL`
 
@@ -290,7 +291,7 @@ A string value that represents the API key for the ipdata.co API. This API can b
 
 ### 〣 `OCR_SPACE_API_KEY`
 
-A string value that represents the API key for the OCR.Space API. This API can be used to perform Optical Character Recognition (OCR) on images. The API key can be obtained for free from the OCR.Space website.
+A string value that represents the API key for the OCR.Space API. This API can be used to perform Optical Character Recognition (OCR) on images. The API key can be obtained for free from the OCR.Space website. Get your api key from [here](https://ocr.space/ocrapi)
 
 ### 〣 `OPENAI_API_KEY`
 
