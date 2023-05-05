@@ -16,10 +16,9 @@
 
 ## Tutorials
 
-* [Setup](tutorials/setup.md)
-* [G-Drive](tutorials/g-drive.md)
-* [Github Commit](tutorials/github-commit.md)
-* [IBM](tutorials/ibm.md)
-* [Heroku Vars](tutorials/heroku-vars.md)
-* [LastFM](tutorials/lastfm.md)
-* [Spotify](tutorials/spotify.md)
+* [📕 G-Drive](tutorials/g-drive.md)
+* [📕 Github Commit](tutorials/github-commit.md)
+* [📕 Heroku Vars](tutorials/heroku-vars.md)
+* [📕 IBM](tutorials/ibm.md)
+* [📕 LastFM](tutorials/lastfm.md)
+* [📕 Spotify](tutorials/spotify.md)

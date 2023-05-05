@@ -131,12 +131,11 @@ A string value that represents the path to the ChromeDriver executable. This var
 ### 〣 `G_DRIVE_CLIENT_ID`
 
 A string value that represents the client ID for the Google Drive plugin. This value is used to authenticate and authorize the plugin to access the Google Drive account. You can obtain this value by creating a project on the Google Cloud Console and enabling the Google Drive API. \
-Refer [G-drive](../../tutorials/g-drive.md) tutorial for getting the values
+Refer [**G-drive tutorial**](../../tutorials/g-drive.md) for getting the values.
 
 ### 〣 `G_DRIVE_CLIENT_SECRET`
 
-A string value that represents the client secret for the Google Drive plugin. This value is used in conjunction with the client ID to authenticate and authorize the plugin. You can obtain this value from the same Google Cloud Console project where you obtained the client ID.\
-Refer [G-drive](../../tutorials/g-drive.md) tutorial for getting the values
+A string value that represents the client secret for the Google Drive plugin. This value is used in conjunction with the client ID to authenticate and authorize the plugin. You can obtain this value from the same Google Cloud Console project where you obtained the client ID.
 
 ### 〣 `G_DRIVE_FOLDER_ID`
 
@@ -151,7 +150,7 @@ A string value that represents the API key for the Genius API. This API can be u
 ### 〣 `SPOTIFY_CLIENT_ID`
 
 A string value that represents the client ID for the Spotify API. This value is used to authenticate and authorize the plugin to access the Spotify API. You can obtain this value by creating an app on the Spotify Developer Dashboard and copying the client ID from the app settings.\
-Refer [Spotify](../../tutorials/spotify.md) tutorial for getting the values
+Refer [**Spotify tutorial**](../../tutorials/spotify.md) for getting the values.
 
 ### 〣 `SPOTIFY_CLIENT_SECRET`
 
@@ -160,7 +159,7 @@ A string value that represents the client secret for the Spotify API. This value
 ### 〣 `LASTFM_API`
 
 A string value that represents the API key for the Last.fm plugin. This value is used to authenticate and authorize the plugin to access the Last.fm API. You can obtain this value by creating an account on the Last.fm website and generating an API key from the settings page.\
-Refer [LastFM](../../tutorials/lastfm.md) tutorial for getting the values
+Refer [**LastFM tutorial**](../../tutorials/lastfm.md) for getting the values.
 
 ### 〣 `LASTFM_PASSWORD`
 
@@ -177,7 +176,7 @@ A string value that represents the username for the Last.fm account that the plu
 ### 〣 `IBM_WATSON_CRED_PASSWORD`
 
 A string value that represents the password for the IBM Watson speech-to-text plugin. You can obtain this value from the IBM Watson website. Refer IBM tutorial for getting the values. \
-Refer [IBM guide](../../tutorials/ibm.md) for more info.
+Refer [**IBM Tutorial**](../../tutorials/ibm.md) for getting the values.
 
 ### 〣 `IBM_WATSON_CRED_URL`
 
@@ -241,7 +240,9 @@ A boolean variable \[ <mark style="color:green;">True</mark> / <mark style="colo
 
 ### 〣 `GITHUB_ACCESS_TOKEN`
 
-A string value that represents an access token for the GitHub API. This token is used to authenticate the Python program with the GitHub API so that it can perform actions like fetching data or creating issues. To obtain this value, you need to create a personal access token on GitHub and store it as an environment variable named GITHUB\_ACCESS\_TOKEN.
+A string value that represents an access token for the GitHub API. This token is used to authenticate the Python program with the GitHub API so that it can perform actions like fetching data or creating issues.
+
+Refer [**Github tutorial** ](../../tutorials/github-commit.md)to get the value.
 
 ### 〣 `GIT_REPO_NAME`
 

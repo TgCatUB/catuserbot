@@ -4,7 +4,7 @@ description: >-
   unload after restart
 ---
 
-# Github Commit
+# 📕 Github Commit
 
 To set-up click [Here](https://github.com/settings/tokens) & login with Github in which u forked the repo.
 

@@ -2,7 +2,7 @@
 description: Set Heroku App Name and API
 ---
 
-# Heroku Vars
+# 📕 Heroku Vars
 
 Goto [https://dashboard.heroku.com/account](https://dashboard.heroku.com/account) and scroll down till you see the Title API key (as shown in the screenshot), click on **reveal** to see the Heroku API key, copy it and paste in settings with the var HEROKU\_API\_KEY
 

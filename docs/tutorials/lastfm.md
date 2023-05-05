@@ -1,4 +1,4 @@
-# LastFM
+# 📕 LastFM
 
 GET LASTFM Details as shown in the below Guide and Fill the necessary details on HEROKU, the vars are given below
 
