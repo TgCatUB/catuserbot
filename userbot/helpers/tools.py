@@ -36,6 +36,7 @@ async def meme_type(message):
                 return "Video"
             if message.document:
                 mime = message.document.mime_type
+                ext = os.path.splitext(message.file.name)
                 if mime != "image/gif" and mime.split("/")[0] == "image":
                     return "Photo"
                 if mime == "image/gif":
@@ -44,7 +45,7 @@ async def meme_type(message):
                     return "Video"
                 if mime == "application/x-tgsticker":
                     return "Animated Sticker"
-                return "Document"
+                return "Video" if ext in [".mp4", ".mkv", ".avi", ".m4v"] else "Document"
         except AttributeError:
             return await file_type(message)
     return None
