@@ -130,11 +130,13 @@ A string value that represents the path to the ChromeDriver executable. This var
 
 ### 〣 `G_DRIVE_CLIENT_ID`
 
-A string value that represents the client ID for the Google Drive plugin. This value is used to authenticate and authorize the plugin to access the Google Drive account. You can obtain this value by creating a project on the Google Cloud Console and enabling the Google Drive API.
+A string value that represents the client ID for the Google Drive plugin. This value is used to authenticate and authorize the plugin to access the Google Drive account. You can obtain this value by creating a project on the Google Cloud Console and enabling the Google Drive API. \
+Refer [G-drive](../../tutorials/g-drive.md) tutorial for getting the values
 
 ### 〣 `G_DRIVE_CLIENT_SECRET`
 
-A string value that represents the client secret for the Google Drive plugin. This value is used in conjunction with the client ID to authenticate and authorize the plugin. You can obtain this value from the same Google Cloud Console project where you obtained the client ID.
+A string value that represents the client secret for the Google Drive plugin. This value is used in conjunction with the client ID to authenticate and authorize the plugin. You can obtain this value from the same Google Cloud Console project where you obtained the client ID.\
+Refer [G-drive](../../tutorials/g-drive.md) tutorial for getting the values
 
 ### 〣 `G_DRIVE_FOLDER_ID`
 
@@ -148,7 +150,8 @@ A string value that represents the API key for the Genius API. This API can be u
 
 ### 〣 `SPOTIFY_CLIENT_ID`
 
-A string value that represents the client ID for the Spotify API. This value is used to authenticate and authorize the plugin to access the Spotify API. You can obtain this value by creating an app on the Spotify Developer Dashboard and copying the client ID from the app settings.
+A string value that represents the client ID for the Spotify API. This value is used to authenticate and authorize the plugin to access the Spotify API. You can obtain this value by creating an app on the Spotify Developer Dashboard and copying the client ID from the app settings.\
+Refer [Spotify](../../tutorials/spotify.md) tutorial for getting the values
 
 ### 〣 `SPOTIFY_CLIENT_SECRET`
 
@@ -156,7 +159,8 @@ A string value that represents the client secret for the Spotify API. This value
 
 ### 〣 `LASTFM_API`
 
-A string value that represents the API key for the Last.fm plugin. This value is used to authenticate and authorize the plugin to access the Last.fm API. You can obtain this value by creating an account on the Last.fm website and generating an API key from the settings page.
+A string value that represents the API key for the Last.fm plugin. This value is used to authenticate and authorize the plugin to access the Last.fm API. You can obtain this value by creating an account on the Last.fm website and generating an API key from the settings page.\
+Refer [LastFM](../../tutorials/lastfm.md) tutorial for getting the values
 
 ### 〣 `LASTFM_PASSWORD`
 
@@ -172,7 +176,7 @@ A string value that represents the username for the Last.fm account that the plu
 
 ### 〣 `IBM_WATSON_CRED_PASSWORD`
 
-A string value that represents the password for the IBM Watson speech-to-text plugin. You can obtain this value from the IBM Watson website.
+A string value that represents the password for the IBM Watson speech-to-text plugin. You can obtain this value from the IBM Watson website. Refer IBM tutorial for getting the values
 
 ### 〣 `IBM_WATSON_CRED_URL`
 
@@ -294,11 +298,11 @@ A string value that represents the API key for the OpenAI API. This value is use
 
 ### 〣 `OPEN_WEATHER_MAP_APPID`
 
-A string value that represents the APPID for the OpenWeatherMap API. This API can be used to retrieve weather information for a location. The APPID can be obtained for free from the OpenWeatherMap website.
+A string value that represents the APPID for the OpenWeatherMap API. This API can be used to retrieve weather information for a location. The APPID can be obtained for free from the OpenWeatherMap website.  Get your api from [openweathermap](https://home.openweathermap.org/api\_keys)
 
 ### 〣 `REM_BG_API_KEY`
 
-A string value that represents the API key for the Remove.bg API. This API can be used to remove the background from an image. The API key can be obtained for free from the Remove.bg website.
+A string value that represents the API key for the Remove.bg API. This API can be used to remove the background from an image. The API key can be obtained for free from the [Remove.bg](https://www.remove.bg/api) website.
 
 ### 〣 `SCREEN_SHOT_LAYER_ACCESS_KEY`
 

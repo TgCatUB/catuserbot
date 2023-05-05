@@ -17,8 +17,8 @@
 ## Tutorials
 
 * [Setup](tutorials/setup.md)
-* [Climate](tutorials/climate.md)
 * [G-Drive](tutorials/g-drive.md)
+* [IBM](tutorials/ibm.md)
+* [Heroku Vars](tutorials/heroku-vars.md)
 * [LastFM](tutorials/lastfm.md)
-* [Remove Background](tutorials/remove-background.md)
 * [Spotify](tutorials/spotify.md)
