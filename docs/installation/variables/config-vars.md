@@ -1,10 +1,10 @@
 # Config Vars
 
-## ≡  Mandatory Vars
+## ≡ Mandatory Vars
 
-> ### To  host bot these are must needed, else bot wouldn't start
+> #### To host bot these are must needed, else bot wouldn't start
 
-### 〣  `APP_ID`  &  `API_HASH`
+### 〣 `APP_ID` & `API_HASH`
 
 <details>
 
@@ -18,7 +18,7 @@
 
 </details>
 
-### 〣  `STRING_SESSION`
+### 〣 `STRING_SESSION`
 
 <details>
 
@@ -26,37 +26,35 @@
 
 You can generate String several ways:
 
-#### ➦ **Locally**
+**➦ Locally**
 
 {% code title="Run this inside catuserbot directory" overflow="wrap" %}
-
 ```batch
 pip3 install git+https://github.com/jisan09/Telethon && python3 stringsetup.py
 ```
-
 {% endcode %}
 
-#### &#x20;➦ Telegram Bot :  <mark style="color:blue;">**@CatSessionBot**</mark> in telegram: [https://t.me/CatStringSessionBot](https://t.me/CatStringSessionBot)
+**➦ Telegram Bot : **<mark style="color:blue;">**@CatSessionBot**</mark>** in telegram:** [**https://t.me/CatStringSessionBot**](https://t.me/CatStringSessionBot)
 
-#### ➦ Repl : [https://generatestringsession.sandeep1709.repl.run/](https://generatestringsession.sandeep1709.repl.run/)
+**➦ Repl :** [**https://generatestringsession.sandeep1709.repl.run/**](https://generatestringsession.sandeep1709.repl.run/)
 
 </details>
 
-### 〣  `TG_BOT_TOKEN`
+### 〣 `TG_BOT_TOKEN`
 
 <details>
 
 <summary>Generate</summary>
 
 1. Go to <mark style="color:blue;">**@BotFather**</mark> in telegram : [**https://t.me/BotFather**](https://t.me/BotFather)
-2. Start the bot then send <mark style="color:yellow;">`/new_bot`</mark>
+2. Start the bot then send `/new_bot`
 3. Enter name for your bot & username
 
-The bot will send token after that.&#x20;
+The bot will send token after that.
 
-#### While in botfather turn on inline permission also, for the bot you created
+**While in botfather turn on inline permission also, for the bot you created**
 
-1. <mark style="color:yellow;">`/mybot`</mark>
+1. `/mybot`
 2. Click on your bot name
 3. Bot Settings
 4. Inline Mode
@@ -64,24 +62,20 @@ The bot will send token after that.&#x20;
 
 </details>
 
-### 〣  `DB_URI`
+### 〣 `DB_URI`
 
 {% tabs %}
 {% tab title="Local Database" %}
 {% code title="Run this in terminal" overflow="wrap" %}
-
 ```batch
 sudo -u postgres bash -c "psql -c \"CREATE USER postgres WITH PASSWORD 'your_password';\" && createdb catuserbot -O postgres"
 ```
-
 {% endcode %}
 
 {% code title="Your DB_URI will be" overflow="wrap" %}
-
 ```batch
 postgresql://postgres:your_password@localhost:5432/catuserbot
 ```
-
 {% endcode %}
 {% endtab %}
 
@@ -94,37 +88,37 @@ Elephant SQL
 {% endtab %}
 {% endtabs %}
 
-## ≡  Extra Plugins Related Variables
+## ≡ Extra Plugins Related Variables
 
-### 〣  `BADCAT`
+### 〣 `BADCAT`
 
-A boolean variable \[ <mark style="color:green;">True</mark> / <mark style="color:green;">False</mark> ] that determines whether the userbot should load "badcat"      plugins, which contain offensive or NSFW content.
+A boolean variable \[ <mark style="color:green;">True</mark> / <mark style="color:green;">False</mark> ] that determines whether the userbot should load "badcat" plugins, which contain offensive or NSFW content.
 
-### 〣  `EXTERNAL_REPO`
+### 〣 `EXTERNAL_REPO`
 
 A string variable that contains the link to an external repository where additional plugins , modules for the userbot can be found. The default value is [<mark style="color:blue;">https://github.com/TgCatUB/CatPlugins</mark>](https://github.com/TgCatUB/CatPlugins) .
 
-### 〣  `EXTERNAL_REPOBRANCH`
+### 〣 `EXTERNAL_REPOBRANCH`
 
 A string value that represents the name of a branch in an external GitHub repository. This variable is used by a plugin to determine which branch to use when fetching code from the external repository. The default value is <mark style="color:blue;">main</mark>.
 
-### 〣  `UPSTREAM_REPO`
+### 〣 `UPSTREAM_REPO`
 
 A string variable that contains the link to the repository where the userbot's main code is hosted. The default value is [<mark style="color:blue;">https://github.com/TgCatUB/catuserbot</mark>](https://github.com/TgCatUB/catuserbot) .
 
-### 〣  `UPSTREAM_REPO_BRANCH`
+### 〣 `UPSTREAM_REPO_BRANCH`
 
 A string value that represents the name of a branch in a GitHub repository. This variable is used by a plugin to determine which branch to use when updating the bot. The default value is <mark style="color:blue;">master</mark>.
 
-### 〣  `VCMODE`
+### 〣 `VCMODE`
 
 A boolean variable \[ <mark style="color:green;">True</mark> / <mark style="color:green;">False</mark> ] that determines whether the userbot should enable voice chat mode.
 
-### 〣  `VC_SESSION`
+### 〣 `VC_SESSION`
 
 A string variable that contains the session string for the userbot's voice chat mode. This used for playing music in VC using different account. Make using [<mark style="color:blue;">this tutorial</mark>](config-vars.md#string\_session) .
 
-## ≡  Google Related Variables
+## ≡ Google Related Variables
 
 ### 〣 `CHROME_BIN`
 
@@ -146,7 +140,7 @@ A string value that represents the client secret for the Google Drive plugin. Th
 
 A string value that represents the ID of the Google Drive folder that the plugin interacts with. This value is used to specify the folder where the plugin will upload or download files to/from. You can obtain this value from the Google Drive web interface by right-clicking on the desired folder and selecting "Get shareable link". The ID is the string of characters between "id=" and "&" in the link.
 
-## ≡  Music Related Variables
+## ≡ Music Related Variables
 
 ### 〣 `GENIUS_API_TOKEN`
 
