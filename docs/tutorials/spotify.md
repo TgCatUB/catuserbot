@@ -1,43 +1,37 @@
 # 📕 Spotify
 
-1\) At first click on the link 👉🏻 [Link](https://developer.spotify.com/dashboard/login)
+## 〣 Creating a Spotify App
 
-2\) The page will appear like as shown below⬇
+1. Go to [developer.spotify.com/dashboard/login](https://developer.spotify.com/dashboard/login) and log in with your Spotify account credentials.
+2. Click on the "Create An App" button. This will take you to a page where you can create a new Spotify app.
 
-<figure><img src="https://telegra.ph/file/1c9c99833e327c1027d3e.jpg" alt=""><figcaption><p>Page after clicking link</p></figcaption></figure>
+    <figure><img src="https://telegra.ph/file/8b4e50914e2a8b0c7e3f2.jpg" alt=""><figcaption><p>Page after clicking 'Create an App'</p></figcaption></figure>
 
-3\) Next click on 'Create An App' option the page will shown as given below⬇
+3. Enter a name for your app, a short description, and agree to the terms and conditions. Then, click the "Create" button.
 
-<figure><img src="https://telegra.ph/file/8b4e50914e2a8b0c7e3f2.jpg" alt=""><figcaption><p>Page after clicking 'Create an App'</p></figcaption></figure>
+    <figure><img src="https://telegra.ph/file/4b7207c7ddc0429242dfa.jpg" alt=""><figcaption><p>Page after clicking 'Create' button</p></figcaption></figure>
 
-4\) Here you put any name for your App and Write the description and Agree and finally click on 'Create' button below.
+4. On the next page, you'll see your new app's Client ID and Client Secret. These are the credentials that your bot will use to access the Spotify API. Copy these credentials and save them in your bot's configuration file as environment variables with the following names:
 
-4\) Finally the page will be shown as given below ⬇
+    - `SPOTIFY_CLIENT_ID`
+    - `SPOTIFY_CLIENT_SECRET`
 
-<figure><img src="https://telegra.ph/file/4b7207c7ddc0429242dfa.jpg" alt=""><figcaption><p>Page after clicking 'Create' button</p></figcaption></figure>
+## 〣 Setting up Spotify integration with the bot
 
-5\) Copy the client id and client secret from the page given above and then go to [Heroku](https://heroku.com/) and set these two vars given below ⬇
+1. After starting your bot, go to your bot log group in Telegram and type `.spsetup`. This command will generate a message with a link.
 
-i) SPOTIFY\_CLIENT\_ID
+    <figure><img src="https://telegra.ph/file/34b2fbebfaf3119db88c8.png" alt=""><figcaption><p>Page after typing .spsetup in Logger group</p></figcaption></figure>
 
-ii) SPOTIFY\_CLIENT\_SECRET
+2. Click on the link in the message to open the Spotify authorization page. This is where you will authorize your bot to access your Spotify account.
 
-6\) The Heroku vars setting will be shown as the page given below ⬇
+    <figure><img src="https://telegra.ph/file/c7a2c6053473c5a4a10f7.jpg" alt=""><figcaption><p>Page that came after clicking the link of the Logger group</p></figcaption></figure>
 
-<figure><img src="https://telegra.ph/file/9f6a76fd54c67ec5ca366.jpg" alt=""><figcaption><p>Setting of Heroku vars</p></figcaption></figure>
+3. Log in to your Spotify account if you haven't already. Then, click the "Agree" button to give your bot permission to access your Spotify account.
 
-6\) Now after the Bot starts, go to your Bot Log group in telegram and type .spsetup you will get such links after typing the command⬇
+4. After granting permission, you will be redirected to a blank page, Copy the URL of this page.
 
-<figure><img src="https://telegra.ph/file/34b2fbebfaf3119db88c8.png" alt=""><figcaption><p>Page after typing .spsetup in Logger group</p></figcaption></figure>
+5. Go back to your bot log group in Telegram and paste the URL you just copied as a reply to the `.spsetup` message. The bot will use this URL to authenticate with Spotify.
 
-7\) Now click on the link given as shown in the Logger Group and it will open a website as shown below after clicking it ⬇
+    <figure><img src="https://telegra.ph/file/4902594ab447b1a931ab4.jpg" alt=""><figcaption><p>Page after copy pasting the website link in reply of the link of Logger group .</p></figcaption></figure>
 
-<figure><img src="https://telegra.ph/file/c7a2c6053473c5a4a10f7.jpg" alt=""><figcaption><p>Page that came after clicking the link of the Logger group</p></figcaption></figure>
-
-8\) Now copy the website link as shown above and go to Logger group and paste the web link in reply to that link that came after typing .spsetup given in Logger group. The page will be shown as given below⬇
-
-<figure><img src="https://telegra.ph/file/4902594ab447b1a931ab4.jpg" alt=""><figcaption><p>Page after copy pasting the website link in reply of the link of Logger group .</p></figcaption></figure>
-
-9\) Then when it's successfully done it will show 'Done! Setup Successful' .
-
-10\) Now you are ready to use the Spotify plugins.
+6. If the authentication is successful, the bot will respond with a message saying "Done! Setup Successful". Your bot is now authorized to access your Spotify account, and you can start using the Spotify commands in your Telegram chats.

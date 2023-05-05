@@ -22,3 +22,11 @@
 * [📕 IBM](tutorials/ibm.md)
 * [📕 LastFM](tutorials/lastfm.md)
 * [📕 Spotify](tutorials/spotify.md)
+
+## Changelog
+
+* [📕 Version 3.0.0](changelog/version-3.0.0.md)
+
+## About Us
+
+* [📕 Support Us](about-us/support-us.md)
