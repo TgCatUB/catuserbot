@@ -12,4 +12,4 @@ The database variables are get saved to your database that you set with [<mark s
 
 ## ≡  How to save var?
 
-You can edit your <mark style="color:green;">config.py</mark> or in your <mark style="color:green;">app environment</mark> manually or can set by using bot itself ny doing `.set var <Variable-Name> <Value>` check `.help var` for more info on this.
+You can edit your <mark style="color:green;">config.py</mark> or in your <mark style="color:green;">app environment</mark> manually or can set by using bot itself by doing `.set var <Variable-Name> <Value>` check `.help var` for more info on this.

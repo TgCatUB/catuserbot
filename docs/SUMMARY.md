@@ -17,5 +17,8 @@
 ## Tutorials
 
 * [Setup](tutorials/setup.md)
-* [Steps of setting Spotify Vars](tutorials/steps-of-setting-spotify-vars.md)
-* [G-Drive guide](tutorials/g-drive-guide.md)
+* [Climate](tutorials/climate.md)
+* [G-Drive](tutorials/g-drive.md)
+* [LastFM](tutorials/lastfm.md)
+* [Remove Background](tutorials/remove-background.md)
+* [Spotify](tutorials/spotify.md)
