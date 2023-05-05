@@ -2,7 +2,7 @@
 
 ## ≡  Mandatory Vars
 
-> #### To  host bot these are must needed, else bot wouldn't start.
+> ### To  host bot these are must needed, else bot wouldn't start
 
 ### 〣  `APP_ID`  &  `API_HASH`
 
@@ -29,9 +29,11 @@ You can generate String several ways:
 #### ➦ **Locally**
 
 {% code title="Run this inside catuserbot directory" overflow="wrap" %}
+
 ```batch
 pip3 install git+https://github.com/jisan09/Telethon && python3 stringsetup.py
 ```
+
 {% endcode %}
 
 #### &#x20;➦ Telegram Bot :  <mark style="color:blue;">**@CatSessionBot**</mark> in telegram: [https://t.me/CatStringSessionBot](https://t.me/CatStringSessionBot)
@@ -52,7 +54,7 @@ pip3 install git+https://github.com/jisan09/Telethon && python3 stringsetup.py
 
 The bot will send token after that.&#x20;
 
-#### While in botfather turn on inline permission also, for the bot you created.
+#### While in botfather turn on inline permission also, for the bot you created
 
 1. <mark style="color:yellow;">`/mybot`</mark>
 2. Click on your bot name
@@ -67,15 +69,19 @@ The bot will send token after that.&#x20;
 {% tabs %}
 {% tab title="Local Database" %}
 {% code title="Run this in terminal" overflow="wrap" %}
+
 ```batch
 sudo -u postgres bash -c "psql -c \"CREATE USER postgres WITH PASSWORD 'your_password';\" && createdb catuserbot -O postgres"
 ```
+
 {% endcode %}
 
 {% code title="Your DB_URI will be" overflow="wrap" %}
+
 ```batch
 postgresql://postgres:your_password@localhost:5432/catuserbot
 ```
+
 {% endcode %}
 {% endtab %}
 
@@ -90,7 +96,7 @@ Elephant SQL
 
 ## ≡  Extra Plugins Related Variables
 
-### 〣  `BADCAT`:
+### 〣  `BADCAT`
 
 A boolean variable \[ <mark style="color:green;">True</mark> / <mark style="color:green;">False</mark> ] that determines whether the userbot should load "badcat"      plugins, which contain offensive or NSFW content.
 
@@ -295,10 +301,6 @@ A string value that represents the API key for the OpenAI API. This value is use
 ### 〣 `OPEN_WEATHER_MAP_APPID`
 
 A string value that represents the APPID for the OpenWeatherMap API. This API can be used to retrieve weather information for a location. The APPID can be obtained for free from the OpenWeatherMap website.
-
-### 〣 `OPEN_WEATHER_MAP_APPID`
-
-A string value that represents the APPID for the OpenWeatherMap API. You can obtain this value from the OpenWeatherMap website.
 
 ### 〣 `REM_BG_API_KEY`
 

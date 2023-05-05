@@ -9,26 +9,28 @@ Hosting bot manually can  be a bit of pain, that why we prefer [<mark style="col
 ### 〣 _**Install required packages**_  <a href="#install-packages" id="install-packages"></a>
 
 {% code title="Update and install apt packages & node.v18" overflow="wrap" %}
+
 ```batch
 sudo apt update && sudo apt upgrade -y \
 && sudo apt install --no-install-recommends -y curl ffmpeg fonts-noto-color-emoji gcc git libmagickwand-dev libpq-dev mediainfo nano neofetch pv python3 python3-dev python3-lxml python3-pip python3-psycopg2 screen tree unzip wget zlib1g libyaml-dev \
 && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && apt-get install -y nodejs
 ```
+
 {% endcode %}
 
 ### 〣 _**Clone the repo & make config**_  <a href="#clone-repo" id="clone-repo"></a>
 
 {% code title="Change dir to catuserbot & make config.py to save config values" overflow="wrap" %}
+
 ```batch
 git clone -b beta https://github.com/TgCatUB/catuserbot && cd catuserbot && mv exampleconfig.py config.py
 ```
+
 {% endcode %}
 
 ### 〣 _**Setup Chromium &  its driver**_  <a href="#setup-chromium" id="setup-chromium"></a>
 
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th data-type="select" data-multiple></th><th data-hidden data-card-cover data-type="files"></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-type="content-ref"></th></tr></thead><tbody><tr><td><em><mark style="color:blue;"><strong>Install Chromium &#x26; Chrome driver</strong></mark></em> </td><td></td><td><a href="../../.gitbook/assets/chromium_pokemon.jpg">chromium_pokemon.jpg</a></td><td><a href="../guide/chromium-and-chrome-driver-setup.md">chromium-and-chrome-driver-setup.md</a></td><td><a href="../guide/chromium-and-chrome-driver-setup.md#ubuntu">#ubuntu</a></td></tr></tbody></table>
-
-
 
 ### 〣 _**Edit the config.py with your config values**_ <a href="#edit-config" id="edit-config"></a>
 
@@ -38,9 +40,11 @@ git clone -b beta https://github.com/TgCatUB/catuserbot && cd catuserbot && mv e
 ### 〣 _**Create a Virtual**_ environment _**& install requirements**_  <a href="#create-venv" id="create-venv"></a>
 
 {% code title="Using Screen to create Venv" overflow="wrap" %}
+
 ```batch
 screen -S catuserbot && virtualenv venv && source venv/bin/activate && pip3 install -r requirements.txt
 ```
+
 {% endcode %}
 
 ### 〣 _**All setup completed, its time to run the bot.**_ <a href="#run-bot" id="run-bot"></a>
@@ -55,4 +59,3 @@ screen -S catuserbot && virtualenv venv && source venv/bin/activate && pip3 inst
 {% embed url="https://youtu.be/FyfW3-7i5q0" %}
 Self Host
 {% endembed %}
-

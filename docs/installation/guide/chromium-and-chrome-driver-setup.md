@@ -15,22 +15,28 @@ Here we will show how to setup this in 2 popular and widely used distros only (<
 {% tabs %}
 {% tab title="Ubuntu" %}
 {% code title="Install chromium and chromium based chrome driver" overflow="wrap" %}
+
 ```batch
 sudo apt install chromium-browser chromium-chromedriver
 ```
+
 {% endcode %}
 
 {% code title="Go to catuserbot directory and open the config.py " overflow="wrap" %}
+
 ```batch
 nano config.py
 ```
+
 {% endcode %}
 
 {% code title="Add these two vars in your config" overflow="wrap" %}
+
 ```batch
 CHROME_BIN = "/usr/bin/chromium-browser"
 CHROME_DRIVER = "/usr/bin/chromedriver"
 ```
+
 {% endcode %}
 
 Now to save use <mark style="color:red;">Ctrl+O</mark> and press <mark style="color:red;">Enter</mark> , then  use <mark style="color:red;">Ctrl+X</mark> to exit.
@@ -38,22 +44,28 @@ Now to save use <mark style="color:red;">Ctrl+O</mark> and press <mark style="co
 
 {% tab title="Debian" %}
 {% code title="Install chromium and chromium based chrome driver" overflow="wrap" %}
+
 ```batch
 sudo apt install chromium chromium-driver
 ```
+
 {% endcode %}
 
 {% code title="Go to catuserbot directory and open the config.py " overflow="wrap" %}
+
 ```batch
 nano config.py
 ```
+
 {% endcode %}
 
 {% code title="Add these two vars in your config" overflow="wrap" %}
+
 ```batch
 CHROME_BIN = "/usr/bin/chromium"
 CHROME_DRIVER = "/usr/bin/chromedriver"
 ```
+
 {% endcode %}
 
 Now to save use <mark style="color:red;">Ctrl+O</mark> and press <mark style="color:red;">Enter</mark> , then  use <mark style="color:red;">Ctrl+X</mark> to exit.
