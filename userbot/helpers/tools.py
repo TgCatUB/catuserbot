@@ -46,8 +46,7 @@ async def meme_type(message):
                 if mime == "application/x-tgsticker":
                     return "Animated Sticker"
                 return (
-                    "Video" if ext in [".mp4", ".mkv",
-                                       ".avi", ".m4v"] else "Document"
+                    "Video" if ext in [".mp4", ".mkv", ".avi", ".m4v"] else "Document"
                 )
         except AttributeError:
             return await file_type(message)
