@@ -23,6 +23,12 @@
 * [📕 LastFM](tutorials/lastfm.md)
 * [📕 Spotify](tutorials/spotify.md)
 
+## About Us
+
+* [🐱 Cat UserBot](about-us/cat-userbot.md)
+* [🆘 Support](about-us/support.md)
+* [🖤 Support Us](about-us/support-us.md)
+
 ## Project Info
 
 * [GitHub](https://github.com/TgCatUB)
@@ -30,9 +36,3 @@
   * [📄 Version 3.2.0](project-info/changelogs/version-3.2.0.md)
   * [📄 Version 3.1.0](project-info/changelogs/version-3.1.0.md)
   * [📄 Version 3.0.0](project-info/changelogs/version-3.0.0.md)
-
-## About Us
-
-* [🐱 Cat UserBot](about-us/cat-userbot.md)
-* [🆘 Support](about-us/support.md)
-* [🖤 Support Us](about-us/support-us.md)
