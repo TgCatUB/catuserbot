@@ -34,4 +34,5 @@
 ## About Us
 
 * [🐱 Cat UserBot](about-us/cat-userbot.md)
+* [🆘 Support](about-us/support.md)
 * [🖤 Support Us](about-us/support-us.md)
