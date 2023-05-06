@@ -4,7 +4,7 @@ description: >-
   community and support channels.
 ---
 
-# 🆘 Support
+# 📞 Support
 
 ## 🌐 Community
 
