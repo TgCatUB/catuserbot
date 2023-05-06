@@ -10,11 +10,32 @@
 version: '3.3'
 
 services:
-  app:
+ app:
     container_name: cat
     build:
       context: .
       dockerfile: Dockerfile
-    network_mode: "host"
     command: python3 -m userbot
     restart: on-failure
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db/catuserbot
+    depends_on:
+      - db
+    volumes:
+      - botdata:/userbot
+
+ db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=catuserbot
+    volumes:
+      - db:/var/lib/postgresql/data
+volumes:
+  db:
+    driver: local
+  botdata:
+    driver: local
+
