@@ -18,7 +18,7 @@ from telethon.tl.types import DocumentAttributeFilename
 
 from userbot import Convert, catub
 
-from ..core.managers import edit_or_reply, edit_delete
+from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions import delete_conv
 from ..helpers.utils import reply_id
 

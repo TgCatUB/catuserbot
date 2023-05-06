@@ -9,6 +9,7 @@
 # Special credits: [Sumanjay](https://github.com/cyberboysumanjay) (ported from uniborg)
 
 import os
+
 # imported from uniborg
 from justwatch import JustWatch, justwatchapi
 from pySmartDL import SmartDL

@@ -10,7 +10,7 @@
 # @PhycoNinja13b <Telegram> (for Random RGB Sticklet)
 # @UniBorg <Telegram> (Modification)
 # @heyworld & @DeletedUser420 <Telegram> (imported from ppe-remix)
-# 
+#
 # @SnapDragon7410 <Telegram> (RegEx)
 # https://t.me/c/1220993104/500653
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
