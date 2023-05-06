@@ -25,6 +25,7 @@
 
 ## Project Info
 
+* [GitHub](https://github.com/TgCatUB)
 * [📑 Changelogs](project-info/changelogs/README.md)
   * [📄 Version 3.2.0](project-info/changelogs/version-3.2.0.md)
   * [📄 Version 3.1.0](project-info/changelogs/version-3.1.0.md)
@@ -32,4 +33,5 @@
 
 ## About Us
 
+* [🐱 Cat UserBot](about-us/cat-userbot.md)
 * [🖤 Support Us](about-us/support-us.md)
