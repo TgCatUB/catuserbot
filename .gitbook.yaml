@@ -1,1 +1,4 @@
 root: ./docs
+redirects:
+  - from: /
+    to: /catuserbot
