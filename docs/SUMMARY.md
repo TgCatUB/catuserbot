@@ -25,7 +25,8 @@
 
 ## Changelog
 
-* [📕 Version 3.0.0](changelog/version-3.0.0.md)
+* [Changelogs](changelog/changelogs/README.md)
+  * [📕 Version 3.0.0](changelog/changelogs/version-3.0.0.md)
 
 ## About Us
 
