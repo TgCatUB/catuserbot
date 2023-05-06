@@ -1,10 +1,19 @@
-# Random RGB Sticklet by @PhycoNinja13b
-# modified by @UniBorg
-# imported from ppe-remix by @heyworld & @DeletedUser420
-# modified by @mrconfused
-# pengin & gandhi Yato
-# modified & improved by @jisan7509
-# RegEx by https://t.me/c/1220993104/500653 ( @SnapDragon7410 )
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Special credits:
+# @PhycoNinja13b <Telegram> (for Random RGB Sticklet)
+# @UniBorg <Telegram> (Modification)
+# @heyworld & @DeletedUser420 <Telegram> (imported from ppe-remix)
+# 
+# @SnapDragon7410 <Telegram> (RegEx)
+# https://t.me/c/1220993104/500653
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 import os
 import random
