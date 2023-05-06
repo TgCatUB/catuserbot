@@ -1,4 +1,4 @@
-# Database Vars
+# 📕 Database Vars
 
 ## ≡ List of Available Database Variables
 

@@ -1,4 +1,4 @@
-# Self Host
+# 📕 Self Host
 
 ## ≡ Build your bot manually
 

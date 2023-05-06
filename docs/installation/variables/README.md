@@ -1,4 +1,4 @@
-# 📕 Variables
+# 📚 Variables
 
 ## ≡  What are these ?
 

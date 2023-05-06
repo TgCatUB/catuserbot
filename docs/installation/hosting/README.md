@@ -1,4 +1,4 @@
-# 📕 Hosting
+# 📚 Hosting
 
 ## ≡  What For ??
 

@@ -1,4 +1,4 @@
-# Docker Compose
+# 📕 Docker Compose
 
 ## ≡ Run your bot in docker with just simple steps
 

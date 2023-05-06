@@ -1,4 +1,4 @@
-# Config Vars
+# 📕 Config Vars
 
 ## ≡ Mandatory Vars
 
