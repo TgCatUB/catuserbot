@@ -2,55 +2,55 @@
 
 ## ≡ Base Changes
 
-- Changed the docker base image to `catub/catuserbot:latest`. Users can use `catub/base:bullseye` in case of blacklisting by changing the image name in the Dockerfile.
-- Added a Docker Compose file with database support. Users can run the bot with a database, and if they don't set `DB_URI` in `config.py`, it will automatically make an SQLite database.
-- Added new [Documentation](https://tgcatub.gitbook.io/catuserbot/) .
-- Changed the plugin log style in `botlogger` to make it less spammy.
-- Added logs support for VPS users (check `.help logs`).
+* Changed the docker base image to `catub/catuserbot:latest`. Users can use `catub/base:bullseye` in case of blacklisting by changing the image name in the Dockerfile.
+* Added a Docker Compose file with database support. Users can run the bot with a database, and if they don't set `DB_URI` in `config.py`, it will automatically make an SQLite database.
+* Added new [Documentation](https://tgcatub.gitbook.io/catuserbot/) .
+* Changed the plugin log style in `botlogger` to make it less spammy.
+* Added logs support for VPS users (check `.help logs`).
 
 ## ≡ Breaking Changes
 
-- Updated `Telethon` to the latest version and added spoiler media support globally. Users can enable it in `config.py` (`SPOILER_MEDIA = True`).
-- Removed the old way of managing database var by using `db` (`.setdb`, `.getdb`, `.deldb`). Users can now manage them with var itself (`.setvar`, `.getvar`, `.delvar`). The bot will decide whether to add them in the database or in `config.py`.
+* Updated `Telethon` to the latest version and added spoiler media support globally. Users can enable it in `config.py` (`SPOILER_MEDIA = True`).
+* Removed the old way of managing database var by using `db` (`.setdv`, `.getdv`, `.deldv`). Users can now manage them with var itself (`.setvar`, `.getvar`, `.delvar`). The bot will decide whether to add them in the database or in `config.py`.
 
 ## ≡ Plugin Changes
 
 ### 〣 Security
 
-- Fixed the issue where sudo users could upload the **config.py** file.
-- Fixed issue where sudo users could scrap botlog config with eval.
+* Fixed the issue where sudo users could upload the **config.py** file.
+* Fixed issue where sudo users could scrap botlog config with eval.
 
 ### 〣 Reformatted
 
-- Reformatted inline and added `vcplayer` there too (check `@your_bot_username`).
-- Reformatted the log of `.eval` to make it more readable.
-- Dumped `chatbot` for now, as no faster API was found for it.
-- Revamped **google**, removed the old way of searching, and added the new way of searching with **Google Lens** (check `.help google`).
-- Replaced **ray.so API** with **chromedriver**.
+* Reformatted inline and added `vcplayer` there too (check `@your_bot_username`).
+* Reformatted the log of `.eval` to make it more readable.
+* Dumped `chatbot` for now, as no faster API was found for it.
+* Revamped **google**, removed the old way of searching, and added the new way of searching with **Google Lens** (check `.help google`).
+* Replaced **ray.so API** with **chromedriver**.
 
 ### 〣 Fixed
 
-- Fixed **last.fm** config error on VPS.
-- Fixed **autoprofile** error (after setting value, it was asking for the value again).
-- Fixed **filesummary** round video error.
-- Fixed **sangmata**  now it can fetch name/username history.
-- Fixed **stcr** giving an error while making a sticker.
+* Fixed **last.fm** config error on VPS.
+* Fixed **autoprofile** error (after setting value, it was asking for the value again).
+* Fixed **filesummary** round video error.
+* Fixed **sangmata** now it can fetch name/username history.
+* Fixed **stcr** giving an error while making a sticker.
 
 ### 〣 Added
 
-- Added **musicmix** API with **genius** (fixes lyrics error for VPS users).
-- Added **install to path** option in `.install`.
-- Added more flags in **logs** (check `.help logs`).
-- Added `.inspect` in **evaluators**  (check `.help inspect`).
-  - **aitools:** AI chatbot works without any API key (check `.help aitools`).
-    - `gentxt`: Generate text response from a given text (using `thab` API).
-    - `genimg`: Generate an image from a given text (using `somnium`).
-  - **openai:** AI chatbot works with OpenAI API key (check `.help openai`).
-    - `gpt`: Generate text response from a given text.
-    - `dalle`: Generate an image from a given text.
-  - **schedule:** Schedule messages with a database to any time (check `.help schedule`).
-    - `schedule`: Schedule a message with date and time.
-    - `autoschedule`: Schedule a message with day and time and repeat it.
+* Added **musicmix** API with **genius** (fixes lyrics error for VPS users).
+* Added **install to path** option in `.install`.
+* Added more flags in **logs** (check `.help logs`).
+* Added `.inspect` in **evaluators** (check `.help inspect`).
+  * **aitools:** AI chatbot works without any API key (check `.help aitools`).
+    * `gentxt`: Generate text response from a given text (using `thab` API).
+    * `genimg`: Generate an image from a given text (using `somnium`).
+  * **openai:** AI chatbot works with OpenAI API key (check `.help openai`).
+    * `gpt`: Generate text response from a given text.
+    * `dalle`: Generate an image from a given text.
+  * **schedule:** Schedule messages with a database to any time (check `.help schedule`).
+    * `schedule`: Schedule a message with date and time.
+    * `autoschedule`: Schedule a message with day and time and repeat it.
 
 ## ≡ VC Player Changes
 
@@ -100,6 +100,6 @@ If the `VC_SESSION` string is added and the user is not in the group, the bot wi
 
 ### 〣 Improvements
 
-- The updated VC Player is more user-friendly and functional.
-- We have fixed several bugs and improved the performance of the VC Player.
-- The VC Player is now more stable and reliable than before.
+* The updated VC Player is more user-friendly and functional.
+* We have fixed several bugs and improved the performance of the VC Player.
+* The VC Player is now more stable and reliable than before.
