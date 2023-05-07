@@ -1,1 +1,5 @@
 root: ./docs
+plugins:
+  - theme-default
+variables:
+  showAuthor: true
