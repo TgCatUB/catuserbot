@@ -1,3 +1,1 @@
 root: ./docs
-redirects:
-  /: docs/README.md

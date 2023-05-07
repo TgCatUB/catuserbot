@@ -33,6 +33,7 @@
 
 * [GitHub](https://github.com/TgCatUB)
 * [📑 Changelogs](project-info/changelogs/README.md)
+  * [📄 Version 3.3.0](project-info/changelogs/version-3.3.0.md)
   * [📄 Version 3.2.0](project-info/changelogs/version-3.2.0.md)
   * [📄 Version 3.1.0](project-info/changelogs/version-3.1.0.md)
   * [📄 Version 3.0.0](project-info/changelogs/version-3.0.0.md)
