@@ -4,7 +4,7 @@ description: >-
   everything from telegram itself.
 ---
 
-# 📙 Introduction
+# Introduction
 
 <figure><img src=".gitbook/assets/catlogo.jpg" alt="Cat Logo" width="280"><figcaption><p>Vidushano</p></figcaption></figure>
 
