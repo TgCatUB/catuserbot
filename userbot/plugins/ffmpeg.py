@@ -11,17 +11,11 @@
 import asyncio
 import contextlib
 import io
-import json
 import math
 import os
-import pathlib
 import re
-import subprocess
 import time
 from datetime import datetime
-
-from telethon.tl import types
-from telethon.utils import get_extension
 
 from userbot import catub
 from userbot.core.logger import logging
@@ -44,8 +38,6 @@ plugin_category = "utils"
 
 
 thumb_image_path = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg")
-NAME = "untitled"
-MERGER_DIR = pathlib.Path(os.path.join(os.getcwd(), "merger"))
 FF_MPEG_DOWN_LOAD_MEDIA_PATH = os.path.join(
     Config.TMP_DOWNLOAD_DIRECTORY, "catuserbot.media.ffmpeg"
 )
@@ -129,82 +121,6 @@ async def cult_small_video(
     # Wait for the subprocess to finish
     await process.communicate()
     return out_put_file_name if os.path.lexists(out_put_file_name) else None
-
-
-async def tg_dl(mone, reply):
-    "To download the replied telegram file"
-    name = NAME
-    path = None
-    if not os.path.isdir(Config.TEMP_DIR):
-        os.makedirs(Config.TEMP_DIR)
-    start = datetime.now()
-    for attr in getattr(reply.document, "attributes", []):
-        if isinstance(attr, types.DocumentAttributeFilename):
-            name = attr.file_name
-    path = pathlib.Path(os.path.join(MERGER_DIR, name))
-    ext = get_extension(reply.document)
-    if path and not path.suffix and ext:
-        path = path.with_suffix(ext)
-    if name == NAME:
-        name += "_" + str(getattr(reply.document, "id", reply.id)) + ext
-    if path and path.exists():
-        if path.is_file():
-            newname = f"{str(path.stem)}_OLD"
-            path.rename(path.with_name(newname).with_suffix(path.suffix))
-            file_name = path
-        else:
-            file_name = path / name
-    elif path and not path.suffix and ext:
-        file_name = MERGER_DIR / path.with_suffix(ext)
-    elif path:
-        file_name = path
-    else:
-        file_name = MERGER_DIR / name
-    file_name.parent.mkdir(parents=True, exist_ok=True)
-    c_time = time.time()
-    progress_callback = lambda d, t: asyncio.get_event_loop().create_task(
-        progress(d, t, mone, c_time, "trying to download")
-    )
-    if (
-        not reply.document
-        and reply.photo
-        and file_name
-        and file_name.suffix
-        or not reply.document
-        and not reply.photo
-    ):
-        await reply.download_media(
-            file=file_name.absolute(), progress_callback=progress_callback
-        )
-    elif not reply.document:
-        file_name = await reply.download_media(
-            file=MERGER_DIR, progress_callback=progress_callback
-        )
-    else:
-        dl = io.FileIO(file_name.absolute(), "a")
-        await catub.fast_download_file(
-            location=reply.document,
-            out=dl,
-            progress_callback=progress_callback,
-        )
-        dl.close()
-    end = datetime.now()
-    ms = (end - start).seconds
-    await mone.edit(
-        f"**•  Downloaded in {ms} seconds.**\n**•  Downloaded to :- **  `{os.path.relpath(file_name,os.getcwd())}`\n"
-    )
-
-    return [os.path.relpath(file_name, os.getcwd()), file_name]
-
-
-async def merger(output_name=f"{MERGER_DIR}/MineisZarox.mp4"):
-    process = await asyncio.create_subprocess_shell(
-        f"ffmpeg -f concat -safe 0 -i {MERGER_DIR}/join.txt -c copy {output_name}",
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE,
-    )
-    await process.communicate()
-    return output_name if os.path.lexists(output_name) else None
 
 
 @catub.cat_cmd(
@@ -570,86 +486,3 @@ async def ff_mpeg_trim_cmd(event):
             event,
             "`The media saved in bot for triming is deleted now . you can save now new one `",
         )
-
-
-# VIDEO MERGER
-@catub.cat_cmd(
-    pattern="merge$",
-    command=("merge", plugin_category),
-    info={
-        "header": "Merge the videos together",
-        "description": "Will download the replied video into the bot.",
-        "usage": "{tr}merge <reply>",
-        "Note": "Videos will be merged in a sequence you download them.",
-    },
-)
-async def merge_save(event):
-    "Merge provided videos together"
-    reply = await event.get_reply_message()
-    catevent = await edit_or_reply(event, "`Downloading....`")
-    count = 0
-    async for messages in event.client.iter_messages(
-        event.chat_id,
-        from_user=reply.sender_id,
-        min_id=reply.id - 1,
-        max_id=event.id,
-        reverse=True,
-    ):
-        if not messages.video:
-            continue
-        file_ = await tg_dl(catevent, reply)
-        video_file, file_name = file_
-        ffprobe_cmd = [
-            "ffprobe",
-            "-v",
-            "quiet",
-            "-print_format",
-            "json",
-            "-show_format",
-            "-show_streams",
-            video_file,
-        ]
-        output = subprocess.check_output(ffprobe_cmd)
-        metadata = json.loads(output)
-        if metadata["streams"][0]["codec_name"] != "h264":
-            await edit_or_reply(catevent, "Converting...  __This might take a while__")
-            ffmpeg_cmd = [
-                "ffmpeg",
-                "-i",
-                video_file,
-                "-c:v",
-                "libx264",
-                "-preset",
-                "medium",
-                "-crf",
-                "23",
-                "-c:a",
-                "copy",
-                f"/temp/{file_name}",
-                "-y",
-            ]
-            subprocess.call(ffmpeg_cmd)
-            process = await asyncio.create_subprocess_shell(
-                " ".join(ffmpeg_cmd),
-                stdout=asyncio.subprocess.PIPE,
-                stderr=asyncio.subprocess.PIPE,
-            )
-            await process.communicate()
-            await _catutils.runcmd(f"mv /temp/{file_name}, {MERGER_DIR}")
-            await edit_or_reply(catevent, "Downloaded and converted")
-        with open(f"{MERGER_DIR}/join.txt", "a+") as join_file:
-            join_file.write(f"file {file_name}\n")
-        count += 1
-    if count == 0:
-        await edit_delete(catevent, "`Found Zero videos to merge. Aborting...`")
-    elif count == 1:
-        await edit_delete(catevent, "`Found Single video. Aborting...`")
-    else:
-        await edit_or_reply(catevent, f"Merging {count} downloaded videos.")
-        output = await merger()
-        if not output:
-            return await edit_delete(catevent, "Failed to merge given videos")
-        await edit_or_reply(catevent, "Uploading...")
-        await event.client.send_file(event.chat_id, file=output)
-        await catevent.delete()
-    await _catutils.runcmd(f"rm -rf {MERGER_DIR}")
