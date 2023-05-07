@@ -20,7 +20,7 @@ sudo apt update && sudo apt upgrade -y \
 
 {% code title="Change dir to catuserbot & make config.py to save config values" overflow="wrap" %}
 ```batch
-git clone -b beta https://github.com/TgCatUB/catuserbot && cd catuserbot && mv exampleconfig.py config.py
+git clone https://github.com/TgCatUB/catuserbot && cd catuserbot && mv exampleconfig.py config.py
 ```
 {% endcode %}
 
