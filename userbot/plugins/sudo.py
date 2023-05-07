@@ -1,3 +1,12 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 import os
 from datetime import datetime
 
@@ -394,8 +403,8 @@ async def _(event):  # sourcery no-metrics
     "To show list of enabled cmds for sudo."
     input_str = event.pattern_match.group(1)
     sudocmds = sudo_enabled_cmds()
-    clist = {}
     error = ""
+    clist = {}
     if not input_str:
         text = "**The list of sudo enabled commands are :**"
         result = "**SUDO ENABLED COMMANDS**"
@@ -435,11 +444,7 @@ async def _(event):  # sourcery no-metrics
         for cmd in clist[plugin]:
             output += f"`{cmd}` "
         output += "\n\n"
-    finalstr = (
-        result
-        + f"\n\n**SUDO TRIGGER: **`{Config.SUDO_COMMAND_HAND_LER}`\n**Commands:** {count}\n\n"
-        + output
-    )
+    finalstr = f"{result}\n\n**SUDO TRIGGER: **`{Config.SUDO_COMMAND_HAND_LER}`\n**Commands:** {count}\n\n{output}"
     await edit_or_reply(event, finalstr, aslink=True, linktext=text)
 
 

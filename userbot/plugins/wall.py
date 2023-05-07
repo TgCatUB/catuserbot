@@ -1,3 +1,12 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 import os
 import random
 
@@ -8,28 +17,11 @@ from userbot import catub
 
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
+from ..helpers.functions.functions import wall_download
 from ..helpers.utils import reply_id
 
 LOGS = logging.getLogger(os.path.basename(__name__))
 plugin_category = "extra"
-
-
-async def wall_download(piclink, query):
-    try:
-        if not os.path.isdir("./temp"):
-            os.mkdir("./temp")
-        picpath = f"./temp/{query.title().replace(' ', '')}.jpg"
-        if os.path.exists(picpath):
-            i = 1
-            while os.path.exists(picpath) and i < 11:
-                picpath = f"./temp/{query.title().replace(' ', '')}-{i}.jpg"
-                i += 1
-        with open(picpath, "wb") as f:
-            f.write(requests.get(piclink).content)
-        return picpath
-    except Exception as e:
-        LOGS.info(str(e))
-        return None
 
 
 @catub.cat_cmd(

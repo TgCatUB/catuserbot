@@ -29,9 +29,8 @@ BIO_PREFIX = Config.BIO_PREFIX
 LASTFM_API = Config.LASTFM_API
 LASTFM_SECRET = Config.LASTFM_SECRET
 LASTFM_USERNAME = Config.LASTFM_USERNAME
-LASTFM_PASSWORD_PLAIN = Config.LASTFM_PASSWORD_PLAIN
+LASTFM_PASS = md5(Config.LASTFM_PASSWORD)
 
-LASTFM_PASS = md5(LASTFM_PASSWORD_PLAIN)
 if LASTFM_API and LASTFM_SECRET and LASTFM_USERNAME and LASTFM_PASS:
     lastfm = LastFMNetwork(
         api_key=LASTFM_API,
@@ -170,7 +169,7 @@ async def get_curr_track(lfmbio):  # sourcery no-metrics
 )
 async def last_fm(lastFM):
     ".lastfm command, fetch scrobble data from last.fm."
-    await edit_or_reply(lastFM, "Processing...")
+    catevent = await edit_or_reply(lastFM, "Processing...")
     preview = None
     playing = User(LASTFM_USERNAME, lastfm).get_now_playing()
     username = f"https://www.last.fm/user/{LASTFM_USERNAME}"
@@ -201,9 +200,9 @@ async def last_fm(lastFM):
             if tags:
                 output += f"`{tags}`\n\n"
     if preview is not None:
-        await edit_or_reply(lastFM, f"{output}", parse_mode="md", link_preview=True)
+        await edit_or_reply(catevent, f"{output}", parse_mode="md", link_preview=True)
     else:
-        await edit_or_reply(lastFM, f"{output}", parse_mode="md")
+        await edit_or_reply(catevent, f"{output}", parse_mode="md")
 
 
 @catub.cat_cmd(

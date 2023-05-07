@@ -1,16 +1,19 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 from typing import Dict, List, Union
 
+from urlextract import URLExtract
+
 from ..Config import Config
-from ..helpers.utils.extdl import install_pip
 from . import CMD_INFO, GRP_INFO, PLG_INFO
 from .managers import edit_delete
-
-try:
-    from urlextract import URLExtract
-except ModuleNotFoundError:
-    install_pip("urlextract")
-    from urlextract import URLExtract
-
 
 extractor = URLExtract()
 cmdprefix = Config.COMMAND_HAND_LER
@@ -32,7 +35,12 @@ def get_data(about, ktype):
     urls = extractor.find_urls(data)
     if len(urls) > 0:
         return data
-    return data.capitalize()
+    words = data.split()
+    data = data.capitalize()
+    for word in words:
+        if word.isupper():
+            data = data.replace(word.lower(), word)
+    return data
 
 
 def _format_about(
@@ -158,14 +166,12 @@ async def plugininfo(input_str, event, flag):
     try:
         cmds = PLG_INFO[input_str]
     except KeyError:
-        outstr = await cmdinfo(input_str, event, plugin=True)
-        return outstr
+        return await cmdinfo(input_str, event, plugin=True)
     except Exception as e:
         await edit_delete(event, f"**Error**\n`{e}`")
         return None
     if len(cmds) == 1 and (flag is None or (flag and flag != "-p")):
-        outstr = await cmdinfo(cmds[0], event, plugin=False)
-        return outstr
+        return await cmdinfo(cmds[0], event, plugin=False)
     outstr = f"**Plugin : **`{input_str}`\n"
     outstr += f"**Commands Available :** `{len(cmds)}`\n"
     category = getkey(input_str)

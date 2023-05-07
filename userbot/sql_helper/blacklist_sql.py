@@ -1,3 +1,12 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 import threading
 
 from sqlalchemy import Column, String, UnicodeText, distinct, func
@@ -15,7 +24,7 @@ class BlackListFilters(BASE):
         self.trigger = trigger
 
     def __repr__(self):
-        return "<Blacklist filter '%s' for %s>" % (self.trigger, self.chat_id)
+        return f"<Blacklist filter '{self.trigger}' for {self.chat_id}>"
 
     def __eq__(self, other):
         return (

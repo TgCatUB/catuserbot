@@ -1,8 +1,12 @@
-"""
-imported from nicegrill
-modified by @mrconfused
-QuotLy: Avaible commands: .qbot
-"""
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Imported from nicegrill
 
 import io
 import os
@@ -246,23 +250,26 @@ async def _(event):
     reply = await event.get_reply_message()
     message = ""
     messages_id = []
-    if reply:
-        if input_str and input_str.isnumeric():
-            messages_id.append(reply.id)
-            async for message in event.client.iter_messages(
-                event.chat_id,
-                limit=(int(input_str) - 1),
-                offset_id=reply.id,
-                reverse=True,
-            ):
-                if message.id != event.id:
-                    messages_id.append(message.id)
-        elif input_str:
-            message = input_str
-        else:
-            messages_id.append(reply.id)
-    elif input_str:
+    if reply and input_str and input_str.isnumeric():
+        messages_id.append(reply.id)
+        async for message in event.client.iter_messages(
+            event.chat_id,
+            limit=(int(input_str) - 1),
+            offset_id=reply.id,
+            reverse=True,
+        ):
+            if message.id != event.id:
+                messages_id.append(message.id)
+    elif (
+        reply
+        and (not input_str or not input_str.isnumeric())
+        and input_str
+        or not reply
+        and input_str
+    ):
         message = input_str
+    elif reply and (not input_str or not input_str.isnumeric()) and not input_str:
+        messages_id.append(reply.id)
     else:
         return await edit_delete(
             event, "`Either reply to message or give input to function properly`"

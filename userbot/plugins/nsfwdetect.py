@@ -1,5 +1,12 @@
-# Copyright (C) 2020 BY - GitHub.com/code-rgb [TG - @deleteduser420]
-# ported to cat by @mrconfused (@sandy1709)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Special credits: [Code RGB](https://gitHub.com/code-rgb)
 
 import os
 
@@ -53,10 +60,9 @@ async def detect(event):
     r_json = r.json()["output"]
     pic_id = r.json()["id"]
     percentage = r_json["nsfw_score"] * 100
-    detections = r_json["detections"]
     link = f"https://api.deepai.org/job-view-file/{pic_id}/inputs/image.jpg"
     result = f"<b>Detected Nudity :</b>\n<a href='{link}'>>>></a> <code>{percentage:.3f}%</code>\n\n"
-    if detections:
+    if detections := r_json["detections"]:
         for parts in detections:
             name = parts["name"]
             confidence = int(float(parts["confidence"]) * 100)

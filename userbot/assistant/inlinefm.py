@@ -1,4 +1,14 @@
-# By MineisZarox https://t.me/IrisZarox (Demon)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+# Special Credit: MineisZarox https://t.me/IrisZarox (Demon)
+
 import asyncio
 import io
 import os
@@ -22,24 +32,16 @@ thumb_image_path = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg"
 
 # freaking selector
 def add_s(msg, num: int):
-    fmsg = ""
     msgs = msg.splitlines()
     leng = len(msgs)
     if num == 0:
         valv = leng - 1
-        msgs[valv] = msgs[valv] + " ⭕️"
-        for ff in msgs:
-            fmsg += f"{ff}\n"
     elif num == leng:
         valv = 1
-        msgs[valv] = msgs[valv] + " ⭕️"
-        for ff in msgs:
-            fmsg += f"{ff}\n"
     else:
         valv = num
-        msgs[valv] = msgs[valv] + " ⭕️"
-        for ff in msgs:
-            fmsg += f"{ff}\n"
+    msgs[valv] = f"{msgs[valv]} ⭕️"
+    fmsg = "".join(f"{ff}\n" for ff in msgs)
     buttons = [
         [
             Button.inline("D", data=f"fmrem_{msgs[valv]}|{valv}"),
@@ -59,81 +61,82 @@ def add_s(msg, num: int):
 
 def get_manager(path, num: int):
     if os.path.isdir(path):
-        msg = "Folders and Files in `{}` :\n".format(path)
-        lists = sorted(os.listdir(path))
-        files = ""
-        folders = ""
-        for contents in sorted(lists):
-            zpath = os.path.join(path, contents)
-            if not os.path.isdir(zpath):
-                size = os.stat(zpath).st_size
-                if str(contents).endswith((".mp3", ".flac", ".wav", ".m4a")):
-                    files += f"🎧`{contents}`\n"
-                if str(contents).endswith((".opus")):
-                    files += f"🎤`{contents}`\n"
-                elif str(contents).endswith(
-                    (".mkv", ".mp4", ".webm", ".avi", ".mov", ".flv")
-                ):
-                    files += f"🎬`{contents}`\n"
-                elif str(contents).endswith((".zip", ".tar", ".tar.gz", ".rar")):
-                    files += f"📚`{contents}`\n"
-                elif str(contents).endswith((".py")):
-                    files += f"🐍`{contents}`\n"
-                elif str(contents).endswith(
-                    (".jpg", ".jpeg", ".png", ".gif", ".bmp", ".ico")
-                ):
-                    files += f"🏞`{contents}`\n"
-                else:
-                    files += f"📔`{contents}`\n"
-            else:
-                folders += f"📂`{contents}`\n"
-        msg = msg + folders + files if files or folders else f"{msg}__empty path__"
-        PATH.clear()
-        PATH.append(path)
-        msgs = add_s(msg, int(num))
+        return manage_dir(path, num)
+    size = os.stat(path).st_size
+    msg = "The details of given file :\n"
+    if str(path).endswith((".mp3", ".flac", ".wav", ".m4a")):
+        mode = "🎧"
+    if str(path).endswith((".opus")):
+        mode = "🎤"
+    elif str(path).endswith((".mkv", ".mp4", ".webm", ".avi", ".mov", ".flv")):
+        mode = "🎬"
+    elif str(path).endswith((".zip", ".tar", ".tar.gz", ".rar")):
+        mode = "📚"
+    elif str(path).endswith((".jpg", ".jpeg", ".png", ".gif", ".bmp", ".ico")):
+        mode = "🏞"
+    elif str(path).endswith((".py")):
+        mode = "🐍"
     else:
-        size = os.stat(path).st_size
-        msg = "The details of given file :\n"
-        if str(path).endswith((".mp3", ".flac", ".wav", ".m4a")):
-            mode = "🎧"
-        if str(path).endswith((".opus")):
-            mode = "🎤"
-        elif str(path).endswith((".mkv", ".mp4", ".webm", ".avi", ".mov", ".flv")):
-            mode = "🎬"
-        elif str(path).endswith((".zip", ".tar", ".tar.gz", ".rar")):
-            mode = "📚"
-        elif str(path).endswith((".jpg", ".jpeg", ".png", ".gif", ".bmp", ".ico")):
-            mode = "🏞"
-        elif str(path).endswith((".py")):
-            mode = "🐍"
+        mode = "📔"
+    time.ctime(os.path.getctime(path))
+    time2 = time.ctime(os.path.getmtime(path))
+    time3 = time.ctime(os.path.getatime(path))
+    msg += f"**Location :** `{path}`\n"
+    msg += f"**icon :** `{mode}`\n"
+    msg += f"**Size :** `{humanbytes(size)}`\n"
+    msg += f"**Last Modified Time:** `{time2}`\n"
+    msg += f"**Last Accessed Time:** `{time3}`"
+    buttons = [
+        [
+            Button.inline("Rem", data=f"fmrem_File|{num}"),
+            Button.inline("Send", data="fmsend"),
+            Button.inline("X", data=f"fmcut_File|{num}"),
+            Button.inline("C", data=f"fmcopy_File{num}"),
+        ],
+        [
+            Button.inline("⬅️", data="fmback"),
+            Button.inline("⬆️", data="fmup_File"),
+            Button.inline("⬇️", data="fmdown_File"),
+            Button.inline("➡️", data="fmforth_File"),
+        ],
+    ]
+    PATH.clear()
+    PATH.append(path)
+    return msg, buttons
+
+
+def manage_dir(path, num):
+    msg = f"Folders and Files in `{path}` :\n"
+    lists = sorted(os.listdir(path))
+    files = ""
+    folders = ""
+    for contents in sorted(lists):
+        zpath = os.path.join(path, contents)
+        if not os.path.isdir(zpath):
+            if str(contents).endswith((".mp3", ".flac", ".wav", ".m4a")):
+                files += f"🎧`{contents}`\n"
+            if str(contents).endswith((".opus")):
+                files += f"🎤`{contents}`\n"
+            elif str(contents).endswith(
+                (".mkv", ".mp4", ".webm", ".avi", ".mov", ".flv")
+            ):
+                files += f"🎬`{contents}`\n"
+            elif str(contents).endswith((".zip", ".tar", ".tar.gz", ".rar")):
+                files += f"📚`{contents}`\n"
+            elif str(contents).endswith((".py")):
+                files += f"🐍`{contents}`\n"
+            elif str(contents).endswith(
+                (".jpg", ".jpeg", ".png", ".gif", ".bmp", ".ico")
+            ):
+                files += f"🏞`{contents}`\n"
+            else:
+                files += f"📔`{contents}`\n"
         else:
-            mode = "📔"
-        time.ctime(os.path.getctime(path))
-        time2 = time.ctime(os.path.getmtime(path))
-        time3 = time.ctime(os.path.getatime(path))
-        msg += f"**Location :** `{path}`\n"
-        msg += f"**icon :** `{mode}`\n"
-        msg += f"**Size :** `{humanbytes(size)}`\n"
-        msg += f"**Last Modified Time:** `{time2}`\n"
-        msg += f"**Last Accessed Time:** `{time3}`"
-        buttons = [
-            [
-                Button.inline("Rem", data=f"fmrem_File|{num}"),
-                Button.inline("Send", data="fmsend"),
-                Button.inline("X", data=f"fmcut_File|{num}"),
-                Button.inline("C", data=f"fmcopy_File{num}"),
-            ],
-            [
-                Button.inline("⬅️", data="fmback"),
-                Button.inline("⬆️", data="fmup_File"),
-                Button.inline("⬇️", data="fmdown_File"),
-                Button.inline("➡️", data="fmforth_File"),
-            ],
-        ]
-        PATH.clear()
-        PATH.append(path)
-        msgs = (msg, buttons)
-    return msgs
+            folders += f"📂`{contents}`\n"
+    msg = msg + folders + files if files or folders else f"{msg}__empty path__"
+    PATH.clear()
+    PATH.append(path)
+    return add_s(msg, num)
 
 
 # BACK
@@ -144,12 +147,8 @@ async def back(event):
     paths = path.split("/")
     if paths[-1] == "":
         paths.pop()
-        paths.pop()
-    else:
-        paths.pop()
-    npath = ""
-    for ii in paths:
-        npath += f"{ii}/"
+    paths.pop()
+    npath = "".join(f"{ii}/" for ii in paths)
     num = 1
     msg, buttons = get_manager(npath, num)
     await asyncio.sleep(1)
@@ -213,12 +212,8 @@ async def remove(event):
         paths = path.split("/")
         if paths[-1] == "":
             paths.pop()
-            paths.pop()
-        else:
-            paths.pop()
-        npath = ""
-        for ii in paths:
-            npath += f"{ii}/"
+        paths.pop()
+        npath = "".join(f"{ii}/" for ii in paths)
         rpath = path
     else:
         n_path = fn[2:-4]
@@ -272,31 +267,26 @@ async def cut(event):
     f, n = (event.pattern_match.group(1).decode("UTF-8")).split("|", 1)
     if CC:
         return await event.answer(f"Paste {CC[1]} first")
+    if f == "File":
+        npath = PATH[0]
+        paths = npath.split("/")
+        if paths[-1] == "":
+            paths.pop()
+        paths.pop()
+        path = "".join(f"{ii}/" for ii in paths)
+        CC.append("cut")
+        CC.append(npath)
+        await event.answer(f"Moving {npath} ...")
     else:
-        if f == "File":
-            npath = PATH[0]
-            paths = npath.split("/")
-            if paths[-1] == "":
-                paths.pop()
-                paths.pop()
-            else:
-                paths.pop()
-            path = ""
-            for ii in paths:
-                path += f"{ii}/"
-            CC.append("cut")
-            CC.append(npath)
-            await event.answer(f"Moving {npath} ...")
-        else:
-            path = PATH[0]
-            npath = f[2:-4]
-            rpath = f"{path}/{npath}"
-            CC.append("cut")
-            CC.append(rpath)
-            await event.answer(f"Moving {rpath} ...")
-        msg, buttons = get_manager(path, n)
-        await asyncio.sleep(1)
-        await event.edit(msg, buttons=buttons)
+        path = PATH[0]
+        npath = f[2:-4]
+        rpath = f"{path}/{npath}"
+        CC.append("cut")
+        CC.append(rpath)
+        await event.answer(f"Moving {rpath} ...")
+    msg, buttons = get_manager(path, n)
+    await asyncio.sleep(1)
+    await event.edit(msg, buttons=buttons)
 
 
 # COPY
@@ -306,31 +296,26 @@ async def copy(event):
     f, n = (event.pattern_match.group(1).decode("UTF-8")).split("|", 1)
     if CC:
         return await event.answer(f"Paste {CC[1]} first")
+    if f == "File":
+        npath = PATH[0]
+        paths = npath.split("/")
+        if paths[-1] == "":
+            paths.pop()
+        paths.pop()
+        path = "".join(f"{ii}/" for ii in paths)
+        CC.append("copy")
+        CC.append(npath)
+        await event.answer(f"Copying {path} ...")
     else:
-        if f == "File":
-            npath = PATH[0]
-            paths = npath.split("/")
-            if paths[-1] == "":
-                paths.pop()
-                paths.pop()
-            else:
-                paths.pop()
-            path = ""
-            for ii in paths:
-                path += f"{ii}/"
-            CC.append("copy")
-            CC.append(npath)
-            await event.answer(f"Copying {path} ...")
-        else:
-            path = PATH[0]
-            npath = f[2:-4]
-            rpath = f"{path}/{npath}"
-            CC.append("copy")
-            CC.append(rpath)
-            await event.answer(f"Copying {rpath} ...")
-        msg, buttons = get_manager(path, n)
-        await asyncio.sleep(1)
-        await event.edit(msg, buttons=buttons)
+        path = PATH[0]
+        npath = f[2:-4]
+        rpath = f"{path}/{npath}"
+        CC.append("copy")
+        CC.append(rpath)
+        await event.answer(f"Copying {rpath} ...")
+    msg, buttons = get_manager(path, n)
+    await asyncio.sleep(1)
+    await event.edit(msg, buttons=buttons)
 
 
 # PASTE
@@ -338,12 +323,9 @@ async def copy(event):
 @check_owner
 async def paste(event):
     n = event.pattern_match.group(1).decode("UTF-8")
-    path = PATH[0]
     if CC:
-        if CC[0] == "cut":
-            cmd = f"mv '{CC[1]}' '{path}'"
-        else:
-            cmd = f"cp '{CC[1]}' '{path}'"
+        path = PATH[0]
+        cmd = f"mv '{CC[1]}' '{path}'" if CC[0] == "cut" else f"cp '{CC[1]}' '{path}'"
         await _catutils.runcmd(cmd)
         msg, buttons = get_manager(path, n)
         await event.edit(msg, buttons=buttons)

@@ -128,7 +128,9 @@ class Config(object):
     LASTFM_API = os.environ.get("LASTFM_API", None)
     LASTFM_SECRET = os.environ.get("LASTFM_SECRET", None)
     LASTFM_USERNAME = os.environ.get("LASTFM_USERNAME", None)
-    LASTFM_PASSWORD_PLAIN = os.environ.get("LASTFM_PASSWORD", None)
+    LASTFM_PASSWORD = os.environ.get("LASTFM_PASSWORD", None)
+    # Open ai api // get from here: https://platform.openai.com/account/api-keys
+    OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", None)
     # Spotify API for spotify.py // get from here :  https://developer.spotify.com/dashboard/login
     SPOTIFY_CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID", None)
     SPOTIFY_CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET", None)
@@ -167,7 +169,7 @@ class Config(object):
     CATUBLOGO = None
     BOTLOG = False
     BOTLOG_CHATID = 0
-    # extra plugins realted vars below  4
+    # extra plugins realted vars below
     EXTERNAL_REPOBRANCH = os.environ.get("EXTERNAL_REPOBRANCH", "main")
     BADCAT_REPO = os.environ.get("BADCAT_REPO", "https://github.com/TgCatUB/CatPlugins")
     if BADCAT_REPO and not url(BADCAT_REPO):

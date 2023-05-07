@@ -1,3 +1,12 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 import asyncio
 import io
 import math
@@ -167,7 +176,7 @@ async def _(event):  # sourcery no-metrics  # sourcery skip: low-code-quality
                 f"**•  Downloaded in {ms} seconds.**\n**•  Downloaded file location :- ** `{os.path.relpath(downloaded_file_name,os.getcwd())}`"
             )
         else:
-            await mone.edit("Incorrect URL\n {}".format(input_str))
+            await mone.edit(f"Incorrect URL\n {input_str}")
     else:
         await mone.edit("`Reply to a message to download to my local server.`")
 

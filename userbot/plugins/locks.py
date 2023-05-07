@@ -1,3 +1,12 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 import base64
 import contextlib
 
@@ -667,11 +676,9 @@ async def _(event):  # sourcery no-metrics
 
     else:
         return await edit_or_reply(event, "`I can't lock nothing !!`")
-    try:
+    with contextlib.suppress(BaseException):
         cat = Get(cat)
         await event.client(cat)
-    except BaseException:
-        pass
     lock_rights = ChatBannedRights(
         until_date=None,
         send_messages=umsg,
@@ -916,11 +923,9 @@ async def _(event):  # sourcery no-metrics
 
     else:
         return await edit_or_reply(event, "`I can't lock nothing !!`")
-    try:
+    with contextlib.suppress(BaseException):
         cat = Get(cat)
         await event.client(cat)
-    except BaseException:
-        pass
     lock_rights = ChatBannedRights(
         until_date=None,
         send_messages=umsg,
@@ -1031,9 +1036,8 @@ async def check_incoming_messages(event):  # sourcery no-metrics
             return
     peer_id = event.chat_id
     if is_locked(peer_id, "commands"):
-        entities = event.message.entities
         is_command = False
-        if entities:
+        if entities := event.message.entities:
             for entity in entities:
                 if isinstance(entity, types.MessageEntityBotCommand):
                     is_command = True
@@ -1042,7 +1046,7 @@ async def check_incoming_messages(event):  # sourcery no-metrics
                 await event.delete()
             except Exception as e:
                 await event.reply(
-                    "I don't seem to have ADMIN permission here. \n`{}`".format(str(e))
+                    f"I don't seem to have ADMIN permission here. \n`{str(e)}`"
                 )
                 update_lock(peer_id, "commands", False)
     if is_locked(peer_id, "forward") and event.fwd_from:
@@ -1050,13 +1054,12 @@ async def check_incoming_messages(event):  # sourcery no-metrics
             await event.delete()
         except Exception as e:
             await event.reply(
-                "I don't seem to have ADMIN permission here. \n`{}`".format(str(e))
+                f"I don't seem to have ADMIN permission here. \n`{str(e)}`"
             )
             update_lock(peer_id, "forward", False)
     if is_locked(peer_id, "email"):
-        entities = event.message.entities
         is_email = False
-        if entities:
+        if entities := event.message.entities:
             for entity in entities:
                 if isinstance(entity, types.MessageEntityEmail):
                     is_email = True
@@ -1065,13 +1068,12 @@ async def check_incoming_messages(event):  # sourcery no-metrics
                 await event.delete()
             except Exception as e:
                 await event.reply(
-                    "I don't seem to have ADMIN permission here. \n`{}`".format(str(e))
+                    f"I don't seem to have ADMIN permission here. \n`{str(e)}`"
                 )
                 update_lock(peer_id, "email", False)
     if is_locked(peer_id, "url"):
-        entities = event.message.entities
         is_url = False
-        if entities:
+        if entities := event.message.entities:
             for entity in entities:
                 if isinstance(
                     entity, (types.MessageEntityTextUrl, types.MessageEntityUrl)
@@ -1082,7 +1084,7 @@ async def check_incoming_messages(event):  # sourcery no-metrics
                 await event.delete()
             except Exception as e:
                 await event.reply(
-                    "I don't seem to have ADMIN permission here. \n`{}`".format(str(e))
+                    f"I don't seem to have ADMIN permission here. \n`{str(e)}`"
                 )
                 update_lock(peer_id, "url", False)
 
@@ -1117,15 +1119,11 @@ async def _(event):
                     )
                 except Exception as e:
                     await event.reply(
-                        "I don't seem to have ADMIN permission here. \n`{}`".format(
-                            str(e)
-                        )
+                        f"I don't seem to have ADMIN permission here. \n`{str(e)}`"
                     )
                     update_lock(event.chat_id, "bots", False)
                     break
         if BOTLOG and is_ban_able:
             ban_reason_msg = await event.reply(
-                "!warn [user](tg://user?id={}) Please Do Not Add BOTs to this chat.".format(
-                    users_added_by
-                )
+                f"!warn [user](tg://user?id={users_added_by}) Please Do Not Add BOTs to this chat."
             )

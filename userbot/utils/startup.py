@@ -1,3 +1,12 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 import glob
 import os
 import sys
@@ -181,10 +190,7 @@ async def load_plugins(folder, extfolder=None):
     if extfolder:
         if not failure:
             failure.append("None")
-        await catub.tgbot.send_message(
-            BOTLOG_CHATID,
-            f'Your external repo plugins have imported \n**No of imported plugins :** `{success}`\n**Failed plugins to import :** `{", ".join(failure)}`',
-        )
+        return success, failure
 
 
 async def verifyLoggerGroup():
@@ -196,11 +202,17 @@ async def verifyLoggerGroup():
         try:
             entity = await catub.get_entity(BOTLOG_CHATID)
             if not isinstance(entity, types.User) and not entity.creator:
-                if entity.default_banned_rights.send_messages:
+                if (
+                    entity.default_banned_rights
+                    and entity.default_banned_rights.send_messages
+                ) or not entity.admin_rights.post_messages:
                     LOGS.info(
                         "Permissions missing to send messages for the specified PRIVATE_GROUP_BOT_API_ID."
                     )
-                if entity.default_banned_rights.invite_users:
+                if (
+                    entity.default_banned_rights
+                    and entity.default_banned_rights.invite_users
+                ) or not entity.admin_rights.invite_users:
                     LOGS.info(
                         "Permissions missing to addusers for the specified PRIVATE_GROUP_BOT_API_ID."
                     )
@@ -223,7 +235,7 @@ async def verifyLoggerGroup():
             "CatUserbot BotLog Group", catub, Config.TG_BOT_USERNAME, descript
         )
         addgvar("PRIVATE_GROUP_BOT_API_ID", groupid)
-        print(
+        LOGS.info(
             "Private Group for PRIVATE_GROUP_BOT_API_ID is created successfully and added to vars."
         )
         flag = True
@@ -231,11 +243,17 @@ async def verifyLoggerGroup():
         try:
             entity = await catub.get_entity(PM_LOGGER_GROUP_ID)
             if not isinstance(entity, types.User) and not entity.creator:
-                if entity.default_banned_rights.send_messages:
+                if (
+                    entity.default_banned_rights
+                    and entity.default_banned_rights.send_messages
+                ) or not entity.admin_rights.post_messages:
                     LOGS.info(
                         "Permissions missing to send messages for the specified PM_LOGGER_GROUP_ID."
                     )
-                if entity.default_banned_rights.invite_users:
+                if (
+                    entity.default_banned_rights
+                    and entity.default_banned_rights.invite_users
+                ) or not entity.admin_rights.invite_users:
                     LOGS.info(
                         "Permissions missing to addusers for the specified PM_LOGGER_GROUP_ID."
                     )
@@ -281,4 +299,5 @@ async def install_externalrepo(repo, branch, cfolder):
         )
     if os.path.exists(rpath):
         await runcmd(f"pip3 install --no-cache-dir -r {rpath}")
-    await load_plugins(folder="userbot", extfolder=cfolder)
+    success, failure = await load_plugins(folder="userbot", extfolder=cfolder)
+    return repourl, cfolder, success, failure

@@ -1,5 +1,17 @@
-# copied from https://github.com/tulir/mautrix-telegram/blob/master/mautrix_telegram/util/parallel_file_transfer.py
-# Copyright (C) 2021 Tulir Asokan
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Special credits:
+#
+# [Tulir Asokan]
+# (https://github.com/tulir/mautrix-telegram/blob/master/mautrix_telegram/util/parallel_file_transfer.py)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 import asyncio
 import hashlib
 import inspect
@@ -339,10 +351,10 @@ parallel_transfer_locks: DefaultDict[int, asyncio.Lock] = defaultdict(
 
 def stream_file(file_to_stream: BinaryIO, chunk_size=1024):
     while True:
-        data_read = file_to_stream.read(chunk_size)
-        if not data_read:
+        if data_read := file_to_stream.read(chunk_size):
+            yield data_read
+        else:
             break
-        yield data_read
 
 
 async def _internal_transfer_to_telegram(

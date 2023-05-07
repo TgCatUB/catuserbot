@@ -1,5 +1,15 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 import asyncio
 import os
+import re
 import zipfile
 from random import choice
 from textwrap import wrap
@@ -7,19 +17,10 @@ from uuid import uuid4
 
 import requests
 from googletrans import Translator
-from PIL import Image, ImageOps
-from telethon import functions, types
-
-from ..utils.extdl import install_pip
-
-try:
-    from imdb import Cinemagoer
-except ModuleNotFoundError:
-    install_pip("cinemagoer")
-    from imdb import Cinemagoer
-
 from html_telegraph_poster import TelegraphPoster
-from PIL import Image, ImageColor, ImageDraw, ImageFont, ImageOps
+from imdb import Cinemagoer
+from PIL import Image, ImageColor, ImageDraw, ImageFilter, ImageFont, ImageOps
+from telethon import functions, types
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.contacts import UnblockRequest as unblock
 
@@ -74,18 +75,12 @@ def rand_key():
     return str(uuid4())[:8]
 
 
-async def sanga_seperator(sanga_list):
-    for i in sanga_list:
-        if i.startswith("🔗"):
-            sanga_list.remove(i)
-    s = 0
-    for i in sanga_list:
-        if i.startswith("Username History"):
-            break
-        s += 1
-    usernames = sanga_list[s:]
-    names = sanga_list[:s]
-    return names, usernames
+def sanga_seperator(sanga_list):
+    string = "".join(info[info.find("\n") + 1 :] for info in sanga_list)
+    string = re.sub(r"^$\n", "", string, flags=re.MULTILINE)
+    name, username = string.split("Usernames**")
+    name = name.split("Names")[1]
+    return name, username
 
 
 # covid india data
@@ -110,6 +105,17 @@ async def post_to_telegraph(
         text=html_format_content,
     )
     return f"https://graph.org/{post_page['path']}"
+
+
+async def GetStylesGraph():
+    html = "".join(
+        [
+            f'<h2>{i["name"]}:</h2> <pre>{i["id"]}</pre><br/><img src="{i["photo_url"]}">⁪⁬⁮⁮⁮⁮'
+            for i in requests.get("https://paint.api.wombo.ai/api/styles").json()
+            if i["is_premium"] == False
+        ]
+    )
+    return await post_to_telegraph("List Of ArtStyles", html)
 
 
 # --------------------------------------------------------------------------------------------------------------------#
@@ -242,6 +248,43 @@ def reddit_thumb_link(preview, thumb=None):
 
 
 # ----------------------------------------------## Image ##------------------------------------------------------------#
+
+
+def format_image(filename):
+    img = Image.open(filename).convert("RGBA")
+    w, h = img.size
+    if w != h:
+        _min, _max = min(w, h), max(w, h)
+        bg = img.crop(
+            ((w - _min) // 2, (h - _min) // 2, (w + _min) // 2, (h + _min) // 2)
+        )
+        bg = bg.filter(ImageFilter.GaussianBlur(5))
+        bg = bg.resize((_max, _max))
+        img_new = Image.new("RGBA", (_max, _max), (255, 255, 255, 0))
+        img_new.paste(
+            bg, ((img_new.width - bg.width) // 2, (img_new.height - bg.height) // 2)
+        )
+        img_new.paste(img, ((img_new.width - w) // 2, (img_new.height - h) // 2))
+        img = img_new
+    img.save(filename)
+
+
+async def wall_download(piclink, query, ext=".jpg"):
+    try:
+        if not os.path.isdir("./temp"):
+            os.mkdir("./temp")
+        picpath = f"./temp/{query.title().replace(' ', '')}{ext}"
+        if os.path.exists(picpath):
+            i = 1
+            while os.path.exists(picpath) and i < 11:
+                picpath = f"./temp/{query.title().replace(' ', '')}-{i}{ext}"
+                i += 1
+        with open(picpath, "wb") as f:
+            f.write(requests.get(piclink).content)
+        return picpath
+    except Exception as e:
+        LOGS.info(str(e))
+        return None
 
 
 def ellipse_create(filename, size, border):

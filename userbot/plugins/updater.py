@@ -1,3 +1,12 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 import asyncio
 import contextlib
 import os
@@ -111,9 +120,9 @@ async def update_bot(event, repo, ups_rem, ac_br):
         "`Successfully Updated!\n" "Bot is restarting... Wait for a minute!`"
     )
     if os.path.exists("config.py"):
-        from userbot.plugins.vps import switch_branch
+        from userbot.plugins.vps import reload_codebase
 
-        await switch_branch()
+        await reload_codebase()
     await event.client.reload(sandy)
 
 

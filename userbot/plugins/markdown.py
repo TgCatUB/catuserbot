@@ -1,6 +1,16 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 import re
 from functools import partial
 from random import choice
@@ -45,7 +55,7 @@ def get_tag_parser(tag, entity):
         return m.group(1), entity(offset=m.start(), length=len(m.group(1)))
 
     tag = re.escape(tag)
-    return re.compile(tag + r"(.+?)" + tag, re.DOTALL), tag_parser
+    return re.compile(f"{tag}(.+?){tag}", re.DOTALL), tag_parser
 
 
 PRINTABLE_ASCII = range(0x21, 0x7F)

@@ -1,3 +1,12 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 import json
 import math
 import os
@@ -5,10 +14,8 @@ import random
 import re
 import time
 from pathlib import Path
-from uuid import uuid4
 
 from telethon import Button, types
-from telethon.errors import QueryIdInvalidError
 from telethon.events import CallbackQuery, InlineQuery
 from youtubesearchpython import VideosSearch
 
@@ -31,25 +38,15 @@ from .cmdinfo import cmdinfo, get_key, getkey, plugininfo
 from .logger import logging
 
 LOGS = logging.getLogger(__name__)
-
-BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>)")
-MEDIA_PATH_REGEX = re.compile(r"(:?\<\bmedia:(:?(?:.*?)+)\>)")
 tr = Config.COMMAND_HAND_LER
 
 
-def get_thumb(name):
-    url = f"https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Inline/{name}?raw=true"
-    return types.InputWebDocument(url=url, size=0, mime_type="image/png", attributes=[])
-
-
-def ibuild_keyboard(buttons):
-    keyb = []
-    for btn in buttons:
-        if btn[2] and keyb:
-            keyb[-1].append(Button.url(btn[0], btn[1]))
-        else:
-            keyb.append([Button.url(btn[0], btn[1])])
-    return keyb
+def get_thumb(name=None, url=None):
+    if url is None:
+        url = f"https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Inline/{name}?raw=true"
+    return types.InputWebDocument(
+        url=url, size=0, mime_type="image/jpeg", attributes=[]
+    )
 
 
 def main_menu():
@@ -89,55 +86,159 @@ def main_menu():
     return text, buttons
 
 
-async def article_builder(event, method):
-    media = thumb = photo = None
-    link_preview = False
+async def build_article(
+    event,
+    media=None,
+    title=None,
+    text=None,
+    description=None,
+    buttons=None,
+    thumbnail=None,
+    parse_mode="md",
+    link_preview=False,
+):
     builder = event.builder
+    photo_document = None
+    if media:
+        if not media.endswith((".jpg", ".jpeg", ".png")):
+            # Return a document object with the provided media URL
+            return builder.document(
+                media,
+                title=title,
+                description=description,
+                text=text,
+                buttons=buttons,
+            )
+        # Create an InputWebDocument object for the media file
+        photo_document = get_thumb(url=media)
+    if thumbnail and isinstance(thumbnail, str):
+        thumbnail = get_thumb(url=thumbnail)
+    # Return an article object with the provided properties
+    return builder.article(
+        title=title,
+        description=description,
+        type="photo" if photo_document else "article",
+        file=media,
+        thumb=thumbnail or photo_document,
+        content=photo_document,
+        text=text,
+        buttons=buttons,
+        link_preview=link_preview,
+        parse_mode=parse_mode,
+    )
+
+
+async def help_article(event):
+    help_info = main_menu()
+    return await build_article(
+        event,
+        title="Help Menu",
+        description="Help menu for CatUserbot.",
+        thumbnail=get_thumb("help.png"),
+        text=help_info[0],
+        buttons=help_info[1],
+    )
+
+
+async def filemanager_article(event):
+    try:
+        _, path_ = (event.text).split(" ", 1)
+        path = Path(path_) if path_ else os.getcwd()
+    except Exception:
+        path = os.getcwd()
+    if not os.path.exists(path):
+        return
+    query, buttons = get_manager(path, 1)
+    return await build_article(
+        event,
+        title="File Manager",
+        description=f"Inline file manager\nSyntax: ls (path optional)\nPath:  {path}",
+        thumbnail=get_thumb("filemanager.jpg"),
+        media="https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/filemanager.jpg",
+        text=query,
+        buttons=buttons,
+    )
+
+
+async def deploy_article(event):
+    buttons = [
+        (
+            Button.url("Source code", "https://github.com/TgCatUB/catuserbot"),
+            Button.url("Deploy", "https://github.com/TgCatUB/nekopack"),
+        )
+    ]
+    return await build_article(
+        event,
+        title="𝘾𝙖𝙩𝙐𝙨𝙚𝙧𝙗𝙤𝙩",
+        description="Deploy yourself.",
+        media="https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/catlogo.png",
+        text="𝗗𝗲𝗽𝗹𝗼𝘆 𝘆𝗼𝘂𝗿 𝗼𝘄𝗻 𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁.",
+        buttons=buttons,
+    )
+
+
+async def pmpermit_article(event):
+    buttons = [Button.inline(text="Show Options.", data="show_pmpermit_options")]
+    query = gvarstatus("pmpermit_text")
+    media = None
+    if PM_PIC := gvarstatus("pmpermit_pic"):
+        CAT = list(PM_PIC.split())
+        PIC = list(CAT)
+        media = random.choice(PIC)
+    return await build_article(
+        event,
+        media=media,
+        text=query,
+        buttons=buttons,
+    )
+
+
+async def age_verification_article(event):
+    buttons = [
+        Button.inline(text="Yes I'm 18+", data="age_verification_true"),
+        Button.inline(text="No I'm Not", data="age_verification_false"),
+    ]
+    return await build_article(
+        event,
+        title="Age verification",
+        text="**ARE YOU OLD ENOUGH FOR THIS ?**",
+        buttons=buttons,
+        media="https://i.imgur.com/Zg58iXc.jpg",
+    )
+
+
+async def vcplayer_article(event):
+    try:
+        from catvc.helper.function import vc_player
+        from catvc.helper.inlinevc import buttons, vcimg
+
+        text = "** | VC Menu | **"
+        buttons = buttons[0]
+        if play := vc_player.PLAYING:
+            vcimg = play["img"]
+            text = f"**🎧 Playing:** [{play['title']}]({play['url']})\n"
+            text += f"**⏳ Duration:** `{play['duration']}`\n"
+            text += f"**💭 Chat:** `{vc_player.CHAT_NAME}`"
+            buttons = buttons[1]
+
+        return await build_article(
+            event,
+            title="CatVc Player",
+            media=vcimg,
+            text=text,
+            description="Manange Vc Stream.",
+            buttons=buttons,
+            thumbnail="https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/vcplayer.jpg",
+        )
+    except Exception:
+        return None
+
+
+async def article_builder(event, method):
+    media = thumb = None
     title = "Cat Userbot"
     description = "Button menu for CatUserbot"
-    if method == "help":
-        help_info = main_menu()
-        title = "Help Menu"
-        description = "Help menu for CatUserbot."
-        thumb = get_thumb("help.png")
-        query = help_info[0]
-        buttons = help_info[1]
-    if method == "ls":
-        try:
-            _, path_ = (event.text).split(" ", 1)
-            path = Path(path_) if path_ else os.getcwd()
-        except Exception:
-            path = os.getcwd()
-        if not os.path.exists(path):
-            return
-        num = 1
-        query, buttons = get_manager(path, num)
-        title = "File Manager"
-        description = f"Inline file manager\nSyntax: ls (path optional)\nPath:  {path}"
-        thumb = get_thumb("filemanager.jpg")
-        media = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/filemanager.jpg"
-    elif method == "deploy":
-        media = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/catlogo.png"
-        title = "𝘾𝙖𝙩𝙐𝙨𝙚𝙧𝙗𝙤𝙩"
-        description = "Deploy yourself."
-        query = "𝗗𝗲𝗽𝗹𝗼𝘆 𝘆𝗼𝘂𝗿 𝗼𝘄𝗻 𝗖𝗮𝘁𝗨𝘀𝗲𝗿𝗯𝗼𝘁."
-        buttons = [
-            (
-                Button.url("Source code", "https://github.com/TgCatUB/catuserbot"),
-                Button.url("Deploy", "https://github.com/TgCatUB/nekopack"),
-            )
-        ]
-
-    elif method == "pmpermit":
-        query = gvarstatus("pmpermit_text")
-        buttons = [Button.inline(text="Show Options.", data="show_pmpermit_options")]
-        PM_PIC = gvarstatus("pmpermit_pic")
-        if PM_PIC:
-            CAT = [x for x in PM_PIC.split()]
-            PIC = list(CAT)
-            media = random.choice(PIC)
-
-    elif method == "ialive":
+    if method == "ialive":
         buttons = [
             (
                 Button.inline("Stats", data="stats"),
@@ -156,111 +257,43 @@ async def article_builder(event, method):
         ALIVE_PIC = gvarstatus("ALIVE_PIC")
         IALIVE_PIC = gvarstatus("IALIVE_PIC")
         if IALIVE_PIC:
-            CAT = [x for x in IALIVE_PIC.split()]
+            CAT = list(IALIVE_PIC.split())
             PIC = list(CAT)
             media = random.choice(PIC)
         if not IALIVE_PIC and ALIVE_PIC:
-            CAT = [x for x in ALIVE_PIC.split()]
+            CAT = list(ALIVE_PIC.split())
             PIC = list(CAT)
             media = random.choice(PIC)
 
     elif method == "spotify":
         try:
-            from userbot.plugins.spotify import SP_DATABASE, get_spotify, sp_data
+            from userbot.plugins.spotify import spotify_inline_article
 
-            title = "Spotify"
-            description = "Get currently playing song."
-            media = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/spotify_off.png"
-            if (
-                not (Config.SPOTIFY_CLIENT_ID and Config.SPOTIFY_CLIENT_SECRET)
-                or SP_DATABASE is None
-            ):
-                query = "__Spotify is not setup properly. \nDo `.help spsetup` and follow the tutorial.__"
-                buttons = [
-                    Button.url(
-                        "Tutorial",
-                        "https://graph.org/Steps-of-setting-Spotify-Vars-in-Catuserbot-04-24-2",
-                    )
-                ]
-            else:
-                response = sp_data(
-                    "https://api.spotify.com/v1/me/player/currently-playing"
-                )
-                if response.status_code == 204:
-                    query = "__Currently not listening to any music on spotify...__"
-                    buttons = [Button.url("Open Spotify", "https://open.spotify.com/")]
-                else:
-                    media, tittle, dic, lyrics, symbol = await get_spotify(
-                        event, response
-                    )
-                    thumb = get_thumb("spotify_on.png")
-                    query = f'**🎶 Track :- ** `{tittle}`\n**🎤 Artist :- ** `{dic["interpret"]}`'
-                    buttons = [
-                        (
-                            Button.url("🎧 Spotify", dic["link"]),
-                            Button.url(f"{symbol} Lyrics", lyrics),
-                        )
-                    ]
+            (
+                query,
+                buttons,
+                media,
+                thumb,
+                title,
+                description,
+            ) = await spotify_inline_article()
         except Exception:
             return None
 
     elif method.startswith("Inline buttons"):
-        markdown_note = method[14:]
-        prev = 0
-        note_data = ""
-        buttons_list = []
-        catmedia = MEDIA_PATH_REGEX.search(markdown_note)
-        if catmedia:
-            media = catmedia.group(2)
-            markdown_note = markdown_note.replace(catmedia.group(0), "")
-        for match in BTN_URL_REGEX.finditer(markdown_note):
-            n_escapes = 0
-            to_check = match.start(1) - 1
-            while to_check > 0 and markdown_note[to_check] == "\\":
-                n_escapes += 1
-                to_check -= 1
-            if n_escapes % 2 == 0:
-                buttons_list.append(
-                    (match.group(2), match.group(3), bool(match.group(4)))
-                )
-                note_data += markdown_note[prev : match.start(1)]
-                prev = match.end(1)
-            elif n_escapes % 2 == 1:
-                note_data += markdown_note[prev:to_check]
-                prev = match.start(1) - 1
-            else:
-                break
-        else:
-            note_data += markdown_note[prev:]
-        query = note_data.strip()
-        buttons = ibuild_keyboard(buttons_list)
-    if media and not media.endswith((".jpg", ".jpeg", ".png")):
-        result = builder.document(
-            media,
-            title=title,
-            description=description,
-            text=query,
-            buttons=buttons,
-        )
-    else:
-        type = "article"
-        if media and media.endswith((".jpg", ".jpeg", ".png")):
-            photo = types.InputWebDocument(
-                url=media, size=0, mime_type="image/jpeg", attributes=[]
-            )
-            type = "photo"
-        result = builder.article(
-            title=title,
-            description=description,
-            type=type,
-            file=media,
-            thumb=thumb if thumb else photo,
-            content=photo,
-            text=query,
-            buttons=buttons,
-            link_preview=link_preview,
-        )
-    return result
+        from userbot.plugins.button import inline_button_aricle
+
+        query, buttons, media = inline_button_aricle(method)
+
+    return await build_article(
+        event,
+        title=title,
+        text=query,
+        buttons=buttons,
+        description=description,
+        media=media,
+        thumbnail=thumb,
+    )
 
 
 def command_in_category(cname):
@@ -390,7 +423,7 @@ def paginate_help(
 
 
 @catub.tgbot.on(InlineQuery)
-async def inline_handler(event):  # sourcery no-metrics
+async def inline_handler(event):
     builder = event.builder
     result = None
     query = event.text
@@ -409,67 +442,15 @@ async def inline_handler(event):  # sourcery no-metrics
         if string == "ialive":
             result = await article_builder(event, string)
             await event.answer([result] if result else None)
-        if str_y[0].lower() == "ls":
-            result = await article_builder(event, str_y[0].lower())
+        elif str_y[0].lower() == "ls":
+            result = await filemanager_article(event)
             await event.answer([result] if result else None)
         elif query.startswith("Inline buttons"):
             result = await article_builder(event, query)
             await event.answer([result] if result else None)
         elif match or match2 or match3:
-            user_list = []
-            if match3:
-                sandy = "Chat"
-                query = query[5:]
-                info_type = ["hide", "can't", "Read Message "]
-            else:
-                sandy = ""
-                if match:
-                    query = query[6:]
-                    info_type = ["troll", "can't", "show message 🔐"]
-                elif match2:
-                    query = query[7:]
-                    info_type = ["secret", "can", "show message 🔐"]
-                if "|" in query:
-                    iris, query = query.replace(" |", "|").replace("| ", "|").split("|")
-                    users = iris.split(" ")
-                else:
-                    user, query = query.split(" ", 1)
-                    users = [user]
-                for user in users:
-                    usr = int(user) if user.isdigit() else user
-                    try:
-                        u = await event.client.get_entity(usr)
-                    except ValueError:
-                        return
-                    if u.username:
-                        sandy += f"@{u.username}"
-                    else:
-                        sandy += f"[{u.first_name}](tg://user?id={u.id})"
-                    user_list.append(u.id)
-                    sandy += " "
-                sandy = sandy[:-1]
-            old_msg = os.path.join("./userbot", f"{info_type[0]}.txt")
-            try:
-                jsondata = json.load(open(old_msg))
-            except Exception:
-                jsondata = False
-            timestamp = int(time.time() * 2)
-            new_msg = {
-                str(timestamp): {"text": query}
-                if match3
-                else {"userid": user_list, "text": query}
-            }
-            buttons = [Button.inline(info_type[2], data=f"{info_type[0]}_{timestamp}")]
-            result = builder.article(
-                title=f"{info_type[0].title()} message  to {sandy}.",
-                description="Send hidden text in chat."
-                if match3
-                else f"Only he/she/they {info_type[1]} open it.",
-                thumb=get_thumb(f"{info_type[0]}.png"),
-                text="✖✖✖"
-                if match3
-                else f"🔒 A whisper message to {sandy}, Only he/she can open it.",
-                buttons=buttons,
+            result, old_msg, jsondata, new_msg = await hide_toll_secret(
+                event, query, match, match3
             )
             await event.answer([result] if result else None)
             if jsondata:
@@ -478,204 +459,240 @@ async def inline_handler(event):  # sourcery no-metrics
             else:
                 json.dump(new_msg, open(old_msg, "w"))
         elif string == "help":
-            result = await article_builder(event, string)
+            result = await help_article(event)
             await event.answer([result] if result else None)
         elif string == "spotify":
             result = await article_builder(event, string)
             await event.answer([result] if result else None)
+        elif string == "vcplayer":
+            result = await vcplayer_article(event)
+            await event.answer([result] if result else None)
         elif str_y[0].lower() == "s" and len(str_y) == 2:
             result = await inline_search(event, str_y[1].strip())
-            await event.answer(result if result else None)
+            await event.answer(result or None)
         elif str_y[0].lower() == "ytdl" and len(str_y) == 2:
-            link = get_yt_video_id(str_y[1].strip())
-            found_ = True
-            if link is None:
-                search = VideosSearch(str_y[1].strip(), limit=15)
-                resp = (search.result()).get("result")
-                if len(resp) == 0:
-                    found_ = False
-                else:
-                    outdata = await result_formatter(resp)
-                    key_ = rand_key()
-                    ytsearch_data.store_(key_, outdata)
-                    buttons = [
-                        Button.inline(
-                            f"1 / {len(outdata)}",
-                            data=f"ytdl_next_{key_}_1",
-                        ),
-                        Button.inline(
-                            "📜  List all",
-                            data=f"ytdl_listall_{key_}_1",
-                        ),
-                        Button.inline(
-                            "⬇️  Download",
-                            data=f'ytdl_download_{outdata[1]["video_id"]}_0',
-                        ),
-                    ]
-                    caption = outdata[1]["message"]
-                    photo = await get_ytthumb(outdata[1]["video_id"])
-            else:
-                caption, buttons = await download_button(link, body=True)
-                photo = await get_ytthumb(link)
-            if found_:
-                markup = event.client.build_reply_markup(buttons)
-                photo = types.InputWebDocument(
-                    url=photo, size=0, mime_type="image/jpeg", attributes=[]
-                )
-                text, msg_entities = await event.client._parse_message_text(
-                    caption, "html"
-                )
-                result = types.InputBotInlineResult(
-                    id=str(uuid4()),
-                    type="photo",
-                    title=link,
-                    description="⬇️ Click to Download",
-                    thumb=photo,
-                    content=photo,
-                    send_message=types.InputBotInlineMessageMediaAuto(
-                        reply_markup=markup, message=text, entities=msg_entities
-                    ),
-                )
-            else:
-                result = builder.article(
-                    title="Not Found",
-                    text=f"No Results found for `{str_y[1]}`",
-                    description="INVALID",
-                )
-            try:
-                await event.answer([result] if result else None)
-            except QueryIdInvalidError:
-                await event.answer(
-                    [
-                        builder.article(
-                            title="Not Found",
-                            text=f"No Results found for `{str_y[1]}`",
-                            description="INVALID",
-                        )
-                    ]
-                )
+            result = await youtube_data_article(event, str_y)
+            await event.answer([result] if result else None)
         elif string == "age_verification_alert":
-            buttons = [
-                Button.inline(text="Yes I'm 18+", data="age_verification_true"),
-                Button.inline(text="No I'm Not", data="age_verification_false"),
-            ]
-            markup = event.client.build_reply_markup(buttons)
-            photo = types.InputWebDocument(
-                url="https://i.imgur.com/Zg58iXc.jpg",
-                size=0,
-                mime_type="image/jpeg",
-                attributes=[],
-            )
-            text, msg_entities = await event.client._parse_message_text(
-                "<b>ARE YOU OLD ENOUGH FOR THIS ?</b>", "html"
-            )
-            result = types.InputBotInlineResult(
-                id=str(uuid4()),
-                type="photo",
-                title="Age verification",
-                thumb=photo,
-                content=photo,
-                send_message=types.InputBotInlineMessageMediaAuto(
-                    reply_markup=markup, message=text, entities=msg_entities
-                ),
-            )
+            result = await age_verification_article(event)
             await event.answer([result] if result else None)
         elif string == "pmpermit":
-            result = await article_builder(event, string)
+            result = await pmpermit_article(event)
             await event.answer([result] if result else None)
         elif string == "":
-            results = []
-            alive_menu = await article_builder(event, "ialive")
-            results.append(alive_menu) if alive_menu else None
-            help_menu = await article_builder(event, "help")
-            results.append(help_menu) if help_menu else None
-            spotify_menu = await article_builder(event, "spotify")
-            results.append(spotify_menu) if spotify_menu else None
-            file_manager = await article_builder(event, "ls")
-            results.append(file_manager) if file_manager else None
-            results.append(
-                builder.article(
-                    title="Hide",
-                    description="Send hidden text in chat.\nSyntax: hide",
-                    text="__Send hidden message for spoilers/quote prevention.__",
-                    thumb=get_thumb("hide.png"),
-                    buttons=[
-                        Button.switch_inline(
-                            "Hidden Text", query="hide Text", same_peer=True
-                        )
-                    ],
-                ),
-            )
-            results.append(
-                builder.article(
-                    title="Search",
-                    description="Search cmds & plugins\nSyntax: s",
-                    text="__Get help about a plugin or cmd.\n\nMixture of .help & .s__",
-                    thumb=get_thumb("search.jpg"),
-                    buttons=[
-                        Button.switch_inline(
-                            "Search Help", query="s al", same_peer=True
-                        )
-                    ],
-                ),
-            )
-            results.append(
-                builder.article(
-                    title="Secret",
-                    description="Send secret message to your friends.\nSyntax: secret @usename",
-                    text="__Send **secret message** which only you & the reciever can see.\n\nFor multiple users give space to username & use **|** to seperate text.__",
-                    thumb=get_thumb("secret.png"),
-                    buttons=[
-                        (
-                            Button.switch_inline(
-                                "Single", query="secret @username Text", same_peer=True
-                            ),
-                            Button.switch_inline(
-                                "Multiple",
-                                query="secret @username @username2 | Text",
-                                same_peer=True,
-                            ),
-                        )
-                    ],
-                ),
-            )
-            results.append(
-                builder.article(
-                    title="Troll",
-                    description="Send troll message to your friends.\nSyntax: toll @usename",
-                    text="__Send **troll message** which everyone can see except the reciever.\n\nFor multiple users give space to username & use **|** to seperate text.__",
-                    thumb=get_thumb("troll.png"),
-                    buttons=[
-                        (
-                            Button.switch_inline(
-                                "Single", query="troll @username Text", same_peer=True
-                            ),
-                            Button.switch_inline(
-                                "Multiple",
-                                query="troll @username @username2 | Text",
-                                same_peer=True,
-                            ),
-                        )
-                    ],
-                ),
-            )
-            results.append(
-                builder.article(
-                    title="Youtube Download",
-                    description="Download videos/audios from YouTube.\nSyntax: ytdl",
-                    text="__Download videos or audios from YouTube with different options of resolutions/quality.__",
-                    thumb=get_thumb("youtube.png"),
-                    buttons=[
-                        Button.switch_inline(
-                            "Youtube-dl", query="ytdl perfect", same_peer=True
-                        )
-                    ],
-                ),
-            )
+            results = await inline_popup_info(event, builder)
             await event.answer(results)
     else:
-        result = await article_builder(event, "deploy")
+        result = await deploy_article(event)
         await event.answer([result] if result else None)
+
+
+async def youtube_data_article(event, str_y):
+    link = get_yt_video_id(str_y[1].strip())
+    found_ = True
+    if link is None:
+        search = VideosSearch(str_y[1].strip(), limit=15)
+        resp = (search.result()).get("result")
+        if len(resp) == 0:
+            found_ = False
+        else:
+            outdata = await result_formatter(resp)
+            key_ = rand_key()
+            ytsearch_data.store_(key_, outdata)
+            buttons = [
+                Button.inline(
+                    f"1 / {len(outdata)}",
+                    data=f"ytdl_next_{key_}_1",
+                ),
+                Button.inline(
+                    "📜  List all",
+                    data=f"ytdl_listall_{key_}_1",
+                ),
+                Button.inline(
+                    "⬇️  Download",
+                    data=f'ytdl_download_{outdata[1]["video_id"]}_0',
+                ),
+            ]
+            caption = outdata[1]["message"]
+            photo = await get_ytthumb(outdata[1]["video_id"])
+    else:
+        caption, buttons = await download_button(link, body=True)
+        photo = await get_ytthumb(link)
+    if found_:
+        result = await build_article(
+            event,
+            title=link,
+            description="⬇️ Click to Download",
+            thumbnail=photo,
+            media=photo,
+            text=caption,
+            buttons=buttons,
+            parse_mode="html",
+        )
+    else:
+        result = await build_article(
+            event,
+            title="Not Found",
+            text=f"No Results found for `{str_y[1]}`",
+            description="INVALID",
+        )
+    return result
+
+
+async def hide_toll_secret(event, query, match, match3):
+    user_list = []
+    if match3:
+        sandy = "Chat"
+        query = query[5:]
+        info_type = ["hide", "can't", "Read Message "]
+    else:
+        sandy = ""
+        if match:
+            query = query[6:]
+            info_type = ["troll", "can't", "show message 🔐"]
+        else:
+            query = query[7:]
+            info_type = ["secret", "can", "show message 🔐"]
+        if "|" in query:
+            iris, query = query.replace(" |", "|").replace("| ", "|").split("|")
+            users = iris.split(" ")
+        else:
+            user, query = query.split(" ", 1)
+            users = [user]
+        for user in users:
+            usr = int(user) if user.isdigit() else user
+            try:
+                u = await event.client.get_entity(usr)
+            except ValueError:
+                return
+            if u.username:
+                sandy += f"@{u.username}"
+            else:
+                sandy += f"[{u.first_name}](tg://user?id={u.id})"
+            user_list.append(u.id)
+            sandy += " "
+        sandy = sandy[:-1]
+    old_msg = os.path.join("./userbot", f"{info_type[0]}.txt")
+    try:
+        jsondata = json.load(open(old_msg))
+    except Exception:
+        jsondata = False
+    timestamp = int(time.time() * 2)
+    new_msg = {
+        str(timestamp): {"text": query}
+        if match3
+        else {"userid": user_list, "text": query}
+    }
+    buttons = [Button.inline(info_type[2], data=f"{info_type[0]}_{timestamp}")]
+
+    result = await build_article(
+        event,
+        title=f"{info_type[0].title()} message  to {sandy}.",
+        description="Send hidden text in chat."
+        if match3
+        else f"Only he/she/they {info_type[1]} open it.",
+        thumbnail=get_thumb(f"{info_type[0]}.png"),
+        text="✖✖✖"
+        if match3
+        else f"🔒 A whisper message to {sandy}, Only he/she can open it.",
+        buttons=buttons,
+    )
+    return result, old_msg, jsondata, new_msg
+
+
+async def inline_popup_info(event, builder):
+    results = []
+    alive_menu = await article_builder(event, "ialive")
+    results.append(alive_menu) if alive_menu else None
+    help_menu = await help_article(event)
+    results.append(help_menu) if help_menu else None
+    spotify_menu = await article_builder(event, "spotify")
+    results.append(spotify_menu) if spotify_menu else None
+    vcplayer_menu = await vcplayer_article(event)
+    results.append(vcplayer_menu) if vcplayer_menu else None
+    file_manager = await filemanager_article(event)
+    results.append(file_manager) if file_manager else None
+    results.extend(
+        (
+            builder.article(
+                title="Hide",
+                description="Send hidden text in chat.\nSyntax: hide",
+                text="__Send hidden message for spoilers/quote prevention.__",
+                thumb=get_thumb("hide.png"),
+                buttons=[
+                    Button.switch_inline(
+                        "Hidden Text",
+                        query="hide Text",
+                        same_peer=True,
+                    )
+                ],
+            ),
+            builder.article(
+                title="Search",
+                description="Search cmds & plugins\nSyntax: s",
+                text="__Get help about a plugin or cmd.\n\nMixture of .help & .s__",
+                thumb=get_thumb("search.jpg"),
+                buttons=[
+                    Button.switch_inline("Search Help", query="s al", same_peer=True)
+                ],
+            ),
+            builder.article(
+                title="Secret",
+                description="Send secret message to your friends.\nSyntax: secret @usename",
+                text="__Send **secret message** which only you & the reciever can see.\n\nFor multiple users give space to username & use **|** to seperate text.__",
+                thumb=get_thumb("secret.png"),
+                buttons=[
+                    (
+                        Button.switch_inline(
+                            "Single",
+                            query="secret @username Text",
+                            same_peer=True,
+                        ),
+                        Button.switch_inline(
+                            "Multiple",
+                            query="secret @username @username2 | Text",
+                            same_peer=True,
+                        ),
+                    )
+                ],
+            ),
+            builder.article(
+                title="Troll",
+                description="Send troll message to your friends.\nSyntax: toll @usename",
+                text="__Send **troll message** which everyone can see except the reciever.\n\nFor multiple users give space to username & use **|** to seperate text.__",
+                thumb=get_thumb("troll.png"),
+                buttons=[
+                    (
+                        Button.switch_inline(
+                            "Single",
+                            query="troll @username Text",
+                            same_peer=True,
+                        ),
+                        Button.switch_inline(
+                            "Multiple",
+                            query="troll @username @username2 | Text",
+                            same_peer=True,
+                        ),
+                    )
+                ],
+            ),
+            builder.article(
+                title="Youtube Download",
+                description="Download videos/audios from YouTube.\nSyntax: ytdl",
+                text="__Download videos or audios from YouTube with different options of resolutions/quality.__",
+                thumb=get_thumb("youtube.png"),
+                buttons=[
+                    Button.switch_inline(
+                        "Youtube-dl",
+                        query="ytdl perfect",
+                        same_peer=True,
+                    )
+                ],
+            ),
+        )
+    )
+
+    return results
 
 
 @catub.tgbot.on(CallbackQuery(data=re.compile(b"close")))

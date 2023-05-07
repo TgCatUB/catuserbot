@@ -1,3 +1,12 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 import contextlib
 import importlib
 import sys
@@ -20,13 +29,7 @@ def load_module(shortname, plugin_path=None):
     if shortname.startswith("__"):
         pass
     elif shortname.endswith("_"):
-        path = Path(f"userbot/plugins/{shortname}.py")
-        checkplugins(path)
-        name = f"userbot.plugins.{shortname}"
-        spec = importlib.util.spec_from_file_location(name, path)
-        mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(mod)
-        LOGS.info(f"Successfully imported {shortname}")
+        load_module_sortner(shortname)
     else:
         if plugin_path is None:
             path = Path(f"userbot/plugins/{shortname}.py")
@@ -41,7 +44,6 @@ def load_module(shortname, plugin_path=None):
         mod.LOGS = LOGS
         mod.Config = Config
         mod._format = _format
-        mod.tgbot = catub.tgbot
         mod.sudo_cmd = sudo_cmd
         mod.CMD_HELP = CMD_HELP
         mod.reply_id = reply_id
@@ -51,12 +53,23 @@ def load_module(shortname, plugin_path=None):
         mod.install_pip = install_pip
         mod.parse_pre = _format.parse_pre
         mod.edit_or_reply = edit_or_reply
+        mod.tgbot = catub.tgbot
         mod.logger = logging.getLogger(shortname)
         mod.borg = catub
         spec.loader.exec_module(mod)
         # for imports
         sys.modules[f"userbot.plugins.{shortname}"] = mod
         LOGS.info(f"Successfully imported {shortname}")
+
+
+def load_module_sortner(shortname):
+    path = Path(f"userbot/plugins/{shortname}.py")
+    checkplugins(path)
+    name = f"userbot.plugins.{shortname}"
+    spec = importlib.util.spec_from_file_location(name, path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    LOGS.info(f"Successfully imported {shortname}")
 
 
 def remove_plugin(shortname):

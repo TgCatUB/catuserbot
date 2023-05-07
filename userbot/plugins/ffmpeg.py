@@ -1,4 +1,13 @@
-# ported from uniborg by @spechide
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Special credits: @spechide (ported from uniborg)
+
 import asyncio
 import contextlib
 import io
@@ -93,9 +102,7 @@ async def convert_video(video_file, output_directory, crf, total_time, bot, mess
                 await message.edit(text=stats)
     # Wait for the subprocess to finish
     stdout, stderr = await process.communicate()
-    if os.path.lexists(out_put_file_name):
-        return out_put_file_name
-    return None
+    return out_put_file_name if os.path.lexists(out_put_file_name) else None
 
 
 async def cult_small_video(
@@ -113,9 +120,7 @@ async def cult_small_video(
     )
     # Wait for the subprocess to finish
     await process.communicate()
-    if os.path.lexists(out_put_file_name):
-        return out_put_file_name
-    return None
+    return out_put_file_name if os.path.lexists(out_put_file_name) else None
 
 
 @catub.cat_cmd(

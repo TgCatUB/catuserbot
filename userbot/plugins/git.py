@@ -1,3 +1,12 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 import os
 from datetime import datetime
 
@@ -163,7 +172,7 @@ async def git_commit(file_name, mone):
         LOGS.info(content_file)
     for i in content_list:
         create_file = True
-        if i == 'ContentFile(path="' + file_name + '")':
+        if i == f'ContentFile(path="{file_name}")':
             return await mone.edit("`File Already Exists`")
     if create_file:
         file_name = f"userbot/plugins/{file_name}"

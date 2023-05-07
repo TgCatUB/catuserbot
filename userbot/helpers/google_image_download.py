@@ -1,3 +1,12 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 #!/usr/bin/env python
 # In[ ]:
 #  coding: utf-8
@@ -901,8 +910,7 @@ class googleimagesdownload:
                 else:
                     built_url = f"{built_url},{ext_param}"
                 counter += 1
-        built_url = lang_url + built_url + exact_size
-        return built_url
+        return lang_url + built_url + exact_size
 
     # building main search URL
     def build_search_url(
@@ -1187,9 +1195,7 @@ class googleimagesdownload:
                         image_name += ".svg"
                 else:
                     download_status = "fail"
-                    download_message = (
-                        "Invalid image format '" + type + "'. Skipping..."
-                    )
+                    download_message = f"Invalid image format '{type}'. Skipping..."
                     return_image_name = ""
                     absolute_path = ""
                     return (
@@ -1201,20 +1207,11 @@ class googleimagesdownload:
 
                 # prefix name in image
                 prefix = f"{prefix} " if prefix else ""
-                if no_numbering:
-                    path = f"{main_directory}/{dir_name}/{prefix}{image_name}"
-                else:
-                    path = (
-                        main_directory
-                        + "/"
-                        + dir_name
-                        + "/"
-                        + prefix
-                        + str(count)
-                        + "."
-                        + image_name
-                    )
-
+                path = (
+                    f"{main_directory}/{dir_name}/{prefix}{image_name}"
+                    if no_numbering
+                    else f"{main_directory}/{dir_name}/{prefix}{str(count)}.{image_name}"
+                )
                 try:
                     with open(path, "wb") as output_file:
                         output_file.write(data)
@@ -1436,7 +1433,6 @@ class googleimagesdownload:
         return paths_agg, errors
 
     def download_executor(self, arguments):  # sourcery no-metrics
-        paths = {}
         errorCount = None
         for arg in args_list:
             if arg not in arguments:
@@ -1469,7 +1465,7 @@ class googleimagesdownload:
         # Additional words added to keywords
         if arguments["suffix_keywords"]:
             suffix_keywords = [
-                " " + str(sk) for sk in arguments["suffix_keywords"].split(",")
+                f" {str(sk)}" for sk in arguments["suffix_keywords"].split(",")
             ]
         else:
             suffix_keywords = [""]
@@ -1477,7 +1473,7 @@ class googleimagesdownload:
         # Additional words added to keywords
         if arguments["prefix_keywords"]:
             prefix_keywords = [
-                str(sk) + " " for sk in arguments["prefix_keywords"].split(",")
+                f"{str(sk)} " for sk in arguments["prefix_keywords"].split(",")
             ]
         else:
             prefix_keywords = [""]
@@ -1526,6 +1522,7 @@ class googleimagesdownload:
 
             ######Initialization Complete
         total_errors = 0
+        paths = {}
         for pky in prefix_keywords:  # 1.for every prefix keywords
             for sky in suffix_keywords:  # 2.for every suffix keywords
                 for i in range(len(search_keyword)):  # 3.for every main keyword
@@ -1544,11 +1541,7 @@ class googleimagesdownload:
                         print("Evaluating...")
                     else:
                         print(
-                            "Downloading images for: "
-                            + (pky)
-                            + (search_keyword[i])
-                            + (sky)
-                            + " ..."
+                            f"Downloading images for: {pky}{search_keyword[i]}{sky} ..."
                         )
                     search_term = pky + search_keyword[i] + sky
 
@@ -1607,9 +1600,7 @@ class googleimagesdownload:
                                 os.makedirs("logs")
                         except OSError as e:
                             print(e)
-                        with open(
-                            "logs/" + search_keyword[i] + ".json", "w"
-                        ) as json_file:
+                        with open(f"logs/{search_keyword[i]}.json", "w") as json_file:
                             json.dump(items, json_file, indent=4, sort_keys=True)
                     # Related images
                     if arguments["related_images"]:
@@ -1617,7 +1608,7 @@ class googleimagesdownload:
                             "\nGetting list of related keywords...this may take a few moments"
                         )
                         for key, value in tabs.items():
-                            final_search_term = search_term + " - " + key
+                            final_search_term = f"{search_term} - {key}"
                             print("\nNow Downloading - " + final_search_term)
                             if limit < 101:
                                 images, _ = self.download_page(value)  # download page
@@ -1634,7 +1625,7 @@ class googleimagesdownload:
                             self._get_all_items(
                                 images,
                                 main_directory,
-                                search_term + " - " + key,
+                                f"{search_term} - {key}",
                                 limit,
                                 arguments,
                             )
@@ -1651,11 +1642,10 @@ def main():
     total_errors = 0
     t0 = time.time()  # start the timer
     for arguments in records:
+        response = googleimagesdownload()
         if arguments["single_image"]:  # Download Single Image using a URL
-            response = googleimagesdownload()
             response.single_image(arguments["single_image"])
         else:  # or download multiple images based on keywords/keyphrase search
-            response = googleimagesdownload()
             paths, errors = response.download(
                 arguments
             )  # wrapping response in a variable just for consistency
@@ -1667,8 +1657,8 @@ def main():
         )  # Calculating the total time required to crawl, find and download all the links of 60,000 images
         if not arguments["silent_mode"]:
             print("\nEverything downloaded!")
-            print("Total errors: " + str(total_errors))
-            print("Total time taken: " + str(total_time) + " Seconds")
+            print(f"Total errors: {str(total_errors)}")
+            print(f"Total time taken: {str(total_time)} Seconds")
 
 
 if __name__ == "__main__":

@@ -1,3 +1,12 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 import os
 
 from bs4 import BeautifulSoup
@@ -72,14 +81,16 @@ async def wiki(event):
         "usage": "{tr}imdb <movie/series name>",
     },
 )
-async def imdb_query(event):  # sourcery no-metrics
-    # sourcery skip: low-code-quality
+async def imdb_query(event):
     """To fetch imdb data about the given movie or series."""
     catevent = await edit_or_reply(event, "`searching........`")
     reply_to = await reply_id(event)
     try:
         movie_name = event.pattern_match.group(1)
-        movies = imdb.search_movie_advanced(movie_name)
+        try:
+            movies = imdb.search_movie(movie_name)
+        except Exception:
+            movies = imdb.search_movie_advanced(movie_name)
         movieid = movies[0].movieID
         movie = imdb.get_movie(movieid)
         moviekeys = list(movie.keys())

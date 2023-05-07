@@ -1,9 +1,11 @@
-# \\ Created by-@mrconfused -- Github.com/sandy1709 //
-# \\ Modified by-@Jisan7509 -- Github.com/Jisan09 //
-#  \\    https://github.com/TgCatUB/catuserbot   //
-#   \\        Plugin for @catuserbot            //
-#    ````````````````````````````````````````````
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
 
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 import re
 
@@ -73,7 +75,7 @@ async def lyrics(event):  # sourcery no-metrics
         song = args[1].strip(" ")
         songinfo = f"{artist} - {song}"
         catevent = await edit_or_reply(event, f"`Searching lyrics for {songinfo}...`")
-        lyrics = await LyricsGen.lyrics(event, song, artist)
+        lyrics = LyricsGen.lyrics(song, artist)[1]
         if lyrics is None:
             return await catevent.edit(f"Song **{songinfo}** not found!")
         result = f"**Search query**: \n`{songinfo}`\n\n```{lyrics}```"
@@ -93,5 +95,5 @@ async def lyrics(event):  # sourcery no-metrics
                     f"**Invalid song selection for the query select proper number**\n{msg}",
                 )
             songtitle = response[songno - 1]["result"]["title"]
-            result += f"`{await LyricsGen.lyrics(event, songtitle)}`"
+            result += f"`{LyricsGen.lyrics(songtitle)[1]}`"
     await edit_or_reply(catevent, result)

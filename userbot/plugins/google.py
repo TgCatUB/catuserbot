@@ -1,59 +1,29 @@
-# reverse search and google search  plugin for cat
-import contextlib
+""" Reverse search image and Google search """
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 import os
 import re
-import urllib
 from datetime import datetime
 
-import requests
-from bs4 import BeautifulSoup
-from PIL import Image
 from search_engine_parser import BingSearch, GoogleSearch, YahooSearch
 from search_engine_parser.core.exceptions import NoResultsOrTrafficError
 
 from userbot import BOTLOG, BOTLOG_CHATID, Convert, catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.functions import deEmojify
+from ..helpers.functions import deEmojify, unsavegif
+from ..helpers.google_tools import GooglePic, chromeDriver
 from ..helpers.utils import reply_id
 
-opener = urllib.request.build_opener()
-useragent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36"
-opener.addheaders = [("User-agent", useragent)]
-
 plugin_category = "tools"
-
-
-async def ParseSauce(googleurl):
-    """Parse/Scrape the HTML code for the info we want."""
-    source = opener.open(googleurl).read()
-    soup = BeautifulSoup(source, "html.parser")
-    results = {"similar_images": "", "best_guess": ""}
-    with contextlib.suppress(BaseException):
-        for similar_image in soup.findAll("input", {"class": "gLFyf"}):
-            url = "https://www.google.com/search?tbm=isch&q=" + urllib.parse.quote_plus(
-                similar_image.get("value")
-            )
-            results["similar_images"] = url
-    for best_guess in soup.findAll("div", attrs={"class": "r5a77d"}):
-        results["best_guess"] = best_guess.get_text()
-    return results
-
-
-async def scam(results, lim):
-    single = opener.open(results["similar_images"]).read()
-    decoded = single.decode("utf-8")
-    imglinks = []
-    counter = 0
-    pattern = r"^,\[\"(.*[.png|.jpg|.jpeg])\",[0-9]+,[0-9]+\]$"
-    oboi = re.findall(pattern, decoded, re.I | re.M)
-    for imglink in oboi:
-        counter += 1
-        if counter <= int(lim):
-            imglinks.append(imglink)
-        else:
-            break
-    return imglinks
 
 
 @catub.cat_cmd(
@@ -157,153 +127,104 @@ async def gis(event):
     command=("grs", plugin_category),
     info={
         "header": "Google reverse search command.",
-        "description": "reverse search replied image or sticker in google and shows results.",
+        "description": "Reverse search replied media in google and shows results.",
         "usage": "{tr}grs",
     },
 )
 async def grs(event):
     "Google Reverse Search"
-    start = datetime.now()
-    OUTPUT_STR = "Reply to an image to do Google Reverse Search"
-    if event.reply_to_msg_id:
-        catevent = await edit_or_reply(event, "Pre Processing Media")
-        previous_message = await event.get_reply_message()
-        previous_message_text = previous_message.message
-        BASE_URL = "http://www.google.com"
-        if previous_message.media:
-            photo = await Convert.to_image(
-                event,
-                previous_message,
-                dirct="./temp",
-                file="grs.png",
-            )
-            if photo[1] is None:
-                return await edit_delete(
-                    photo[0], "__Unable to extract image from the replied message.__"
-                )
-            SEARCH_URL = f"{BASE_URL}/searchbyimage/upload"
-            multipart = {
-                "encoded_image": (
-                    photo[1],
-                    open(photo[1], "rb"),
-                ),
-                "image_content": "",
-            }
-            # https://stackoverflow.com/a/28792943/4723940
-            google_rs_response = requests.post(
-                SEARCH_URL, files=multipart, allow_redirects=False
-            )
-            the_location = google_rs_response.headers.get("Location")
-            os.remove(photo[1])
-        else:
-            previous_message_text = previous_message.message
-            SEARCH_URL = "{}/searchbyimage?image_url={}"
-            request_url = SEARCH_URL.format(BASE_URL, previous_message_text)
-            google_rs_response = requests.get(request_url, allow_redirects=False)
-            the_location = google_rs_response.headers.get("Location")
-        await catevent.edit("Found Google Result. Pouring some soup on it!")
-        headers = {
-            "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:84.0) Gecko/20100101 Firefox/84.0"
-        }
-        response = requests.get(the_location, headers=headers)
-        soup = BeautifulSoup(response.text, "html.parser")
-        # document.getElementsByClassName("r5a77d"): PRS
-        try:
-            prs_div = soup.find_all("div", {"class": "r5a77d"})[0]
-            prs_anchor_element = prs_div.find("a")
-            prs_url = BASE_URL + prs_anchor_element.get("href")
-            prs_text = prs_anchor_element.text
-            # document.getElementById("jHnbRc")
-            img_size_div = soup.find(id="jHnbRc")
-            img_size = img_size_div.find_all("div")
-        except Exception:
-            return await edit_delete(
-                catevent, "`Sorry. I am unable to find similar images`"
-            )
-        end = datetime.now()
-        ms = (end - start).seconds
-        OUTPUT_STR = """{img_size}
-<b>Possible Related Search : </b> <a href="{prs_url}">{prs_text}</a> 
-<b>More Info : </b> Open this <a href="{the_location}">Link</a> 
-<i>fetched in {ms} seconds</i>""".format(
-            **locals()
-        )
-    else:
-        catevent = event
-    await edit_or_reply(catevent, OUTPUT_STR, parse_mode="HTML", link_preview=False)
 
 
 @catub.cat_cmd(
-    pattern="reverse(?:\s|$)([\s\S]*)",
+    pattern="(grs|reverse)(?:\s|$)([\s\S]*)",
     command=("reverse", plugin_category),
     info={
         "header": "Google reverse search command.",
-        "description": "reverse search replied image or sticker in google and shows results. if count is not used then it send 1 image by default.",
-        "usage": "{tr}reverse <count>",
+        "description": "Reverse search replied media in google and shows results. If count is not used then it send 3 image by default.",
+        "usage": "{tr}reverse < 1 - 10 >",
     },
 )
 async def reverse(event):
     "Google Reverse Search"
+    start = datetime.now()
     reply_to = await reply_id(event)
-    if os.path.isfile("okgoogle.png"):
-        os.remove("okgoogle.png")
+    cmd = event.pattern_match.group(1)
     message = await event.get_reply_message()
+    limit = event.pattern_match.group(2) or "3"
+    # limit checker for .reverse
+    if int(limit) < 1 or int(limit) > 10:
+        return await edit_or_reply(event, "`Give a limit between 1-10`")
     if not message and not message.media:
         return await edit_or_reply(event, "`Reply to media...`")
+    # convert media file into image to search in google
     photo = await Convert.to_image(
-        event,
-        message,
-        dirct="./temp",
-        file="reverse.png",
+        event, message, dirct="./temp", file="reverse.png", noedits=True
     )
     if photo[1] is None:
         return await edit_delete(
-            photo[0], "__Unable to extract image from the replied message.__"
+            event, "`Unable to extract image from the replied message..`"
         )
     catevent = await edit_or_reply(event, "`Processing...`")
-    try:
-        image = Image.open(photo[1])
-        os.remove(photo[1])
-    except OSError:
-        return await catevent.edit("`Unsupported , most likely.`")
-    name = "okgoogle.png"
-    image.save(name, "PNG")
-    image.close()
-    # https://stackoverflow.com/questions/23270175/google-reverse-image-search-using-post-request#28792943
-    searchUrl = "https://www.google.com/searchbyimage/upload"
-    multipart = {"encoded_image": (name, open(name, "rb")), "image_content": ""}
-    response = requests.post(searchUrl, files=multipart, allow_redirects=False)
-    if response != 400:
-        await event.edit(
-            "`Image successfully uploaded to Google. Maybe.`"
-            "\n`Parsing source now. Maybe.`"
-        )
+    # get data accoding to cmd
+    flag = cmd != "grs"
+    data = GooglePic.reverse_data(photo[1], flag)
+    if data["error"]:
+        return await edit_delete(catevent, data["error"])
+    if data["lens"] is None:
+        return await edit_delete(catevent, "`Couldn't find any reverse data..`")
+    outfile = "./temp/reverse.png"
+    imagelist, captionlist, gifstring = [], [], ""
+    if cmd == "grs":
+        # save screenshot from lens url
+        pic, _ = await chromeDriver.get_screenshot(data["lens"])
+        if pic:
+            with open(outfile, "wb") as file:
+                file.write(pic)
     else:
-        return await catevent.edit("`Unable to perform reverse search.`")
-    fetchUrl = response.headers["Location"]
-    os.remove(name)
-    match = await ParseSauce(f"{fetchUrl}&preferences?hl=en&fg=1#languages")
-    guess = match["best_guess"]
-    imgspage = match["similar_images"]
-    if guess and imgspage:
-        await catevent.edit(f"[{guess}]({fetchUrl})\n\n`Looking for this Image...`")
-    else:
-        return await catevent.edit("`Can't find any kind similar images.`")
-    lim = event.pattern_match.group(1) or 3
-    images = await scam(match, lim)
-    yeet = []
-    for i in images:
-        k = requests.get(i)
-        yeet.append(k.content)
-    with contextlib.suppress(TypeError):
-        await event.client.send_file(
-            entity=await event.client.get_input_entity(event.chat_id),
-            file=yeet,
-            reply_to=reply_to,
-        )
-    await catevent.edit(
-        f"[{guess}]({fetchUrl})\n\n[Visually similar images]({imgspage})"
+        for checker, item in enumerate(data["image_set"], 1):
+            url = (
+                item.image
+                if item.image.endswith((".jpg", ".jpeg", ".png", ".gif"))
+                else item.site
+            )
+            # scamming telethon to send media as album
+            # gif file can't album so doing single
+            try:
+                image = await catub.send_file(BOTLOG_CHATID, url, silent=True)
+                if url.endswith(".gif"):
+                    await unsavegif(event, image)
+                    giflink = await catub.get_msg_link(image)
+                    gifstring += f'<b><a href="{giflink}">Gif{checker}</a></b>  '
+                elif not url.endswith(".gif"):
+                    imagelist.append(image.media)
+                    captionlist.append("")
+                    await image.delete()
+                await edit_or_reply(catevent, f"**📥 Downloaded : {checker}/{limit}**")
+                if checker >= int(limit):
+                    break
+            except Exception:
+                pass
+
+    end = datetime.now()
+    ms = (end - start).seconds
+    caption = f'<b>➥ Google Reverse Search:</b>  <code>{data["title"]}</code>\n<b>➥ View Source: <a href="{data["google"]}">Google Image</a></b>\n<b>➥ View Similar: <a href="{data["lens"]}">Google Lens</a> </b>(Desktop)\n<b>➥ Time Taken:</b>  <code>{ms} seconds</code>'
+    # if no similar image found save the replied image to respond
+    if not imagelist:
+        imagelist.append(outfile)
+        captionlist.append("")
+    if gifstring:
+        caption = caption + "\n\n<b>➥ Found Gif:</b>  " + gifstring
+    captionlist[-1] = caption
+    await catevent.delete()
+    await catub.send_file(
+        event.chat_id,
+        imagelist,
+        caption=captionlist,
+        parse_mode="html",
+        reply_to=reply_to,
     )
+    if os.path.exists(outfile):
+        os.remove(outfile)
 
 
 @catub.cat_cmd(

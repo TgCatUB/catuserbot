@@ -1,3 +1,12 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 import asyncio
 import base64
 import contextlib
@@ -172,9 +181,7 @@ async def newpacksticker(
         await catevent.edit(
             f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp.text}"
         )
-        if not pkang:
-            return None, None, None
-        return None, None
+        return (None, None) if pkang else (None, None, None)
     await conv.send_message(emoji)
     await args.client.send_read_acknowledge(conv.chat_id)
     await conv.get_response()
@@ -191,9 +198,7 @@ async def newpacksticker(
     await args.client.send_read_acknowledge(conv.chat_id)
     await conv.get_response()
     await args.client.send_read_acknowledge(conv.chat_id)
-    if not pkang:
-        return otherpack, packname, emoji
-    return pack, packname
+    return (pack, packname) if pkang else (otherpack, packname, emoji)
 
 
 async def add_to_pack(
@@ -250,31 +255,25 @@ async def add_to_pack(
     if is_video:
         await conv.send_file("animate.webm")
         os.remove("animate.webm")
-        rsp = await conv.get_response()
     elif is_anim:
         await conv.send_file("AnimatedSticker.tgs")
         os.remove("AnimatedSticker.tgs")
-        rsp = await conv.get_response()
     else:
         stfile.seek(0)
         await conv.send_file(stfile, force_document=True)
-        rsp = await conv.get_response()
+    rsp = await conv.get_response()
     if not verify_cond(EMOJI_SEN, rsp.message):
         await catevent.edit(
             f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp.message}"
         )
-        if not pkang:
-            return None, None, None
-        return None, None
+        return (None, None) if pkang else (None, None, None)
     await conv.send_message(emoji)
     await args.client.send_read_acknowledge(conv.chat_id)
     await conv.get_response()
     await conv.send_message("/done")
     await conv.get_response()
     await args.client.send_read_acknowledge(conv.chat_id)
-    if not pkang:
-        return None, packname, emoji
-    return pack, packname
+    return (pack, packname) if pkang else (None, packname, emoji)
 
 
 @catub.cat_cmd(

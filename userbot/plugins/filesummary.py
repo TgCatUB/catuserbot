@@ -1,4 +1,12 @@
-# file summary plugin for catuserbot  by @mrconfused
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 import time
 
 from prettytable import PrettyTable
@@ -21,7 +29,7 @@ TYPES = [
     "Sticker",
     "Gif",
     "Voice",
-    "Round",
+    "Round Video",
 ]
 
 
@@ -108,17 +116,17 @@ async def _(event):  # sourcery no-metrics  # sourcery skip: low-code-quality
         if media_dict[mediax]["count"] != 0:
             largest += f"  •  <b><a href='{media_dict[mediax]['max_file_link']}'>{mediax}</a>  : </b><code>{humanbytes(media_dict[mediax]['max_size'])}</code>\n"
     endtime = int(time.monotonic())
-    if endtime - starttime >= 120:
-        runtime = f"{str(round(((endtime - starttime) / 60), 2))} minutes"
-    else:
-        runtime = f"{str(endtime - starttime)} seconds"
     avghubytes = humanbytes(weird_division(totalsize, totalcount))
     avgruntime = (
-        str(round((weird_division((endtime - starttime), totalcount)) * 1000, 2))
-        + " ms"
+        f"{str(round(weird_division(endtime - starttime, totalcount) * 1000, 2))} ms"
     )
     totalstring = f"<code><b>Total files : </b>       | {totalcount}\nTotal file size :    | {humanbytes(totalsize)}\nAvg. file size :     | {avghubytes}\n</code>"
 
+    runtime = (
+        f"{str(round((endtime - starttime) / 60, 2))} minutes"
+        if endtime - starttime >= 120
+        else f"{str(endtime - starttime)} seconds"
+    )
     runtimestring = f"<code>Runtime :            | {runtime}\
                     \nRuntime per file :   | {avgruntime}\
                     \n</code>"
@@ -235,17 +243,17 @@ async def _(event):  # sourcery no-metrics  # sourcery skip: low-code-quality
         if media_dict[mediax]["count"] != 0:
             largest += f"  •  <b><a href='{media_dict[mediax]['max_file_link']}'>{mediax}</a>  : </b><code>{humanbytes(media_dict[mediax]['max_size'])}</code>\n"
     endtime = int(time.monotonic())
-    if endtime - starttime >= 120:
-        runtime = f"{str(round(((endtime - starttime) / 60), 2))} minutes"
-    else:
-        runtime = f"{str(endtime - starttime)} seconds"
     avghubytes = humanbytes(weird_division(totalsize, totalcount))
     avgruntime = (
-        str(round((weird_division((endtime - starttime), totalcount)) * 1000, 2))
-        + " ms"
+        f"{str(round(weird_division(endtime - starttime, totalcount) * 1000, 2))} ms"
     )
     totalstring = f"<code><b>Total files : </b>       | {totalcount}\nTotal file size :    | {humanbytes(totalsize)}\nAvg. file size :     | {avghubytes}\n</code>"
 
+    runtime = (
+        f"{str(round((endtime - starttime) / 60, 2))} minutes"
+        if endtime - starttime >= 120
+        else f"{str(endtime - starttime)} seconds"
+    )
     runtimestring = f"<code>Runtime :            | {runtime}\
                     \nRuntime per file :   | {avgruntime}\
                     \n</code>"

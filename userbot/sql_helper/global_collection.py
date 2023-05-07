@@ -1,3 +1,12 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 import threading
 
 from sqlalchemy import Column, PickleType, UnicodeText, distinct, func
@@ -15,10 +24,7 @@ class Cat_GlobalCollection(BASE):
         self.contents = tuple(contents)
 
     def __repr__(self):
-        return "<Cat Global Collection lists '%s' for %s>" % (
-            self.contents,
-            self.keywoard,
-        )
+        return f"<Cat Global Collection lists '{self.contents}' for {self.keywoard}>"
 
     def __eq__(self, other):
         return (

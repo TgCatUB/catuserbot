@@ -1,3 +1,12 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 import asyncio
 import base64
 import contextlib
@@ -819,15 +828,13 @@ async def check_progress_for_dl(
                 return file.name
         except Exception as e:
             if " not found" in str(e) or "'file'" in str(e):
-                await event.edit("Download Canceled :\n`{}`".format(file.name))
+                await event.edit(f"Download Canceled :\n`{file.name}`")
                 await asyncio.sleep(2.5)
                 return await event.delete()
             elif " depth exceeded" in str(e):
                 file.remove(force=True)
                 await event.edit(
-                    "Download Auto Canceled :\n`{}`\nYour Torrent/Link is Dead.".format(
-                        file.name
-                    )
+                    f"Download Auto Canceled :\n`{file.name}`\nYour Torrent/Link is Dead."
                 )
 
 
@@ -939,7 +946,7 @@ async def glists(gdrive):
     if query == "":
         query = "Not specified"
     if len(message) > 4000:
-        title = name if name else query
+        title = name or query
         url = await post_to_telegraph(title, message.replace("\n", "<br>"))
         message = f"<b><a href = {url}>• View in Telegraph</a></b>"
     await edit_or_reply(

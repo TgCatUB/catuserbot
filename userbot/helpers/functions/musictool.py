@@ -1,19 +1,27 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 import contextlib
 import os
 from pathlib import Path
 
 import lyricsgenius
-from telethon.errors.rpcerrorlist import YouBlockedUserError
-from telethon.tl.functions.contacts import UnblockRequest as unblock
+import requests
+from bs4 import BeautifulSoup
 
 from ...Config import Config
 from ...core.managers import edit_or_reply
+from ...helpers.google_tools import chromeDriver
 from ..utils.utils import runcmd
-from .functions import delete_conv
 from .utube import name_dl, song_dl, video_dl
 
 GENIUS = Config.GENIUS_API_TOKEN
-ENV = bool(os.environ.get("ENV", False))
 
 
 class LyricGenius:
@@ -41,38 +49,43 @@ class LyricGenius:
                             break
         return song_info
 
-    async def lyrics(self, event, title, artist=None, mode="lyrics"):
-        lyrics = link = None
-        if ENV:
-            if not artist:
-                song_info = self.song(title)["title"]
-                song = self.genius.search_song(song_info)
-            else:
-                song = self.genius.search_song(title, artist)
-            if song:
-                lyrics = song.lyrics
-                link = song.song_art_image_url
-        else:
-            msg = f"{artist}-{title}" if artist else title
-            chat = "@CatMusicRobot"
-            async with event.client.conversation(chat) as conv:
-                try:
-                    flag = await conv.send_message("/start")
-                except YouBlockedUserError:
-                    await event.client(unblock("CatMusicRobot"))
-                    flag = await conv.send_message("/start")
-                await conv.get_response()
-                await event.client.send_read_acknowledge(conv.chat_id)
-                await conv.send_message(f"/{mode} {msg}")
-                if mode == "devloper":
-                    link = (await conv.get_response()).text
-                    await event.client.send_read_acknowledge(conv.chat_id)
-                lyrics = (await conv.get_response()).text
-                await event.client.send_read_acknowledge(conv.chat_id)
-                await delete_conv(event, chat, flag)
-        if mode == "devloper":
-            return link, lyrics
-        return lyrics
+    def lyrics(self, title, artist=None):
+        lyrics = ""
+        song_info = self.song(title, artist)
+        title = song_info["title"]
+        link = song_info["song_art_image_url"] or None
+        if not artist:
+            artist = song_info["primary_artist"]["name"]
+        try:
+            song = self.genius.search_song(title, artist)
+            lyrics = song.lyrics.split(f"{title} Lyrics")
+            if len(lyrics) > 1:
+                lyrics = (
+                    lyrics[1]
+                    .replace("[", "\n\n[")
+                    .replace("\n\n\n[", "\n\n[")
+                    .replace("\n\n\n", "\n\n")
+                )
+        except Exception:
+            # try to scrap 1st
+            url = f"https://www.musixmatch.com/lyrics/{artist.replace(' ', '-')}/{title.replace(' ', '-')}"
+            soup, _ = chromeDriver.get_html(url)
+            soup = BeautifulSoup(soup, "html.parser")
+            lyrics_containers = soup.find_all(class_="lyrics__content__ok")
+            for container in lyrics_containers:
+                lyrics += container.get_text().strip()
+
+            # if private data then show 30%
+            if not lyrics:
+                base_url = "https://api.musixmatch.com/ws/1.1/"
+                endpoint = (
+                    base_url
+                    + f"matcher.lyrics.get?format=json&q_track={title}&q_artist={artist}&apikey=bf9bfaeccae52f5a4366bcdb2a6b0c4e"
+                )
+                response = requests.get(endpoint)
+                data = response.json()
+                lyrics = data["message"]["body"]["lyrics"]["lyrics_body"]
+        return link, lyrics
 
 
 LyricsGen = LyricGenius()

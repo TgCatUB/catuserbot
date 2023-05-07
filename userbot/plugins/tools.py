@@ -1,3 +1,12 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 import calendar
 import json
 import os
@@ -394,7 +403,7 @@ async def _(event):
     b = r.json()
     a = json.dumps(b, sort_keys=True, indent=4)
     # https://stackoverflow.com/a/9105132/4723940
-    await edit_or_reply(event, str(a))
+    await edit_or_reply(event, a)
 
 
 @catub.cat_cmd(

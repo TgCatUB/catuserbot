@@ -1,3 +1,12 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 import string
 
 from telethon.errors.rpcerrorlist import ForbiddenError
@@ -115,7 +124,7 @@ async def _(event):
                     FPOST_.MSG_CACHE[c] = msg
                     break
         if c not in FPOST_.MSG_CACHE:
-            for i in FPOST_.GROUPSID:
+            for _ in FPOST_.GROUPSID:
                 async for msg in event.client.iter_messages(event.chat_id, search=c):
                     if msg.raw_text.lower() == c and msg.media is None:
                         FPOST_.MSG_CACHE[c] = msg

@@ -1,3 +1,12 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# CatUserBot #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Copyright (C) 2020-2023 by TgCatUB@Github.
+
+# This file is part of: https://github.com/TgCatUB/catuserbot
+# and is released under the "GNU v3.0 License Agreement".
+
+# Please see: https://github.com/TgCatUB/catuserbot/blob/master/LICENSE
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 import os
 
 from PIL import Image
@@ -111,9 +120,7 @@ class CatConverter:
         )  # pain
         if os.path.exists(catmedia):
             os.remove(catmedia)
-        if os.path.exists(catfile):
-            return catevent, catfile
-        return catevent, None
+        return (catevent, catfile) if os.path.exists(catfile) else (catevent, None)
 
     async def to_gif(
         self, event, reply, dirct="./temp", file="meme.mp4", maxsize="5M", noedits=False
@@ -149,9 +156,7 @@ class CatConverter:
             )
         if catmedia and os.path.exists(catmedia):
             os.remove(catmedia)
-        if os.path.exists(catfile):
-            return catevent, catfile
-        return catevent, None
+        return (catevent, catfile) if os.path.exists(catfile) else (catevent, None)
 
 
 Convert = CatConverter()
