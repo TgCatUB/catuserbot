@@ -3,10 +3,10 @@
 ## ≡ Disclaimer
 
 {% hint style="warning" %}
-Railway doesn't authorize you if have any userbot/bot related stuff. If this happens  clean github & delete railway. then make new railway with the clean github.
+Railway doesn't authorize you if have any userbot/bot related stuff. If this happens clean github & delete railway. then make new railway with the clean github.
 {% endhint %}
 
-#### To Deploy in  Railway you will need 2 things
+#### To Deploy in Railway you will need 2 things
 
 1. [<mark style="color:blue;">GitHub account</mark>](https://github.com/) ( 30 days old & clean )
 2. Verified [<mark style="color:blue;">Railway account</mark>](https://railway.app/)
@@ -15,7 +15,7 @@ Railway doesn't authorize you if have any userbot/bot related stuff. If this hap
 
 After testing all what I find, best method will be root railway, get a vps from railway & host.
 
-### 〣 _Get VPS from Railway : _  [_<mark style="color:blue;">https://github.com/Jisan09/SSH4Me</mark>_](https://github.com/Jisan09/SSH4Me) <a href="#install-packages" id="install-packages"></a>
+### 〣 Get VPS from Railway :  [_<mark style="color:blue;">https://github.com/Jisan09/SSH4Me</mark>_](https://github.com/Jisan09/SSH4Me) <a href="#install-packages" id="install-packages"></a>
 
 _Now that you got your vps follow the rest as nomal vps user, try any of the two method below._
 
