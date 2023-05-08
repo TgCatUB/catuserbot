@@ -66,9 +66,13 @@ The bot will send token after that.
 
 {% tabs %}
 {% tab title="Local Database" %}
-{% code title="Run this in terminal" overflow="wrap" %}
+{% code title="First install postgres" overflow="wrap" %}
 ```batch
-sudo -u postgres bash -c "psql -c \"CREATE USER postgres WITH PASSWORD 'your_password';\" && createdb catuserbot -O postgres"
+sudo apt install postgresql postgresql-contrib
+```
+{% code title="Then run this in terminal" overflow="wrap" %}
+```batch
+sudo -u postgres bash -c "psql -c \"ALTER USER postgres WITH PASSWORD 'your_password';\" && createdb catuserbot -O postgres"
 ```
 {% endcode %}
 
