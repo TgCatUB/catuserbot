@@ -107,7 +107,7 @@ async def _(event):
                 allow_cache=False,
             )
 
-            await event.delete()
+            await catevent.delete()
     except Exception as exc:
         await catevent.edit(
             """**SpeedTest** completed in {} seconds

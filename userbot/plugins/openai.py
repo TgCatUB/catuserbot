@@ -130,6 +130,7 @@ async def gpt_response_with_prompt(event):
             "s": "To change pixel size of ai.",
             "e": "To edit the replied media with instructions.",
             "v": "To show variations of replied Image.",
+            "f": "To force document upload.",
         },
         "usage": [
             "{tr}dalle <text/reply>",
@@ -153,8 +154,12 @@ async def dalle_image_generation(event):
     text = event.pattern_match.group(1)
     reply = await event.get_reply_message()
     image_text = "**Available Pixel Size:**\n\n"
+    force_document = False
     reply_to_id = await reply_id(event)
-
+    # Flag to check force document or not
+    if "-f" in text:
+        text = text.replace("-f", "").strip()
+        force_document = True
     # Flag to change pixel size of ai
     if "-s" in text:
         flag = text.replace("-s", "").strip()
@@ -197,7 +202,7 @@ async def dalle_image_generation(event):
             photos,
             caption=captions,
             reply_to=reply_to_id,
-            force_document=True,
+            force_document=force_document,
         )
         await event.delete()
         for i in photos:
