@@ -21,8 +21,6 @@ services:
       - DATABASE_URL=postgresql://postgres:postgres@db/catuserbot
     depends_on:
       - db
-    volumes:
-      - botdata:/userbot
 
  db:
     image: postgres

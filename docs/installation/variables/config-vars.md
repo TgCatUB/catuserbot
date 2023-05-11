@@ -2,7 +2,7 @@
 
 ## ≡ Mandatory Vars
 
-> #### To host bot these are must needed, else bot wouldn't start
+> **To host bot these are must needed, else bot wouldn't start**
 
 ### 〣 `APP_ID` & `API_HASH`
 
@@ -34,9 +34,9 @@ pip3 install git+https://github.com/jisan09/Telethon && python3 stringsetup.py
 ```
 {% endcode %}
 
-**➦ Telegram Bot : **<mark style="color:blue;">**@CatSessionBot**</mark>** in telegram:** [**https://t.me/CatStringSessionBot**](https://t.me/CatStringSessionBot)
+#### **➦ Telegram Bot : **<mark style="color:blue;">**@CatSessionBot**</mark> in telegram: [**https://t.me/CatStringSessionBot**](https://t.me/CatStringSessionBot)
 
-**➦ Repl :** [**https://generatestringsession.sandeep1709.repl.run/**](https://generatestringsession.sandeep1709.repl.run/)
+#### **➦ Repl :** [**https://generatestringsession.sandeep1709.repl.run/**](https://generatestringsession.sandeep1709.repl.run/)
 
 </details>
 
@@ -66,9 +66,15 @@ The bot will send token after that.
 
 {% tabs %}
 {% tab title="Local Database" %}
-{% code title="Run this in terminal" overflow="wrap" %}
+{% code title="First install postgres" overflow="wrap" %}
 ```batch
-sudo -u postgres bash -c "psql -c \"CREATE USER postgres WITH PASSWORD 'your_password';\" && createdb catuserbot -O postgres"
+sudo apt install postgresql postgresql-contrib
+```
+{% endcode %}
+
+{% code title="Then run this in terminal" overflow="wrap" %}
+```batch
+sudo -u postgres bash -c "psql -c \"ALTER USER postgres WITH PASSWORD 'your_password';\" && createdb catuserbot -O postgres"
 ```
 {% endcode %}
 
@@ -130,7 +136,7 @@ A string value that represents the path to the ChromeDriver executable. This var
 
 ### 〣 `G_DRIVE_CLIENT_ID`
 
-A string value that represents the client ID for the Google Drive plugin. This value is used to authenticate and authorize the plugin to access the Google Drive account. You can obtain this value by creating a project on the Google Cloud Console and enabling the Google Drive API. \
+A string value that represents the client ID for the Google Drive plugin. This value is used to authenticate and authorize the plugin to access the Google Drive account. You can obtain this value by creating a project on the Google Cloud Console and enabling the Google Drive API.\
 Refer [**G-drive tutorial**](../../tutorials/g-drive.md) for getting the values.
 
 ### 〣 `G_DRIVE_CLIENT_SECRET`
@@ -175,7 +181,7 @@ A string value that represents the username for the Last.fm account that the plu
 
 ### 〣 `IBM_WATSON_CRED_PASSWORD`
 
-A string value that represents the password for the IBM Watson speech-to-text plugin. You can obtain this value from the IBM Watson website. Refer IBM tutorial for getting the values. \
+A string value that represents the password for the IBM Watson speech-to-text plugin. You can obtain this value from the IBM Watson website. Refer IBM tutorial for getting the values.\
 Refer [**IBM Tutorial**](../../tutorials/ibm.md) for getting the values.
 
 ### 〣 `IBM_WATSON_CRED_URL`
@@ -300,7 +306,7 @@ A string value that represents the API key for the OpenAI API. This value is use
 
 ### 〣 `OPEN_WEATHER_MAP_APPID`
 
-A string value that represents the APPID for the OpenWeatherMap API. This API can be used to retrieve weather information for a location. The APPID can be obtained for free from the OpenWeatherMap website.  Get your api from [openweathermap](https://home.openweathermap.org/api\_keys)
+A string value that represents the APPID for the OpenWeatherMap API. This API can be used to retrieve weather information for a location. The APPID can be obtained for free from the OpenWeatherMap website. Get your api from [openweathermap](https://home.openweathermap.org/api\_keys)
 
 ### 〣 `REM_BG_API_KEY`
 
