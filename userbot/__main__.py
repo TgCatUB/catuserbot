@@ -81,7 +81,7 @@ async def externalrepo():
         string += f"<b>➜ Repo:  </b><a href='{data[0]}'><b>{data[1]}</b></a>\n<b>     • Imported Plugins:</b>  <code>{data[2]}</code>\n<b>     • Failed to Import:</b>  <code>{', '.join(data[3])}</code>\n\n"
     if "Imported Plugins" in string:
         await catub.tgbot.send_message(BOTLOG_CHATID, string, parse_mode="html")
-    
+
 
 catub.loop.run_until_complete(startup_process())
 
