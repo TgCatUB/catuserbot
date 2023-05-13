@@ -11,7 +11,7 @@ Hosting bot manually can be a bit of pain, that why we prefer [<mark style="colo
 {% code title="Update and install apt packages & node.v18" overflow="wrap" %}
 ```batch
 sudo apt update && sudo apt upgrade -y \
-&& sudo apt install --no-install-recommends -y curl ffmpeg fonts-noto-color-emoji gcc git libmagickwand-dev libpq-dev mediainfo nano neofetch pv python3 python3-dev python3-lxml python3-pip python3-psycopg2 screen tree unzip wget zlib1g libyaml-dev \
+&& sudo apt install --no-install-recommends -y curl xvfb libxi6 libgconf-2-4 default-jdk ffmpeg fonts-noto-color-emoji gcc git libmagickwand-dev libpq-dev mediainfo nano neofetch pv python3 python3-dev python3-lxml python3-pip python3-psycopg2 screen tree unzip wget zlib1g libyaml-dev \
 && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && apt-get install -y nodejs
 ```
 {% endcode %}
@@ -51,8 +51,8 @@ pip install virtualenv && virtualenv venv && source venv/bin/activate && pip3 in
 
 * _**Run:**_ `python3 -m userbot`
 * _**Close Screen:**_ Press <mark style="color:red;">CTRL+A</mark> and after that <mark style="color:red;">CTRL+D</mark>
-* _**Reattach Screen:**_ `screen -r catuserbot`
 * _**Check:**_ `screen -ls`
+* _**Reattach Screen:**_ `screen -r <some_id>.catuserbot`
 
 ## ≡ _Video Tutorial_
 
