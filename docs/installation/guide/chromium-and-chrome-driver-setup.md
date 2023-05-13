@@ -1,4 +1,4 @@
-# 📕 Chromium and Chrome driver Setup
+# 📕 Chromium/Chrome and Chrome driver Setup
 
 {% hint style="info" %}
 This setup is only required for the users who followed the SELF-HOST method for deploying Cat Userbot.
@@ -8,7 +8,7 @@ This is not required for Docker or Docker-Compose (recommended method) methods.
 
 ➦ **Why should you do this setup?**
 
-Chromium binary and Chrome-driver is a mandatory requirement for many awesome plugins and commands like <mark style="color:green;">AI tools</mark>, <mark style="color:green;">Screenshot</mark>, <mark style="color:green;">Rayso</mark>, <mark style="color:green;">Rayso based logs</mark>, <mark style="color:green;">Carbon</mark>, etc.
+Chromium/Chrome binary and Chrome-driver is a mandatory requirement for many awesome plugins and commands like <mark style="color:green;">AI tools</mark>, <mark style="color:green;">Screenshot</mark>, <mark style="color:green;">Rayso</mark>, <mark style="color:green;">Rayso based logs</mark>, <mark style="color:green;">Carbon</mark>, etc.
 
 Here we will show how to setup this in 2 popular and widely used distros only (<mark style="color:red;">Ubuntu</mark> and <mark style="color:red;">Debian</mark>). Other distro users have to install and setup the Vars accordingly.
 
@@ -50,6 +50,17 @@ wget https://selenium-release.storage.googleapis.com/3.9/selenium-server-standal
 
 mv selenium-server-standalone-3.9.1.jar selenium-server-standalone.jar
 ```
+{% endcode %}
+
+{% code title="Start Chrome via Selenium Server" overflow="wrap" %}
+```batch
+screen -S chrome
+
+xvfb-run java -Dwebdriver.chrome.driver=/usr/bin/chromedriver -jar selenium-server-standalone.jar
+```
+{% endcode %}
+
+After this, do <mark style="color:red;">CTRL+C</mark> then <mark style="color:red;">CTRL+A</mark> and <mark style="color:red;">CTRL+D</mark> to exit screen.
 
 {% code title="Go to catuserbot directory and open the config.py " overflow="wrap" %}
 ```batch
