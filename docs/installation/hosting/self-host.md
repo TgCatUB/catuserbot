@@ -51,8 +51,8 @@ pip install virtualenv && virtualenv venv && source venv/bin/activate && pip3 in
 
 * _**Run:**_ `python3 -m userbot`
 * _**Close Screen:**_ Press <mark style="color:red;">CTRL+A</mark> and after that <mark style="color:red;">CTRL+D</mark>
-* _**Reattach Screen:**_ `screen -r catuserbot`
 * _**Check:**_ `screen -ls`
+* _**Reattach Screen:**_ `screen -r <some_id>.catuserbot`
 
 ## ≡ _Video Tutorial_
 
