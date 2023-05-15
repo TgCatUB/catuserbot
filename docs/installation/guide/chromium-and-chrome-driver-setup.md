@@ -13,34 +13,44 @@ Chromium/Chrome binary and Chrome-driver is a mandatory requirement for many awe
 Here we will show how to setup this in 2 popular and widely used distros only (<mark style="color:red;">Ubuntu</mark> and <mark style="color:red;">Debian</mark>). Other distro users have to install and setup the Vars accordingly.
 
 {% tabs %}
-{% tab title="Ubuntu" %}
-{% code title="Install Google Chrome" overflow="wrap" %}
+{% tab title="Debian" %}
+{% code title="Install chromium and chromium based chrome driver" overflow="wrap" %}
 ```batch
-sudo curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
-
-sudo bash -c "echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' >> /etc/apt/sources.list.d/google-chrome.list"
-
-sudo apt -y update
-
-sudo apt -y install google-chrome-stable
-
-sudo chmod +x /usr/bin/google-chrome
+sudo apt install chromium chromium-driver
 ```
 {% endcode %}
 
-{% code title="Installing ChromeDriver" overflow="wrap" %}
+{% code title="Go to catuserbot directory and open the config.py " overflow="wrap" %}
 ```batch
-wget https://chromedriver.storage.googleapis.com/113.0.5672.63/chromedriver_linux64.zip
+nano config.py
+```
+{% endcode %}
 
-unzip chromedriver_linux64.zip
+{% code title="Add these two vars in your config" overflow="wrap" %}
+```batch
+CHROME_BIN = "/usr/bin/chromium"
+CHROME_DRIVER = "/usr/bin/chromedriver"
+```
+{% endcode %}
 
-sudo mv chromedriver /usr/bin/chromedriver
+Now to save use <mark style="color:red;">Ctrl+O</mark> and press <mark style="color:red;">Enter</mark> , then use <mark style="color:red;">Ctrl+X</mark> to exit.
+{% endtab %}
 
-sudo chown root:root /usr/bin/chromedriver
-
-sudo chmod +x /usr/bin/chromedriver
-
-rm LICENSE.chromedriver chromedriver_linux64.zip
+{% tab title="Ubuntu" %}
+{% code title="Install Google Chrome & Chromedriver" %}
+```batch
+sudo wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - && \
+  echo "deb http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google.list && \
+  sudo apt-get update -y && \
+  sudo apt-get install -y google-chrome-stable xvfb libxi6 libgconf-2-4 default-jdk && \
+  CHROMEVER=$(sudo google-chrome --product-version | grep -o "[^\.]*\.[^\.]*\.[^\.]*") && \
+  DRIVERVER=$(sudo curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROMEVER") && \
+  sudo wget -q --continue -P /tmp "http://chromedriver.storage.googleapis.com/$DRIVERVER/chromedriver_linux64.zip" && \
+  sudo unzip -q /tmp/chromedriver_linux64.zip -d /usr/bin && \
+  sudo chmod +x /usr/bin/chromedriver && \
+  sudo chown root:root /usr/bin/chromedriver && \
+  sudo chmod +x /usr/bin/google-chrome && \
+  sudo rm /tmp/chromedriver_linux64.zip /usr/bin/LICENSE.chromedriver
 ```
 {% endcode %}
 
@@ -60,7 +70,7 @@ xvfb-run java -Dwebdriver.chrome.driver=/usr/bin/chromedriver -jar selenium-serv
 ```
 {% endcode %}
 
-After this, do <mark style="color:red;">CTRL+C</mark> then <mark style="color:red;">CTRL+A</mark> and <mark style="color:red;">CTRL+D</mark> to exit screen.
+After this, do <mark style="color:red;">Ctrl+O</mark> and press <mark style="color:red;">Enter</mark> , then use <mark style="color:red;">Ctrl+X</mark> to exit screen.
 
 {% code title="Go to catuserbot directory and open the config.py " overflow="wrap" %}
 ```batch
@@ -71,29 +81,6 @@ nano config.py
 {% code title="Add these two vars in your config" overflow="wrap" %}
 ```batch
 CHROME_BIN = "/usr/bin/google-chrome"
-CHROME_DRIVER = "/usr/bin/chromedriver"
-```
-{% endcode %}
-
-Now to save use <mark style="color:red;">Ctrl+O</mark> and press <mark style="color:red;">Enter</mark> , then use <mark style="color:red;">Ctrl+X</mark> to exit.
-{% endtab %}
-
-{% tab title="Debian" %}
-{% code title="Install chromium and chromium based chrome driver" overflow="wrap" %}
-```batch
-sudo apt install chromium chromium-driver
-```
-{% endcode %}
-
-{% code title="Go to catuserbot directory and open the config.py " overflow="wrap" %}
-```batch
-nano config.py
-```
-{% endcode %}
-
-{% code title="Add these two vars in your config" overflow="wrap" %}
-```batch
-CHROME_BIN = "/usr/bin/chromium"
 CHROME_DRIVER = "/usr/bin/chromedriver"
 ```
 {% endcode %}
