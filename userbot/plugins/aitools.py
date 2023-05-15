@@ -73,7 +73,7 @@ async def gen_img(odi):
         )
     await edit_or_reply(catevent, "`Generating ai image ...`")
     getart = Somnium.Generate(query, styleid)
-    ig getart == None:
+    if getart is None:
         return await edit_delete(odi, "`Process failed or contains NSFW.`")
     await catub.send_file(
         odi.chat_id,
