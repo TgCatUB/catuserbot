@@ -658,7 +658,7 @@ async def inline_popup_info(event, builder):
             ),
             builder.article(
                 title="Troll",
-                description="Send troll message to your friends.\nSyntax: toll @usename",
+                description="Send troll message to your friends.\nSyntax: troll @usename",
                 text="__Send **troll message** which everyone can see except the reciever.\n\nFor multiple users give space to username & use **|** to seperate text.__",
                 thumb=get_thumb("troll.png"),
                 buttons=[
