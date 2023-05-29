@@ -31,6 +31,7 @@ bot = catub
 
 StartTime = time.time()
 
+
 def close_connection(*_):
     print("Closing Userbot connection.")
     runasync(catub.disconnect())

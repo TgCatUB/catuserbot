@@ -10,7 +10,6 @@
 import random
 import re
 import time
-import userbot
 from datetime import datetime
 from platform import python_version
 
@@ -23,7 +22,8 @@ from telethon.errors.rpcerrorlist import (
 )
 from telethon.events import CallbackQuery
 
-from userbot import StartTime, catub, catversion
+import userbot
+from userbot import StartTime, catub
 
 from ..Config import Config
 from ..core.managers import edit_or_reply
