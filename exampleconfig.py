@@ -23,3 +23,7 @@ class Development(Config):
     EXTERNAL_REPO = "https://github.com/TgCatUB/CatPlugins"
     # if you need badcat plugins set "True"
     BADCAT = "False"
+    # default set for debian, change if you are using other 
+    # https://docs.catuserbot.co/catuserbot/installation/guide/chromium-and-chrome-driver-setup
+    CHROME_BIN = "/usr/bin/chromium"
+    CHROME_DRIVER = "/usr/bin/chromedriver"

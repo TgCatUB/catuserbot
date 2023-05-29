@@ -18,7 +18,7 @@ services:
     command: python3 -m userbot
     restart: on-failure
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@db/catuserbot
+      - DB_URI=postgresql://postgres:postgres@db/catuserbot
     depends_on:
       - db
 

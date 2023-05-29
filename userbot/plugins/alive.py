@@ -10,6 +10,7 @@
 import random
 import re
 import time
+import userbot
 from datetime import datetime
 from platform import python_version
 
@@ -69,7 +70,7 @@ async def amireallyalive(event):
         mention=mention,
         uptime=uptime,
         telever=version.__version__,
-        catver=catversion,
+        catver=userbot.__version__,
         pyver=python_version(),
         dbhealth=check_sgnirts,
         ping=ms,
@@ -107,7 +108,7 @@ def catalive_text():
     EMOJI = gvarstatus("ALIVE_EMOJI") or "  ✥ "
     cat_caption = "**Catuserbot is Up and Running**\n"
     cat_caption += f"**{EMOJI} Telethon version :** `{version.__version__}\n`"
-    cat_caption += f"**{EMOJI} Catuserbot Version :** `{catversion}`\n"
+    cat_caption += f"**{EMOJI} Catuserbot Version :** `{userbot.__version__}`\n"
     cat_caption += f"**{EMOJI} Python Version :** `{python_version()}\n`"
     cat_caption += f"**{EMOJI} Master:** {mention}\n"
     return cat_caption
