@@ -74,7 +74,7 @@ sudo apt install postgresql postgresql-contrib
 
 {% code title="Then run this in terminal" overflow="wrap" %}
 ```batch
-sudo -u postgres bash -c "psql -c \"ALTER USER postgres WITH PASSWORD 'your_password';\" && createdb catuserbot -O postgres"
+sudo su - postgres bash -c "psql -c \"ALTER USER postgres WITH PASSWORD 'your_password';\" && createdb catuserbot -O postgres"
 ```
 {% endcode %}
 
