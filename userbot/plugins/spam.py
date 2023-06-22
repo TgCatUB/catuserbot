@@ -15,9 +15,8 @@ from telethon.errors.rpcerrorlist import ForbiddenError
 from telethon.tl import functions, types
 from telethon.tl.functions.channels import GetFullChannelRequest
 from telethon.tl.functions.messages import GetStickerSetRequest
-from telethon.tl.functions.messages import SendReactionRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
-
+from telethon.tl.functions.messages import SendReactionRequest
 from telethon.utils import get_display_name
 
 from userbot import catub
@@ -362,7 +361,76 @@ async def react_spam(event):  # By @FeelDeD
     # checker = (await event.client.get_entity(msg.from_id)).mutual_contact
     # if not checker:
     # return await edit_delete(event,"`The user isn't your mutual contact, both need to be in each others contact for this plugin to work..`")
-    emoji = ["👍", "👎", "❤", "🔥", "🥰", "😁", "👏", "🤔", "🤯", "😱", "🤬", "😢", "🎉", "🤩", "🤮", "💩", "🙏", "👌", "🕊", "🤡", "🥱", "🥴", "😍", "🐳", "🌚", "💯", "🌭", "🤣", "⚡", "🍌", "🏆", "💔", "🤨", "😐", "🍓", "🍾", "😡", "👾", "🤷", "😎", "🙊", "💊", "😘", "🦄", "🙉", "💘", "🆒", "🗿", "🤪", "💅", "☃", "🎄", "🎅", "🤗", "✍", "🤝", "😨", "😇", "🙈", "🎃", "👀", "👻", "🤓", "😭", "😴", "😈", "🖕", "💋"]
+    emoji = [
+        "👍",
+        "👎",
+        "❤",
+        "🔥",
+        "🥰",
+        "😁",
+        "👏",
+        "🤔",
+        "🤯",
+        "😱",
+        "🤬",
+        "😢",
+        "🎉",
+        "🤩",
+        "🤮",
+        "💩",
+        "🙏",
+        "👌",
+        "🕊",
+        "🤡",
+        "🥱",
+        "🥴",
+        "😍",
+        "🐳",
+        "🌚",
+        "💯",
+        "🌭",
+        "🤣",
+        "⚡",
+        "🍌",
+        "🏆",
+        "💔",
+        "🤨",
+        "😐",
+        "🍓",
+        "🍾",
+        "😡",
+        "👾",
+        "🤷",
+        "😎",
+        "🙊",
+        "💊",
+        "😘",
+        "🦄",
+        "🙉",
+        "💘",
+        "🆒",
+        "🗿",
+        "🤪",
+        "💅",
+        "☃",
+        "🎄",
+        "🎅",
+        "🤗",
+        "✍",
+        "🤝",
+        "😨",
+        "😇",
+        "🙈",
+        "🎃",
+        "👀",
+        "👻",
+        "🤓",
+        "😭",
+        "😴",
+        "😈",
+        "🖕",
+        "💋",
+    ]
     if isinstance(msg.peer_id, types.PeerUser):
         emoji = emoji
     else:
@@ -386,10 +454,10 @@ async def react_spam(event):  # By @FeelDeD
         for i in emoji:
             await asyncio.sleep(0.2)
             with contextlib.suppress(ForbiddenError):
-                await event.client(SendReactionRequest(
-        peer=event.chat_id,
-        msg_id=msg.id,
-        reaction=[types.ReactionEmoji(
-            emoticon=i
-        )]
-    ))
+                await event.client(
+                    SendReactionRequest(
+                        peer=event.chat_id,
+                        msg_id=msg.id,
+                        reaction=[types.ReactionEmoji(emoticon=i)],
+                    )
+                )
