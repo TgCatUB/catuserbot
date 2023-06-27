@@ -56,7 +56,7 @@ async def carbon_api(event):
     query = event.pattern_match.group(1)
     replied_msg = await event.get_reply_message()
     if not query and replied_msg:
-        query = replied_msg.text
+        query = replied_msg.message
     if query is None:
         return await edit_delete(cat, "No text was given")
 
@@ -107,7 +107,7 @@ async def kar1_api(event):
     query = event.pattern_match.group(1)
     replied_msg = await event.get_reply_message()
     if not query and replied_msg:
-        query = replied_msg.text
+        query = replied_msg.message
     if query is None:
         return await edit_delete(cat, "No text was given")
 
@@ -153,7 +153,7 @@ async def kar2_api(event):
     query = event.pattern_match.group(1)
     replied_msg = await event.get_reply_message()
     if not query and replied_msg:
-        query = replied_msg.text
+        query = replied_msg.message
     if query is None:
         return await edit_delete(cat, "No text was given")
 
@@ -201,7 +201,7 @@ async def kar3_api(event):
     query = event.pattern_match.group(1)
     replied_msg = await event.get_reply_message()
     if not query and replied_msg:
-        query = replied_msg.text
+        query = replied_msg.message
     if query is None:
         return await edit_delete(cat, "No text was given")
 
@@ -249,7 +249,7 @@ async def kar4_api(event):
     query = event.pattern_match.group(1)
     replied_msg = await event.get_reply_message()
     if not query and replied_msg:
-        query = replied_msg.text
+        query = replied_msg.message
     if query is None:
         return await edit_delete(cat, "No text was given")
 
@@ -332,7 +332,7 @@ async def kargb_api(event):
     query = event.pattern_match.group(1)
     replied_msg = await event.get_reply_message()
     if not query and replied_msg:
-        query = replied_msg.text
+        query = replied_msg.message
     if query is None:
         return await edit_delete(cat, "No text was given")
 
