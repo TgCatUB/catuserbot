@@ -58,7 +58,7 @@ async def carbon_api(event):
     if not query and replied_msg:
         query = replied_msg.text
     if query is None:
-        return await edit_delete(cat, query)
+        return await edit_delete(cat, "No text was given")
 
     code = quote_plus(deEmojify(query))
     cat = await edit_or_reply(event, "`Carbonizing...\n25%`")
@@ -109,7 +109,7 @@ async def kar1_api(event):
     if not query and replied_msg:
         query = replied_msg.text
     if query is None:
-        return await edit_delete(cat, query)
+        return await edit_delete(cat, "No text was given")
 
     code = quote_plus(query)
     await edit_or_reply(cat, "🔳🔳🔲🔲🔲")
@@ -155,7 +155,7 @@ async def kar2_api(event):
     if not query and replied_msg:
         query = replied_msg.text
     if query is None:
-        return await edit_delete(cat, query)
+        return await edit_delete(cat, "No text was given")
 
     code = quote_plus(query)
     await edit_or_reply(cat, "🔘🔘📛📛📛")
@@ -203,7 +203,7 @@ async def kar3_api(event):
     if not query and replied_msg:
         query = replied_msg.text
     if query is None:
-        return await edit_delete(cat, query)
+        return await edit_delete(cat, "No text was given")
 
     code = quote_plus(query)
     await edit_or_reply(cat, "🔵🔵🎛🎛🎛")
@@ -251,7 +251,7 @@ async def kar4_api(event):
     if not query and replied_msg:
         query = replied_msg.text
     if query is None:
-        return await edit_delete(cat, query)
+        return await edit_delete(cat, "No text was given")
 
     code = quote_plus(query)
     await edit_or_reply(cat, "🌝🌝🌚🌚🌚")
@@ -334,7 +334,7 @@ async def kargb_api(event):
     if not query and replied_msg:
         query = replied_msg.text
     if query is None:
-        return await edit_delete(cat, query)
+        return await edit_delete(cat, "No text was given")
 
     code = quote_plus(query)
     formatted_url = carbon_url.format(
