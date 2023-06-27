@@ -360,29 +360,89 @@ async def react_spam(event):  # By @FeelDeD
     # checker = (await event.client.get_entity(msg.from_id)).mutual_contact
     # if not checker:
     # return await edit_delete(event,"`The user isn't your mutual contact, both need to be in each others contact for this plugin to work..`")
+    emoji = [
+        "👍",
+        "👎",
+        "❤",
+        "🔥",
+        "🥰",
+        "😁",
+        "👏",
+        "🤔",
+        "🤯",
+        "😱",
+        "🤬",
+        "😢",
+        "🎉",
+        "🤩",
+        "🤮",
+        "💩",
+        "🙏",
+        "👌",
+        "🕊",
+        "🤡",
+        "🥱",
+        "🥴",
+        "😍",
+        "🐳",
+        "🌚",
+        "💯",
+        "🌭",
+        "🤣",
+        "⚡",
+        "🍌",
+        "🏆",
+        "💔",
+        "🤨",
+        "😐",
+        "🍓",
+        "🍾",
+        "😡",
+        "👾",
+        "🤷",
+        "😎",
+        "🙊",
+        "💊",
+        "😘",
+        "🦄",
+        "🙉",
+        "💘",
+        "🆒",
+        "🗿",
+        "🤪",
+        "💅",
+        "☃",
+        "🎄",
+        "🎅",
+        "🤗",
+        "✍",
+        "🤝",
+        "😨",
+        "😇",
+        "🙈",
+        "🎃",
+        "👀",
+        "👻",
+        "🤓",
+        "😭",
+        "😴",
+        "😈",
+        "🖕",
+        "💋",
+    ]
     if isinstance(msg.peer_id, types.PeerUser):
-        emoji = [
-            "👍",
-            "👎",
-            "❤",
-            "🔥",
-            "🥰",
-            "👏",
-            "😁",
-            "🤔",
-            "🤯",
-            "😱",
-            "🤬",
-            "😢",
-            "🎉",
-            "🤩",
-            "🤮",
-            "💩",
-        ]
+        emoji = emoji
     else:
+        emot = []
         getchat = await event.client(GetFullChannelRequest(channel=event.chat_id))
         if grp_emoji := getchat.full_chat.available_reactions:
-            emoji = grp_emoji
+            emo = grp_emoji
+            try:
+                for a in emo.reactions:
+                    emot.append(a.emoticon)
+                emoji = emot
+            except Exception:
+                emoji = emoji
         else:
             return await edit_delete(
                 event, "`Reaction is not active in this chat..`", 6
