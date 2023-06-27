@@ -152,9 +152,6 @@ class Config(object):
         until_date=None, view_messages=None, send_messages=True
     )
     CHROME_BIN = os.environ.get("CHROME_BIN", "/app/.apt/usr/bin/google-chrome")
-    CHROME_DRIVER = os.environ.get(
-        "CHROME_DRIVER", "/app/.chromedriver/bin/chromedriver"
-    )
     # for sed plugin
     GROUP_REG_SED_EX_BOT_S = os.environ.get(
         "GROUP_REG_SED_EX_BOT_S", r"(regex|moku|BananaButler_|rgx|l4mR)bot"
