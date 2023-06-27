@@ -16,7 +16,6 @@ from telethon.tl import functions, types
 from telethon.tl.functions.channels import GetFullChannelRequest
 from telethon.tl.functions.messages import GetStickerSetRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
-from telethon.tl.functions.messages import SendReactionRequest
 from telethon.utils import get_display_name
 
 from userbot import catub
@@ -442,7 +441,7 @@ async def react_spam(event):  # By @FeelDeD
                 for a in emo.reactions:
                     emot.append(a.emoticon)
                 emoji = emot
-            except:
+            except Exception:
                 emoji = emoji
         else:
             return await edit_delete(
@@ -454,10 +453,4 @@ async def react_spam(event):  # By @FeelDeD
         for i in emoji:
             await asyncio.sleep(0.2)
             with contextlib.suppress(ForbiddenError):
-                await event.client(
-                    SendReactionRequest(
-                        peer=event.chat_id,
-                        msg_id=msg.id,
-                        reaction=[types.ReactionEmoji(emoticon=i)],
-                    )
-                )
+                await msg.react(i, True)
