@@ -13,7 +13,7 @@
   * [📕 Config Vars](installation/variables/config-vars.md)
   * [📕 Database Vars](installation/variables/database-vars.md)
 * [📚 Guide](installation/guide/README.md)
-  * [📕 Chromium and Chrome driver Setup](installation/guide/chromium-and-chrome-driver-setup.md)
+  * [📕 Chromium/Chrome Setup](installation/guide/chromium-or-chrome-setup.md)
 
 ## Tutorials
 
