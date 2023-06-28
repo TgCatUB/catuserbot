@@ -8,9 +8,9 @@ This is not required for Docker or Docker-Compose (recommended method) methods.
 
 ➦ **Why should you do this setup?**
 
-Chromium/Chrome binary is a mandatory requirement for many awesome plugins and commands like <mark style="color:green;">AI tools</mark>, <mark style="color:green;">Screenshot</mark>, <mark style="color:green;">Rayso</mark>, <mark style="color:green;">Rayso based logs</mark>, <mark style="color:green;">Carbon</mark>, etc.
+**Chromium / Chrome** binary is a mandatory requirement for many awesome plugins and commands like <mark style="color:green;">AI tools</mark>, <mark style="color:green;">Screenshot</mark>, <mark style="color:green;">Rayso</mark>, <mark style="color:green;">Rayso based logs</mark>, <mark style="color:green;">Carbon</mark>, etc.
 
-Here we will show how to setup this for <mark style="color:red;">Debian</mark>, <mark style="color:orange;">Ubuntu</mark>, <mark style="color:blue;">Arch</mark>, <mark style="color:blue;">Fedora</mark> and their derivatives.
+Here we will show how to setup this for <mark style="color:red;">Debian</mark>, <mark style="color:orange;">Ubuntu</mark>, <mark style="color:blue;">Arch</mark>, <mark style="color:purple;">Fedora</mark> and their derivatives.
 
 {% tabs %}
 {% tab title="Chromium" %}
@@ -19,16 +19,19 @@ Here we will show how to setup this for <mark style="color:red;">Debian</mark>, 
 sudo apt install chromium
 ```
 {% endcode %}
+
 {% code title="For Ubuntu" overflow="wrap" %}
 ```batch
 sudo apt install chromium-browser
 ```
 {% endcode %}
+
 {% code title="For Arch" overflow="wrap" %}
 ```batch
 sudo pacman -S chromium
 ```
 {% endcode %}
+
 {% code title="For Fedora" overflow="wrap" %}
 ```batch
 sudo dnf install chromium
@@ -60,11 +63,13 @@ sudo wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo a
   sudo chmod +x /usr/bin/google-chrome
 ```
 {% endcode %}
-{% code title="For Arch, you can use any AUR helper, here we're using yay." overflow="wrap" %}
+
+{% code title="For Arch, you can use any AUR helper, here we" overflow="wrap" %}
 ```batch
 sudo yay -S google-chrome
 ```
 {% endcode %}
+
 {% code title="For Fedora" overflow="wrap" %}
 ```batch
 sudo dnf install https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
