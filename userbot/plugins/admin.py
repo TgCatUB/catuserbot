@@ -157,7 +157,7 @@ async def set_group_photo(event):  # sourcery no-metrics
 async def promote(event):
     "To promote a person in chat"
     new_rights = ChatAdminRights(
-        add_admins=False,
+        add_admins=True,
         invite_users=True,
         change_info=False,
         ban_users=True,
@@ -491,7 +491,7 @@ async def endmute(event):
         except AttributeError:
             return await edit_or_reply(
                 event,
-                "`This user can already speak freely in this chat ~~lmfao sed rip~~`",
+                "`This user is already a free speaker in this chat ~~lmfao sed rip~~`",
             )
         except Exception as e:
             return await edit_or_reply(event, f"**Error : **`{e}`")
@@ -514,7 +514,7 @@ async def endmute(event):
     info={
         "header": "To kick a person from the group",
         "description": "Will kick the user from the group so he can join back.\
-        \nNote : You need proper rights for this.",
+        \nNote : You need proper rights for doing this operation.",
         "usage": [
             "{tr}kick <userid/username/reply>",
             "{tr}kick <userid/username/reply> <reason>",
