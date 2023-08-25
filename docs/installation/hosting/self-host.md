@@ -35,9 +35,15 @@ git clone https://github.com/TgCatUB/catuserbot && cd catuserbot && mv exampleco
 
 ### 〣 _**Create a Virtual**_ environment _**& install requirements**_ <a href="#create-venv" id="create-venv"></a>
 
-{% code title="Using Screen to create Venv" overflow="wrap" %}
+{% code title="Create catuserbot screen session" overflow="wrap" %}
 ```batch
-screen -S catuserbot && virtualenv venv && source venv/bin/activate && pip3 install -r requirements.txt
+screen -S catuserbot
+```
+{% endcode %}
+
+{% code title="Install venv & requirements" overflow="wrap" %}
+```batch
+pip install virtualenv && virtualenv venv && source venv/bin/activate && pip3 install -r requirements.txt
 ```
 {% endcode %}
 
@@ -45,8 +51,8 @@ screen -S catuserbot && virtualenv venv && source venv/bin/activate && pip3 inst
 
 * _**Run:**_ `python3 -m userbot`
 * _**Close Screen:**_ Press <mark style="color:red;">CTRL+A</mark> and after that <mark style="color:red;">CTRL+D</mark>
-* _**Reattach Screen:**_ `screen -r catuserbot`
 * _**Check:**_ `screen -ls`
+* _**Reattach Screen:**_ `screen -r <some_id>.catuserbot`
 
 ## ≡ _Video Tutorial_
 

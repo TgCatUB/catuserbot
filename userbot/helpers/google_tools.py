@@ -15,6 +15,7 @@ from datetime import datetime
 
 import requests
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.common.by import By
 
 from ..Config import Config
@@ -25,16 +26,20 @@ class chromeDriver:
     @staticmethod
     def start_driver():
         if Config.CHROME_BIN is None:
-            return None, "Need to install Google Chrome. Module Stopping."
+            return None, "Need to install Google Chrome or Chromium. Module Stopping."
         try:
-            chrome_options = webdriver.ChromeOptions()
+            chrome_options = ChromeOptions()
+            chrome_options.binary_location = Config.CHROME_BIN
             chrome_options.add_argument("--ignore-certificate-errors")
             chrome_options.add_argument("--test-type")
-            chrome_options.add_argument("--headless")
+            chrome_options.add_argument("--headless=new")
             chrome_options.add_argument("--no-sandbox")
             chrome_options.add_argument("--disable-dev-shm-usage")
-            chrome_options.binary_location = Config.CHROME_BIN
-            driver = webdriver.Chrome(chrome_options=chrome_options)
+            chrome_options.add_argument("--window-size=1920x1080")
+            chrome_options.add_argument("--disable-gpu")
+            prefs = {"download.default_directory": "./"}
+            chrome_options.add_experimental_option("prefs", prefs)
+            driver = webdriver.Chrome(options=chrome_options)
             return driver, None
         except Exception as err:
             return None, str(err)
@@ -158,7 +163,7 @@ class GooglePic:
                         if flag:
                             data["image_set"] = set()
                             for link in re.findall(
-                                r"https://www.google.com/imgres\?imgurl.+?(?=\")", html
+                                r"https://www.google.com/imgres\?[^\"]+", html
                             ):
                                 image = re.search(r"imgurl=(.+?)&", link)[1]
                                 site = re.search(r"imgrefurl=(.+?)&", link)[1]

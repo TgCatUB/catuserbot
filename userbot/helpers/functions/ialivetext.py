@@ -7,9 +7,6 @@ import requests
 from ...Config import Config
 from .utils import get_readable_time
 
-Heroku = heroku3.from_key(Config.HEROKU_API_KEY)
-heroku_api = "https://api.heroku.com"
-
 # UniBorg Telegram UseRBot
 # Copyright (C) 2020 @UniBorg
 # This code is licensed under
@@ -44,6 +41,8 @@ def check_data_base_heal_th():
 async def catalive(StartTime):
     _, check_sgnirts = check_data_base_heal_th()
     sudo = "Enabled" if Config.SUDO_USERS else "Disabled"
+    Heroku = heroku3.from_key(Config.HEROKU_API_KEY)
+    heroku_api = "https://api.heroku.com"
     uptime = await get_readable_time((time.time() - StartTime))
     try:
         useragent = (

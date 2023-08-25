@@ -100,7 +100,7 @@ async def update_requirements():
     reqs = str(requirements_path)
     try:
         process = await asyncio.create_subprocess_shell(
-            " ".join([sys.executable, "-m", "pip", "install", "-r", reqs]),
+            " ".join([sys.executable, "-m", "pip", "install", "--upgrade", "-r", reqs]),
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
         )

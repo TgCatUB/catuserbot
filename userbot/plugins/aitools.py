@@ -11,7 +11,7 @@
 from somnium import Somnium
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers import GetStylesGraph, ThabAi, reply_id
+from ..helpers import ThabAi, reply_id
 from ..sql_helper.globals import addgvar, gvarstatus
 from . import catub, mention
 
@@ -33,7 +33,7 @@ plugin_category = "tools"
         ],
         "examples": [
             "{tr}genimg -l",
-            "{tr}genimg -l 84",
+            "{tr}genimg -l 2000",
             "{tr}genimg Cat riding bike",
         ],
     },
@@ -47,7 +47,7 @@ async def gen_img(odi):
 
     catevent = await edit_or_reply(odi, "`Processing ...`")
     rstyles = {value: key for key, value in Somnium.Styles().items()}
-    styleid = int(gvarstatus("DREAM_STYLE") or "84")
+    styleid = int(gvarstatus("DREAM_STYLE") or "2000")
 
     if query.startswith("-l"):
         query = query.replace("-l", "").strip()
@@ -60,19 +60,21 @@ async def gen_img(odi):
 
             return await edit_delete(
                 catevent,
-                f"**Wrong style id.\n\n🎠 Here is list of:**  [styles]({await GetStylesGraph()}) ",
+                f"**Wrong style id.\n\n🎠 Here is list of:**  [styles]({Somnium.StylesGraph()}) ",
                 link_preview=True,
                 time=120,
             )
 
         return await edit_delete(
             catevent,
-            f"**🎠 Here is list of:**  [styles]({await GetStylesGraph()}) ",
+            f"**🎠 Here is list of:**  [styles]({Somnium.StylesGraph()}) ",
             link_preview=True,
             time=120,
         )
     await edit_or_reply(catevent, "`Generating ai image ...`")
     getart = Somnium.Generate(query, styleid)
+    if getart is None:
+        return await edit_delete(catevent, "`Process failed or contains NSFW.`")
     await catub.send_file(
         odi.chat_id,
         getart,

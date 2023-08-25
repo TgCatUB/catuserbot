@@ -179,9 +179,9 @@ async def deploy_article(event):
 
 async def pmpermit_article(event):
     buttons = [Button.inline(text="Show Options.", data="show_pmpermit_options")]
-    query = gvarstatus("pmpermit_text")
+    query = gvarstatus("PM_TEXT")
     media = None
-    if PM_PIC := gvarstatus("pmpermit_pic"):
+    if PM_PIC := gvarstatus("PM_PIC"):
         CAT = list(PM_PIC.split())
         PIC = list(CAT)
         media = random.choice(PIC)
@@ -658,7 +658,7 @@ async def inline_popup_info(event, builder):
             ),
             builder.article(
                 title="Troll",
-                description="Send troll message to your friends.\nSyntax: toll @usename",
+                description="Send troll message to your friends.\nSyntax: troll @usename",
                 text="__Send **troll message** which everyone can see except the reciever.\n\nFor multiple users give space to username & use **|** to seperate text.__",
                 thumb=get_thumb("troll.png"),
                 buttons=[

@@ -10,7 +10,7 @@ This the easiest and recommended method to host Cat Userbot.
 
 {% code title="Install git & docker compose" overflow="wrap" %}
 ```batch
-sudo apt install --no-install-recommends -y git docker-compose
+sudo apt install --no-install-recommends -y git docker-compose docker.io
 ```
 {% endcode %}
 
@@ -38,7 +38,7 @@ git clone https://github.com/TgCatUB/catuserbot && cd catuserbot && mv exampleco
 Whenever there is an update to our base docker image (will be notified via the channel or support group), use the below steps to update your docker instances. This is not part of the main guide or not a method to update the Bot.
 {% endhint %}
 
-### 〣 _Steps to update base docker image**.**_ <a href="#run-bot" id="run-bot"></a>
+### 〣 _Steps to update base docker image\*\*.\*\*_ <a href="#run-bot" id="run-bot"></a>
 
 {% code title="stop the running containers " overflow="wrap" %}
 ```batch

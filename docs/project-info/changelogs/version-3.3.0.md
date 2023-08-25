@@ -11,7 +11,7 @@
 ## ≡ Breaking Changes
 
 * Updated `Telethon` to the latest version and added spoiler media support globally. Users can enable it in `config.py` (`SPOILER_MEDIA = True`).
-* Removed the old way of managing database var by using `db` (`.setdv`, `.getdv`, `.deldv`). Users can now manage them with var itself (`.setvar`, `.getvar`, `.delvar`). The bot will decide whether to add them in the database or in `config.py`.
+* Removed the old way of managing database var by using `db` (`.setdv`, `.getdv`, `.deldv`). Users can now manage them with var itself (`.set var`, `.get var`, `.del var`). The bot will decide whether to add them in the database or in `config.py`.
 
 ## ≡ Plugin Changes
 

@@ -66,7 +66,9 @@ async def reload_codebase():
         for file in file_list:
             await _catutils.runcmd(f"rm -rf {file}")
             await _catutils.runcmd(f"mv ./TempCat/{file} ./")
-        await _catutils.runcmd("pip3 install --no-cache-dir -r requirements.txt")
+        await _catutils.runcmd(
+            "pip3 install --no-cache-dir --upgrade -r requirements.txt"
+        )
         await _catutils.runcmd("rm -rf TempCat")
     if os.path.exists("catub.log"):
         os.remove("catub.log")

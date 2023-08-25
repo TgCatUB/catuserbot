@@ -107,17 +107,6 @@ async def post_to_telegraph(
     return f"https://graph.org/{post_page['path']}"
 
 
-async def GetStylesGraph():
-    html = "".join(
-        [
-            f'<h2>{i["name"]}:</h2> <pre>{i["id"]}</pre><br/><img src="{i["photo_url"]}">⁪⁬⁮⁮⁮⁮'
-            for i in requests.get("https://paint.api.wombo.ai/api/styles").json()
-            if i["is_premium"] == False
-        ]
-    )
-    return await post_to_telegraph("List Of ArtStyles", html)
-
-
 # --------------------------------------------------------------------------------------------------------------------#
 
 

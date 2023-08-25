@@ -13,8 +13,6 @@ class Development(Config):
     STRING_SESSION = "Your value"
     # create a new bot in @botfather and fill the following vales with bottoken
     TG_BOT_TOKEN = "Your value"
-    # create a private group and a rose bot to it and type /id and paste that id here (replace that -100 with that group id)
-    PRIVATE_GROUP_BOT_API_ID = -100
     # command handler
     COMMAND_HAND_LER = "."
     # command hanler for sudo
@@ -23,3 +21,6 @@ class Development(Config):
     EXTERNAL_REPO = "https://github.com/TgCatUB/CatPlugins"
     # if you need badcat plugins set "True"
     BADCAT = "False"
+    # set path of the brwoser (Chrome/Chromium) binary , default set to chromium path change it if you are using chrome
+    # https://docs.catuserbot.co/catuserbot/installation/guide/chromium-and-chrome-driver-setup
+    CHROME_BIN = "/usr/bin/chromium"

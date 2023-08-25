@@ -81,7 +81,7 @@ async def do_pm_permit_action(event, chat):  # sourcery no-metrics
                 del PMMESSAGE_CACHE[str(chat.id)]
         except Exception as e:
             LOGS.info(str(e))
-        custompmblock = gvarstatus("pmblock") or None
+        custompmblock = gvarstatus("PM_BLOCK") or None
         if custompmblock is not None:
             USER_BOT_WARN_ZERO = custompmblock.format(
                 mention=mention,
@@ -118,7 +118,7 @@ async def do_pm_permit_action(event, chat):  # sourcery no-metrics
             )
         except BaseException:
             return
-    custompmpermit = gvarstatus("pmpermit_txt") or None
+    custompmpermit = gvarstatus("PM_TEXT") or None
     if custompmpermit is not None:
         USER_BOT_NO_WARN = custompmpermit.format(
             mention=mention,
@@ -148,7 +148,7 @@ Choose an option from below to specify the reason of your message and wait for m
 You have {warns}/{totalwarns} warns until you get blocked by the CatUserbot.
 
 Don't spam my inbox. say reason and wait until my response.__"""
-    addgvar("pmpermit_text", USER_BOT_NO_WARN)
+    addgvar("PM_TEXT", USER_BOT_NO_WARN)
     PM_WARNS[str(chat.id)] += 1
     try:
         if gvarstatus("pmmenu") is None:
@@ -157,7 +157,7 @@ Don't spam my inbox. say reason and wait until my response.__"""
             )
             msg = await results[0].click(chat.id, reply_to=reply_to_id, hide_via=True)
         else:
-            if PM_PIC := gvarstatus("pmpermit_pic"):
+            if PM_PIC := gvarstatus("PM_PIC"):
                 CAT = list(PM_PIC.split())
                 PIC = list(CAT)
                 CAT_IMG = random.choice(PIC)
