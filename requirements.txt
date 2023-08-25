@@ -25,7 +25,7 @@ lyricsgenius
 markdown
 motor
 openai
-Pillow
+Pillow==9.5.0
 prettytable
 psutil
 psycopg2
