@@ -449,7 +449,7 @@ async def inline_handler(event):
             result = await article_builder(event, query)
             await event.answer([result] if result else None)
         elif match or match2 or match3:
-            result, old_msg, jsondata, new_msg = await hide_toll_secret(
+            result, old_msg, jsondata, new_msg = await hide_troll_secret(
                 event, query, match, match3
             )
             await event.answer([result] if result else None)
@@ -539,7 +539,7 @@ async def youtube_data_article(event, str_y):
     return result
 
 
-async def hide_toll_secret(event, query, match, match3):
+async def hide_troll_secret(event, query, match, match3):
     user_list = []
     if match3:
         sandy = "Chat"
@@ -638,7 +638,7 @@ async def inline_popup_info(event, builder):
             ),
             builder.article(
                 title="Secret",
-                description="Send secret message to your friends.\nSyntax: secret @usename",
+                description="Send secret message to your friends.\nSyntax: secret @username",
                 text="__Send **secret message** which only you & the reciever can see.\n\nFor multiple users give space to username & use **|** to seperate text.__",
                 thumb=get_thumb("secret.png"),
                 buttons=[
@@ -658,7 +658,7 @@ async def inline_popup_info(event, builder):
             ),
             builder.article(
                 title="Troll",
-                description="Send troll message to your friends.\nSyntax: troll @usename",
+                description="Send troll message to your friends.\nSyntax: troll @username",
                 text="__Send **troll message** which everyone can see except the reciever.\n\nFor multiple users give space to username & use **|** to seperate text.__",
                 thumb=get_thumb("troll.png"),
                 buttons=[
