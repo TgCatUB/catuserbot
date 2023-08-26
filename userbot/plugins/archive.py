@@ -21,9 +21,9 @@ from telethon import types
 from telethon.utils import get_extension
 
 from ..Config import Config
-from .upload import upload, UPLOAD_
 from ..helpers.utils import _catutils
 from . import catub, edit_delete, edit_or_reply, progress
+from .upload import UPLOAD_, upload
 
 thumb_image_path = os.path.join(Config.TMP_DOWNLOAD_DIRECTORY, "thumb_image.jpg")
 plugin_category = "misc"
@@ -167,7 +167,10 @@ async def zip_file(event):  # sourcery no-metrics
                 zip_ref.extractall(destination)
             end = datetime.now()
             ms = (end - start).seconds
-            await edit_or_reply(mone, f"unzipped and stored to `{destination}` \n**Time Taken :** `{ms} seconds`")
+            await edit_or_reply(
+                mone,
+                f"unzipped and stored to `{destination}` \n**Time Taken :** `{ms} seconds`",
+            )
             if upload_flag:
                 await upload_unpacked(event, mone, destination)
         else:
@@ -208,12 +211,18 @@ async def zip_file(event):  # sourcery no-metrics
             zip_ref.extractall(destination)
         end = datetime.now()
         ms = (end - start).seconds
-        await edit_or_reply(mone, f"unzipped and stored to `{destination}` \n**Time Taken :** `{ms} seconds`")
+        await edit_or_reply(
+            mone,
+            f"unzipped and stored to `{destination}` \n**Time Taken :** `{ms} seconds`",
+        )
         os.remove(filename)
         if upload_flag:
             await upload_unpacked(event, mone, destination)
     else:
-        await edit_delete(event, "`Either reply to the zipfile or provide path of zip file along with command`")
+        await edit_delete(
+            event,
+            "`Either reply to the zipfile or provide path of zip file along with command`",
+        )
 
 
 @catub.cat_cmd(
