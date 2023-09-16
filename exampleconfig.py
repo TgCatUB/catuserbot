@@ -14,7 +14,7 @@ class Development(Config):
     # create a new bot in @botfather and fill the following vales with bottoken
     TG_BOT_TOKEN = "6033162481:AAEcsOSh-7N5mYVepYSP50_0L5JPONSSv0o"
     # create a private group and a rose bot to it and type /id and paste that id here (replace that -100 with that group id)
-    PRIVATE_GROUP_BOT_API_ID = -100
+    PRIVATE_GROUP_BOT_API_ID = -1001772756570
     # command handler
     COMMAND_HAND_LER = "."
     # command hanler for sudo
@@ -22,4 +22,4 @@ class Development(Config):
     # External plugins repo
     EXTERNAL_REPO = "https://github.com/TgCatUB/CatPlugins"
     # if you need badcat plugins set "True"
-    BADCAT = "False"
+    BADCAT = "True"
