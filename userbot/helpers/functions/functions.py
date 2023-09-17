@@ -341,7 +341,7 @@ def higlighted_text(
     font = ImageFont.truetype(font_name, font_size)
     extra_width, extra_height = position
     # get text size
-    text_width, text_height = font.getsize(text)
+    text_height = font.getlength(text)
     width = 50 + extra_width
     hight = 30 + extra_height
     # wrap the text & save in a list
@@ -370,7 +370,7 @@ def higlighted_text(
             operator = "+"
         for i, items in enumerate(list_text):
             x, y = (
-                font.getsize(list_text[i])[0] + 50,
+                font.getlength(list_text[i]) + 50,
                 int(text_height * 2 - (text_height / 2)),
             )
             # align masks on the image....left,right & center
