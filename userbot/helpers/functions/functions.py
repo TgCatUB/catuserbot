@@ -341,7 +341,8 @@ def higlighted_text(
     font = ImageFont.truetype(font_name, font_size)
     extra_width, extra_height = position
     # get text size
-    text_height = font.getlength(text)
+    bbox = font.getbbox(text)
+    text_height = bbox[3] - bbox[1]
     width = 50 + extra_width
     hight = 30 + extra_height
     # wrap the text & save in a list
