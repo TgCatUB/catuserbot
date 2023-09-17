@@ -27,8 +27,8 @@ MARGINS = [50, 150, 250, 350, 450]
 def asciiart(in_f, SC, GCF, out_f, color1, color2, bgcolor="black"):
     chars = np.asarray(list(" .,:irs?@9B&#"))
     font = ImageFont.load_default()
-    letter_width = font.getsize("x")[0]
-    letter_height = font.getsize("x")[1]
+    letter_width = font.getlength("x")
+    letter_height = font.getlength("x")
     WCF = letter_height / letter_width
     img = Image.open(in_f)
     widthByLetter = round(img.size[0] * SC * WCF)
@@ -66,22 +66,22 @@ async def cat_meme(CNG_FONTS, topString, bottomString, filename, endname):
     # find biggest font size that works
     fontSize = int(imageSize[1] / 5)
     font = ImageFont.truetype(CNG_FONTS, fontSize)
-    topTextSize = font.getsize(topString)
-    bottomTextSize = font.getsize(bottomString)
-    while topTextSize[0] > imageSize[0] - 20 or bottomTextSize[0] > imageSize[0] - 20:
+    topTextSize = font.getlength(topString)
+    bottomTextSize = font.getlength(bottomString)
+    while topTextSize > imageSize[0] - 20 or bottomTextSize > imageSize[0] - 20:
         fontSize -= 1
         font = ImageFont.truetype(CNG_FONTS, fontSize)
-        topTextSize = font.getsize(topString)
-        bottomTextSize = font.getsize(bottomString)
+        topTextSize = font.getlength(topString)
+        bottomTextSize = font.getlength(bottomString)
 
     # find top centered position for top text
-    topTextPositionX = (imageSize[0] / 2) - (topTextSize[0] / 2)
+    topTextPositionX = (imageSize[0] / 2) - (topTextSize / 2)
     topTextPositionY = 0
     topTextPosition = (topTextPositionX, topTextPositionY)
 
     # find bottom centered position for bottom text
-    bottomTextPositionX = (imageSize[0] / 2) - (bottomTextSize[0] / 2)
-    bottomTextPositionY = imageSize[1] - bottomTextSize[1]
+    bottomTextPositionX = (imageSize[0] / 2) - (bottomTextSize / 2)
+    bottomTextPositionY = imageSize[1] - bottomTextSize
     bottomTextPosition = (bottomTextPositionX, bottomTextPositionY)
     draw = ImageDraw.Draw(img)
     # draw outlines
