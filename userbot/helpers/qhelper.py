@@ -108,18 +108,18 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
         if length > 43:
             text += textwrap.wrap(line, 43)
             maxlength = 43
-            if width < fallback.getsize(line[:43])[0]:
+            if width < fallback.getlength(line[:43]):
                 if reply and "MessageEntityCode" in str(reply.entities):
-                    width = mono.getsize(line[:43])[0] + 30
+                    width = mono.getlength(line[:43]) + 30
                 else:
-                    width = fallback.getsize(line[:43])[0]
+                    width = fallback.getlength(line[:43])
         else:
             text.append(line + "\n")
-            if width < fallback.getsize(line)[0]:
+            if width < fallback.getlength(line):
                 if reply and "MessageEntityCode" in str(reply.entities):
-                    width = mono.getsize(line)[0] + 30
+                    width = mono.getlength(line) + 30
                 else:
-                    width = fallback.getsize(line)[0]
+                    width = fallback.getlength(line)
             maxlength = max(maxlength, length)
     title = ""
     # try:
@@ -134,13 +134,13 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
     #     pass
     # except ValueError:
     #     pass
-    titlewidth = font2.getsize(title)[0]
+    titlewidth = font2.getlength(title)
 
     # Get user name
     lname = user.last_name or ""
     tot = f"{user.first_name} {lname}"
 
-    namewidth = fallback.getsize(tot)[0] + 10
+    namewidth = fallback.getlength(tot) + 10
 
     if namewidth > width:
         width = namewidth
@@ -256,9 +256,9 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
         else:
             docsize = f"{str(round(reply.document.size / 1024**3, 2))} GB "
         docbglen = (
-            font.getsize(docsize)[0]
-            if font.getsize(docsize)[0] > font.getsize(docname)[0]
-            else font.getsize(docname)[0]
+            font.getlength(docsize)
+            if font.getlength(docsize) > font.getlength(docname)
+            else font.getlength(docname)
         )
         canvas = canvas.resize((pfpbg.width + width + docbglen, 160 + height))
         top, middle, bottom = await drawer(width + docbglen, height + 30)
@@ -284,11 +284,11 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
             space += 40
         elif await fontTest(letter):
             draw.text((space, 20), letter, font=sepcialn, fill=color)
-            space += sepcialn.getsize(letter)[0]
+            space += sepcialn.getlength(letter)
 
         else:
             draw.text((space, 20), letter, font=namefallback, fill=color)
-            space += namefallback.getsize(letter)[0]
+            space += namefallback.getlength(letter)
     if title:
         draw.text(
             (canvas.width - titlewidth - 20, 25), title, font=font2, fill="#898989"
@@ -337,10 +337,10 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
                 emojicount += 1
             elif await fontTest(letter):
                 draw.text((x, y), letter, font=sepcialt, fill=textcolor)
-                x += sepcialt.getsize(letter)[0]
+                x += sepcialt.getlength(letter)
             else:
                 draw.text((x, y), letter, font=textfallback, fill=textcolor)
-                x += textfallback.getsize(letter)[0]
+                x += textfallback.getlength(letter)
             msg = msg.replace(letter, "¶", 1)
         y += 40
         x = pfpbg.width + 30
@@ -460,15 +460,15 @@ async def replied_user(draw, tot, text, maxlength, title):
     for letter in tot:
         if not await fontTest(letter):
             draw.text((180 + space, 86), letter, font=namefallback, fill="#888888")
-            space += namefallback.getsize(letter)[0]
+            space += namefallback.getlength(letter)
         else:
             draw.text((180 + space, 86), letter, font=namefont, fill="#888888")
-            space += namefont.getsize(letter)[0]
+            space += namefont.getlength(letter)
     space = 0
     for letter in text:
         if not await fontTest(letter):
             draw.text((180 + space, 132), letter, font=textfallback, fill="#888888")
-            space += textfallback.getsize(letter)[0]
+            space += textfallback.getlength(letter)
         else:
             draw.text((180 + space, 132), letter, font=textfont, fill="white")
-            space += textfont.getsize(letter)[0]
+            space += textfont.getlength(letter)
