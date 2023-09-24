@@ -20,7 +20,7 @@ A simple Telegram userbot based on Telethon .
 
 ### Heroku Deploy
 
-- [![Deploy To Heroku](https://www.herokucdn.com/deploy/button.svg)](https://github.com/TgCatUB/nekopack)
+- [![Deploy To Heroku](https://www.herokucdn.com/deploy/button.svg)](https://github.com/DARKTERABAAP/nekopack)
 
 ### Self host
 
@@ -61,5 +61,6 @@ Thanks for using our bot 😺
 ## Credits
 
 - Special thanks to [LonamiWebs](https://github.com/LonamiWebs/Telethon/) for Telethon library.
-- To all devs of these [Userbots](https://github.com/TgCatUB/catuserbot/tree/bugs#inspiration)
-- Finally to all [contributors of Catuserbot](https://github.com/TgCatUB/catuserbot/graphs/contributors)
+- To all devs of these [Userbots](https://github.com/TERABAAPDARK
+- /catuserbot/tree/bugs#inspiration)
+- Finally to all [contributors of Catuserbot](https://github.com/DARKTERABAAP/catuserbot/graphs/contributors)
