@@ -26,7 +26,7 @@ git clone https://github.com/TgCatUB/catuserbot && cd catuserbot && mv exampleco
 
 ### 〣 _**Setup Chromium & its driver**_ <a href="#setup-chromium" id="setup-chromium"></a>
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th data-type="select" data-multiple></th><th data-hidden data-card-cover data-type="files"></th><th data-hidden data-card-target data-type="content-ref"></th><th data-hidden data-type="content-ref"></th></tr></thead><tbody><tr><td><em><mark style="color:blue;"><strong>Install Chromium &#x26; Chrome driver</strong></mark></em></td><td></td><td><a href="../../.gitbook/assets/chromium_pokemon.jpg">chromium_pokemon.jpg</a></td><td><a href="../guide/chromium-and-chrome-driver-setup.md">chromium-and-chrome-driver-setup.md</a></td><td><a href="../guide/chromium-and-chrome-driver-setup.md#ubuntu">#ubuntu</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th data-type="select" data-multiple></th><th data-hidden data-card-cover data-type="files"></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><em><mark style="color:blue;"><strong>Install Chromium or Google-Chrome</strong></mark></em></td><td></td><td><a href="../../.gitbook/assets/chromium_pokemon.jpg">chromium_pokemon.jpg</a></td><td><a href="../guide/chromium-or-chrome-setup.md#chromium">#chromium</a></td></tr></tbody></table>
 
 ### 〣 _**Edit the config.py with your config values**_ <a href="#edit-config" id="edit-config"></a>
 
