@@ -3,8 +3,8 @@
 # .spc command is ported from  alfianandaa/ProjectAlf
 
 import platform
-import sys
 import re
+import sys
 from datetime import datetime
 
 import psutil
@@ -113,20 +113,21 @@ async def sysdetails(sysd):
     cmd = "git clone https://github.com/dylanaraps/neofetch.git"
     await _catutils.runcmd(cmd)
     neo = "neofetch/neofetch --color_blocks off --bold off --cpu_temp C --cpu_speed on --cpu_cores physical --kernel_shorthand off"
-    if sysd.pattern_match.group(1) == 'sysd':
-        neo = neo+" --off"
+    if sysd.pattern_match.group(1) == "sysd":
+        neo = neo + " --off"
     a, b, c, d = await _catutils.runcmd(neo)
     ressult = str(a) + str(b)
-    result = re.sub('\x1B\[[0-9;\?]*[a-zA-Z]', '', ressult)
+    result = re.sub("\x1B\[[0-9;\?]*[a-zA-Z]", "", ressult)
     await edit_or_reply(catevent, f"**Neofetch Result:**\n```{result}```")
 
+
 @catub.cat_cmd(
-    pattern='neofetch',
-    command=('neofetch', plugin_category),
+    pattern="neofetch",
+    command=("neofetch", plugin_category),
     info={
-        "header":"Shows system info using neoefetch with logo",
-        "usage":"{tr}neofetch"
-    }
+        "header": "Shows system info using neoefetch with logo",
+        "usage": "{tr}neofetch",
+    },
 )
 async def neofetch_help(neo):
     "Shows System info using neofetch with logo"
