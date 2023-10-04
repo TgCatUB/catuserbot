@@ -51,7 +51,7 @@ virtualenv venv && source venv/bin/activate && pip3 install -r requirements.txt
 
 ### 〣 _**All setup completed, its time to run the bot.**_ <a href="#run-bot" id="run-bot"></a>
 
-* _**Run:**_ `python3 -Bm userbot`
+* _**Run:**_ `python3 -m userbot`
 * _**Close Screen:**_ Press <mark style="color:red;">CTRL+A</mark> and after that <mark style="color:red;">CTRL+D</mark>
 * _**Check:**_ `screen -ls`
 * _**Reattach Screen:**_ `screen -r <some_id>.catuserbot`
