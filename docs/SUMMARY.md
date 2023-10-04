@@ -23,6 +23,7 @@
 * [📕 IBM](tutorials/ibm.md)
 * [📕 LastFM](tutorials/lastfm.md)
 * [📕 Spotify](tutorials/spotify.md)
+* [📕 Genius API Token](tutorials/genius.md)
 
 ## About Us
 
