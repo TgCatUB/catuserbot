@@ -3,7 +3,7 @@
   "description": "xᴄʀʏ-ᴜsᴇʀʙᴏᴛ​] userbot Telegram modular yang berjalan pada Python 3.9+",
   "logo": "https://telegra.ph/file/ac134f6d295ad0c03af9b.jpg",
   "keywords": ["telegram", "userbot", "xcry-userbot", "modular", "python"],
-  "repository": "https://github.com/JIYOXCRY/XCRY-USERBOT",
+  "repository": "https://github.com/JIYOXCRY/catuserbot",
   "stack": "container",
   "env": {
     "API_KEY": {
