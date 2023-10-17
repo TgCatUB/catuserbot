@@ -1,0 +1,52 @@
+{
+  "name": "𝐗𝐂𝐑𝐘-𝐔𝐒𝐄𝐑𝐁𝐎𝐓​",
+  "description": "xᴄʀʏ-ᴜsᴇʀʙᴏᴛ​] userbot Telegram modular yang berjalan pada Python 3.9+",
+  "logo": "https://telegra.ph/file/ac134f6d295ad0c03af9b.jpg",
+  "keywords": ["telegram", "userbot", "xcry-userbot", "modular", "python"],
+  "repository": "https://github.com/JIYOXCRY/XCRY-USERBOT",
+  "stack": "container",
+  "env": {
+    "API_KEY": {
+      "description": "Dapatkan API KEY di web my.telegram.org Masukan yg APP ID Telegram",
+      "required": true
+    },
+    "API_HASH": {
+      "description": "Dapatkan API Hash di web my.telegram.org",
+      "required": true 
+    },
+     "STRING_SESSION": {
+      "description": "Dapatkan String Session di Grup » https://t.me/xcrysupport » Lalu ketik #string",
+      "required": true
+    },
+    "HEROKU_APP_NAME": {
+      "description": "Nama App heroku, Nama App yang paling pertama di isi (liat paling atas)",
+      "required": true
+    },
+    "HEROKU_API_KEY": {
+      "description": "Ambil Heroku API KEY mu disini » https://dashboard.heroku.com/account",
+      "required": true
+    }
+  },
+  "addons": [
+    {
+    "plan": "heroku-postgresql",
+      "options": {
+        "version": "12"
+      }
+    }
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    },
+    {
+      "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git"
+    }
+  ],
+  "formation": {
+    "worker": {
+      "quantity": 1,
+      "size": "basic"
+    }
+  }
+}
