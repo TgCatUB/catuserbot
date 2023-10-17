@@ -11,8 +11,10 @@ Hosting bot manually can be a bit of pain, that why we prefer [<mark style="colo
 {% code title="Update and install apt packages & node.v18" overflow="wrap" %}
 ```batch
 sudo apt update && sudo apt upgrade -y \
-&& sudo apt install --no-install-recommends -y curl ffmpeg fonts-noto-color-emoji gcc git libmagickwand-dev libpq-dev mediainfo nano neofetch pv python3 python3-dev python3-lxml python3-pip python3-psycopg2 screen tree unzip wget zlib1g libyaml-dev \
-&& curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && apt-get install -y nodejs
+&& sudo apt install --no-install-recommends -y ca-certificates curl ffmpeg fonts-noto-color-emoji gcc git gnupg libmagickwand-dev libpq-dev mediainfo nano neofetch pv python3 python3-dev python3-lxml python3-pip python3-psycopg2 screen tree unzip virtualenv wget zlib1g libyaml-dev \
+&& curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && NODE_MAJOR=18 && \
+echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list && \
+sudo apt-get update && sudo apt-get install nodejs -y
 ```
 {% endcode %}
 
@@ -43,7 +45,7 @@ screen -S catuserbot
 
 {% code title="Install venv & requirements" overflow="wrap" %}
 ```batch
-pip install virtualenv && virtualenv venv && source venv/bin/activate && pip3 install -r requirements.txt
+virtualenv venv && source venv/bin/activate && pip3 install -r requirements.txt
 ```
 {% endcode %}
 
