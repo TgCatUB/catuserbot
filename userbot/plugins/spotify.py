@@ -694,7 +694,9 @@ async def spotify_inline_article():
         else:
             media, tittle, dic, lyrics, symbol = await get_spotify(response)
             thumb = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Inline/spotify_on.png"
-            query = f'**🎶 Track :- ** `{tittle}`\n**🎤 Artist :- ** `{dic["interpret"]}`'
+            query = (
+                f'**🎶 Track :- ** `{tittle}`\n**🎤 Artist :- ** `{dic["interpret"]}`'
+            )
             buttons = [
                 (
                     Button.url("🎧 Spotify", dic["link"]),

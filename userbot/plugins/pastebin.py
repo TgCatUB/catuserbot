@@ -164,7 +164,9 @@ async def rayso_by_pro_odi(event):  # By @feelded
     text_list = text_chunk_list(text, 28000)
     user = (await catub.get_me()).first_name
     for i, text in enumerate(text_list, start=1):
-        await edit_or_reply(catevent, f"**⏳ Pasting on image : {i}/{len(text_list)} **")
+        await edit_or_reply(
+            catevent, f"**⏳ Pasting on image : {i}/{len(text_list)} **"
+        )
         outfile, error = chromeDriver.get_rayso(
             text, file_name=f"rayso{i}.png", title=user, theme=theme, darkMode=darkMode
         )

@@ -74,7 +74,9 @@ def main_menu():
     if Config.BADCAT:
         switch_button = [
             (
-                Button.inline(f"➕ Extra ({len(GRP_INFO['extra'])})", data="extra_menu"),
+                Button.inline(
+                    f"➕ Extra ({len(GRP_INFO['extra'])})", data="extra_menu"
+                ),
                 Button.inline(
                     f"⚰️ Useless ({len(GRP_INFO['useless'])})", data="useless_menu"
                 ),
@@ -579,22 +581,26 @@ async def hide_toll_secret(event, query, match, match3):
         jsondata = False
     timestamp = int(time.time() * 2)
     new_msg = {
-        str(timestamp): {"text": query}
-        if match3
-        else {"userid": user_list, "text": query}
+        str(timestamp): (
+            {"text": query} if match3 else {"userid": user_list, "text": query}
+        )
     }
     buttons = [Button.inline(info_type[2], data=f"{info_type[0]}_{timestamp}")]
 
     result = await build_article(
         event,
         title=f"{info_type[0].title()} message  to {sandy}.",
-        description="Send hidden text in chat."
-        if match3
-        else f"Only he/she/they {info_type[1]} open it.",
+        description=(
+            "Send hidden text in chat."
+            if match3
+            else f"Only he/she/they {info_type[1]} open it."
+        ),
         thumbnail=get_thumb(f"{info_type[0]}.png"),
-        text="✖✖✖"
-        if match3
-        else f"🔒 A whisper message to {sandy}, Only he/she can open it.",
+        text=(
+            "✖✖✖"
+            if match3
+            else f"🔒 A whisper message to {sandy}, Only he/she can open it."
+        ),
         buttons=buttons,
     )
     return result, old_msg, jsondata, new_msg
