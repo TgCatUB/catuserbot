@@ -69,9 +69,14 @@ async def img_sampler(event):
         paths = response.download(arguments)
     except Exception as e:
         return await cat.edit(f"Error: \n`{e}`")
+    
     lst = paths[0][query.replace(",", " ")]
+
     try:
         await event.client.send_file(event.chat_id, lst, reply_to=reply_to_id)
+    except TypeError as e:
+        print(paths[1])
+        return await cat.edit(f"Error: \n`{e}`")
     except MediaEmptyError:
         for i in lst:
             with contextlib.suppress(MediaEmptyError):
