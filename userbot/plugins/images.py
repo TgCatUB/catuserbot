@@ -69,7 +69,7 @@ async def img_sampler(event):
         paths = response.download(arguments)
     except Exception as e:
         return await cat.edit(f"Error: \n`{e}`")
-    
+
     lst = paths[0][query.replace(",", " ")]
 
     try:
