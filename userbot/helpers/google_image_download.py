@@ -930,7 +930,7 @@ class googleimagesdownload:
         elif specific_site:
             url = (
                 "https://www.google.com/search?q="
-                + quote(search_term.encode("utf-8"))
+                + quote(search_term.replace(" ","-").encode("utf-8"))
                 + "&as_sitesearch="
                 + specific_site
                 + "&espv=2&biw=1366&bih=667&site=webhp&source=lnms&tbm=isch"
@@ -940,7 +940,7 @@ class googleimagesdownload:
         else:
             url = (
                 "https://www.google.com/search?q="
-                + quote(search_term.encode("utf-8"))
+                + quote(search_term.replace(" ","-").encode("utf-8"))
                 + "&espv=2&biw=1366&bih=667&site=webhp&source=lnms&tbm=isch"
                 + params
                 + "&sa=X&ei=XosDVaCXD8TasATItgE&ved=0CAcQ_AUoAg"
