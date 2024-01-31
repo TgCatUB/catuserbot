@@ -445,7 +445,9 @@ async def cat(event):
         elif cmd == "d":
             delgvar(var)
             await edit_delete(
-                event, f"📑 Value of **{var}** is now deleted & set to default.", time=60
+                event,
+                f"📑 Value of **{var}** is now deleted & set to default.",
+                time=60,
             )
     elif not input_str and cmd == "r":
         delgvar("LOGO_BACKGROUND")

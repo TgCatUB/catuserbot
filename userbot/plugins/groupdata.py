@@ -293,7 +293,9 @@ async def fetch_info(chat, event):  # sourcery skip: low-code-quality
         caption += "    <b>-</b> "
         caption += "\n    <b>-</b> ".join(reactionslist)
     else:
-        caption += "🙂 <b>Enabled Reactions: </b><code>Reactions are not enabled.</code>"
+        caption += (
+            "🙂 <b>Enabled Reactions: </b><code>Reactions are not enabled.</code>"
+        )
 
     if description:
         caption += f"\n💬 <b>Description: </b>\n<code>{description}</code>\n"
@@ -484,7 +486,7 @@ async def info(event):
             "-f": "To select only Documents(files)",
             "-t": "To select only text messages",
             "-m": "To select only media files(Photos+Videos)",
-            "-b": "To show bots also in the result."
+            "-b": "To show bots also in the result.",
             # TODO: "-t": "To filter only messages which mentioned you",
         },
         "usage": [
