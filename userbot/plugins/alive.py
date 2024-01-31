@@ -52,8 +52,15 @@ async def amireallyalive(event):
     ANIME = None
     cat_caption = gvarstatus("ALIVE_TEMPLATE") or temp
     if "ANIME" in cat_caption:
-        data = requests.get("https://animechan.vercel.app/api/random").json()
-        ANIME = f"**“{data['quote']}” - {data['character']} ({data['anime']})**"
+        try:
+            response = requests.get("https://animechan.xyz/api/random", timeout=10)
+            if response.ok:
+                data = response.json()
+                ANIME = f"**“{data['quote']}” - {data['character']} ({data['anime']})**"
+            else:
+                response.raise_for_status()
+        except Exception as exception:
+            ANIME = f"Not available -> {exception}"
     uptime = await get_readable_time((time.time() - StartTime))
     start = datetime.now()
     catevent = await edit_or_reply(event, "`Checking...`")
