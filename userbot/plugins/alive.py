@@ -22,7 +22,8 @@ from telethon.errors.rpcerrorlist import (
 )
 from telethon.events import CallbackQuery
 
-from userbot import StartTime, catub, catversion
+import userbot
+from userbot import StartTime, catub
 
 from ..Config import Config
 from ..core.managers import edit_or_reply
@@ -51,8 +52,15 @@ async def amireallyalive(event):
     ANIME = None
     cat_caption = gvarstatus("ALIVE_TEMPLATE") or temp
     if "ANIME" in cat_caption:
-        data = requests.get("https://animechan.vercel.app/api/random").json()
-        ANIME = f"**“{data['quote']}” - {data['character']} ({data['anime']})**"
+        try:
+            response = requests.get("https://animechan.xyz/api/random", timeout=10)
+            if response.ok:
+                data = response.json()
+                ANIME = f"**“{data['quote']}” - {data['character']} ({data['anime']})**"
+            else:
+                response.raise_for_status()
+        except Exception as exception:
+            ANIME = f"Not available -> {exception}"
     uptime = await get_readable_time((time.time() - StartTime))
     start = datetime.now()
     catevent = await edit_or_reply(event, "`Checking...`")
@@ -69,7 +77,7 @@ async def amireallyalive(event):
         mention=mention,
         uptime=uptime,
         telever=version.__version__,
-        catver=catversion,
+        catver=userbot.__version__,
         pyver=python_version(),
         dbhealth=check_sgnirts,
         ping=ms,
@@ -107,7 +115,7 @@ def catalive_text():
     EMOJI = gvarstatus("ALIVE_EMOJI") or "  ✥ "
     cat_caption = "**Catuserbot is Up and Running**\n"
     cat_caption += f"**{EMOJI} Telethon version :** `{version.__version__}\n`"
-    cat_caption += f"**{EMOJI} Catuserbot Version :** `{catversion}`\n"
+    cat_caption += f"**{EMOJI} Catuserbot Version :** `{userbot.__version__}`\n"
     cat_caption += f"**{EMOJI} Python Version :** `{python_version()}\n`"
     cat_caption += f"**{EMOJI} Master:** {mention}\n"
     return cat_caption

@@ -11,8 +11,6 @@ import signal
 import sys
 import time
 
-import heroku3
-
 from .Config import Config
 from .core.logger import logging
 from .core.session import catub
@@ -21,7 +19,7 @@ from .helpers.functions.musictool import *
 from .helpers.utils.utils import runasync
 from .sql_helper.globals import addgvar, delgvar, gvarstatus
 
-__version__ = "3.3.0"
+__version__ = "3.3.1"
 __license__ = "GNU Affero General Public License v3.0"
 __author__ = "CatUserBot <https://github.com/TgCatUB/catuserbot>"
 __copyright__ = f"Copyright (C) 2020 - 2023  {__author__}"
@@ -32,7 +30,6 @@ LOGS = logging.getLogger("CatUserbot")
 bot = catub
 
 StartTime = time.time()
-catversion = "3.3.0"
 
 
 def close_connection(*_):
@@ -69,6 +66,8 @@ elif str(Config.PM_LOGGER_GROUP_ID)[0] != "-":
     Config.PM_LOGGER_GROUP_ID = int(f"-{str(Config.PM_LOGGER_GROUP_ID)}")
 
 try:
+    import heroku3
+
     if Config.HEROKU_API_KEY is not None or Config.HEROKU_APP_NAME is not None:
         HEROKU_APP = heroku3.from_key(Config.HEROKU_API_KEY).apps()[
             Config.HEROKU_APP_NAME

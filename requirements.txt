@@ -4,6 +4,7 @@ cinemagoer
 cloudscraper
 colour
 cowpy
+c-telethon
 emoji==1.7.0
 fonttools
 geopy
@@ -25,7 +26,7 @@ lyricsgenius
 markdown
 motor
 openai
-Pillow
+Pillow==9.5.0
 prettytable
 psutil
 psycopg2
@@ -53,12 +54,11 @@ tgcrypto
 ujson
 urlextract
 validators
-vcsi
+vcsi==7.0.15
 wand
 wget
 
 git+https://github.com/Jisan09/search-engine-parser
-git+https://github.com/Jisan09/Telethon@test
 git+https://github.com/goldsmith/Wikipedia
 git+https://github.com/sandy1709/py-googletrans
 git+https://github.com/alexmercerind/youtube-search-python

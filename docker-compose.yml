@@ -10,7 +10,7 @@
 version: '3.3'
 
 services:
- app:
+  app:
     container_name: cat
     build:
       context: .
@@ -18,11 +18,11 @@ services:
     command: python3 -m userbot
     restart: on-failure
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@db/catuserbot
+      - DB_URI=postgresql://postgres:postgres@db/catuserbot
     depends_on:
       - db
 
- db:
+  db:
     image: postgres
     restart: always
     environment:
@@ -34,6 +34,3 @@ services:
 volumes:
   db:
     driver: local
-  botdata:
-    driver: local
-

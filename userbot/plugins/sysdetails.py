@@ -3,6 +3,7 @@
 # .spc command is ported from  alfianandaa/ProjectAlf
 
 import platform
+import re
 import sys
 from datetime import datetime
 
@@ -99,11 +100,11 @@ async def cpu(event):
 
 
 @catub.cat_cmd(
-    pattern="sysd$",
+    pattern="(sysd|neofetch)$",
     command=("sysd", plugin_category),
     info={
         "header": "Shows system information using neofetch",
-        "usage": "{tr}cpu",
+        "usage": "{tr}sysd",
     },
 )
 async def sysdetails(sysd):
@@ -111,8 +112,22 @@ async def sysdetails(sysd):
     catevent = await edit_or_reply(sysd, "`Fetching system information.`")
     cmd = "git clone https://github.com/dylanaraps/neofetch.git"
     await _catutils.runcmd(cmd)
-    neo = "neofetch/neofetch --off --color_blocks off --bold off --cpu_temp C \
-                    --cpu_speed on --cpu_cores physical --kernel_shorthand off --stdout"
+    neo = "neofetch/neofetch --color_blocks off --bold off --cpu_temp C --cpu_speed on --cpu_cores physical --kernel_shorthand off"
+    if sysd.pattern_match.group(1) == "sysd":
+        neo = neo + " --off"
     a, b, c, d = await _catutils.runcmd(neo)
-    result = str(a) + str(b)
-    await edit_or_reply(catevent, f"**Neofetch Result:** `{result}`")
+    ressult = str(a) + str(b)
+    result = re.sub("\x1B\[[0-9;\?]*[a-zA-Z]", "", ressult)
+    await edit_or_reply(catevent, f"**Neofetch Result:**\n```{result}```")
+
+
+@catub.cat_cmd(
+    pattern="neofetch",
+    command=("neofetch", plugin_category),
+    info={
+        "header": "Shows system info using neoefetch with logo",
+        "usage": "{tr}neofetch",
+    },
+)
+async def neofetch_help(neo):
+    "Shows System info using neofetch with logo"

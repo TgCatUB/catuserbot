@@ -163,7 +163,7 @@ class GooglePic:
                         if flag:
                             data["image_set"] = set()
                             for link in re.findall(
-                                r"https://www.google.com/imgres\?imgurl.+?(?=\")", html
+                                r"https://www.google.com/imgres\?[^\"]+", html
                             ):
                                 image = re.search(r"imgurl=(.+?)&", link)[1]
                                 site = re.search(r"imgrefurl=(.+?)&", link)[1]
