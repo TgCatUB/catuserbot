@@ -27,7 +27,7 @@ lyricsgenius
 markdown
 motor
 openai
-Pillow==9.5.0
+Pillow==10.3.0
 pre-commit
 prettytable
 psutil
