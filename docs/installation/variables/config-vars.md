@@ -93,12 +93,30 @@ postgresql://postgres:your_password@localhost:5432/catuserbot
 {% endcode %}
 {% endtab %}
 
-{% tab title="Elephant Sql" %}
-**Visit** [**https://www.elephantsql.com/**](https://www.elephantsql.com/) **and get your DATABASE_URL**
+{% tab title="CockroachDB" %}
+* Create a free Serverless cluster at [**Cockroach Labs**](https://www.cockroachlabs.com/). 
 
-{% embed url="https://youtu.be/zlPCUzocwHw" %}
-Elephant SQL
-{% endembed %}
+* Click **Connect** on your dashboard and copy the provided **Connection String**.
+
+{% code title="It will look something like this" overflow="wrap" %}
+
+```batch
+postgresql://user:pass@cluster-name.host.cloud:12345/defaultdb?sslmode=verify-full
+```
+
+{% endcode %}
+
+* Make **two quick changes**:
+	* Replace `postgresql://` with `cockroachdb://`
+	* Replace `sslmode=verify-full` with `sslmode=require&options=--cluster%3D<CLUSTER-NAME>` *(Your cluster name is the first part of your host link, e.g., `baby-buzzard-22549`)*
+
+{% code title="Your DATABASE_URL will be" overflow="wrap" %}
+
+```batch
+cockroachdb://<USER>:<PASSWORD>@<HOST>:<PORT>/defaultdb?sslmode=require&options=--cluster%3D<CLUSTER-NAME>
+```
+
+{% endcode %}
 {% endtab %}
 {% endtabs %}
 
