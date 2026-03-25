@@ -529,7 +529,7 @@ async def youtube_data_article(event, str_y):
 
 async def google_search_article(event, input_str):
     font_url = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/fonts/roboto_regular.ttf"
-    image_url = "https://raw.githubusercontent.com/ZAR0X/CatUserbot-Resources/refs/heads/master/Resources/Inline/google.webp"
+    image_url = "https://raw.githubusercontent.com/TgCatUB/CatUserbot-Resources/refs/heads/master/Resources/Inline/google.webp"
     font_res = requests.get(font_url)
     font_res.raise_for_status()
     font_data = io.BytesIO(font_res.content)
