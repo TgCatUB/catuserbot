@@ -40,10 +40,10 @@ async def amireallyalive(event):
     cat_caption = gvarstatus("ALIVE_TEMPLATE") or temp
     if "ANIME" in cat_caption:
         try:
-            response = requests.get("https://animechan.xyz/api/random", timeout=10)
+            response = requests.get("https://api.animechan.io/v1/quotes/random", timeout=10)
             if response.ok:
                 data = response.json()
-                ANIME = f"**“{data['quote']}” - {data['character']} ({data['anime']})**"
+                ANIME = f"**“{data['data']['content']}” - {data['data']['character']['name']} ({data['data']['anime']['name']})**"
             else:
                 response.raise_for_status()
         except Exception as exception:
