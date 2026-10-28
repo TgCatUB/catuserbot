@@ -132,11 +132,12 @@ async def very(event):  # sourcery no-metrics
         logo = requests.get(LOGO_FONT)
         fontsize = int(LOGO_FONT_SIZE)
         font = ImageFont.truetype(BytesIO(logo.content), fontsize)
-        while font.getsize(max(text.splitlines(), key=len))[0] > 0.70 * resized_width:
+        while font.getlength(max(text.splitlines(), key=len)) > 0.70 * resized_width:
             fontsize -= 1
             font = ImageFont.truetype(BytesIO(logo.content), fontsize)
         image_widthz, image_heightz = img.size
-        w, h = draw.textsize(text, font=font)
+        bbox = draw.textbbox((0, 0), text, font=font)
+        w, h = bbox[2] - bbox[0], bbox[3] - bbox[1]
         h += int(h * 0.21)
         try:
             draw.text(

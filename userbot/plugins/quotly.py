@@ -100,7 +100,8 @@ async def q_pic(event):  # sourcery no-metrics  # sourcery skip: low-code-qualit
     nimg.putalpha(150)
     img.paste(nimg, (nw // 2, nh // 2), nimg)
     draw = ImageDraw.Draw(img)
-    tw, th = draw.textsize(text=text, font=textfont)
+    bbox = draw.textbbox((0, 0), text, font=textfont)
+    tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
     x, y = (w - tw) // 2, (h - th) // 2
     draw.text((x, y), text=text, font=textfont, fill="#ffffff", align="center")
     if user is not None:
@@ -108,7 +109,8 @@ async def q_pic(event):  # sourcery no-metrics  # sourcery skip: low-code-qualit
         namef = "./temp/ArialUnicodeMS.ttf" if await fontTest(usrname[0]) else "./temp/Quivira.otf"
         namefont = ImageFont.truetype(namef, 50)
         credit = "\n".join(wrap(f"by {usrname}", int(get_warp_length(w / 2.5))))
-        tw, th = draw.textsize(text=credit, font=namefont)
+        bbox = draw.textbbox((0, 0), credit, font=namefont)
+        tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
         draw.text(
             ((w - nw + tw) // 1.6, (h - nh - th)),
             text=credit,

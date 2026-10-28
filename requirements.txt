@@ -27,7 +27,8 @@ lyricsgenius
 markdown
 motor
 openai
-Pillow==9.5.0
+Pillow==12.3.0; python_version < "3.11"
+Pillow==13.0.0; python_version >= "3.11"
 pre-commit
 prettytable
 psutil
