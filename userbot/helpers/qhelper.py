@@ -42,7 +42,10 @@ logger.setLevel(logging.DEBUG)
 
 
 def _font_width(font, text):
-    bbox = font.getbbox(text)
+    try:
+        bbox = font.getbbox(text)
+    except RuntimeError:
+        return max(1, round(font.size * 0.6)) * len(text)
     return bbox[2] - bbox[0]
 
 
