@@ -268,7 +268,7 @@ def ellipse_create(filename, size, border):
     mask = Image.new("L", drawsize, 0)
     draw = ImageDraw.Draw(mask)
     draw.ellipse((0, 0) + drawsize, fill=255, outline="green", width=int(border))
-    mask = mask.resize(img.size, Image.ANTIALIAS)
+    mask = mask.resize(img.size, Image.Resampling.LANCZOS)
     img.putalpha(mask)
     return img, mask
 
@@ -281,7 +281,8 @@ def ellipse_layout_create(filename, size, border):
 def text_draw(font_name, font_size, img, text, hight, stroke_width=0, stroke_fill=None):
     font = ImageFont.truetype(font_name, font_size)
     draw = ImageDraw.Draw(img)
-    w, h = draw.textsize(text, font=font)
+    bbox = draw.textbbox((0, 0), text, font=font)
+    w, h = bbox[2] - bbox[0], bbox[3] - bbox[1]
     h += int(h * 0.21)
     draw.text(
         ((1024 - w) / 2, int(hight)),
@@ -322,7 +323,8 @@ def higlighted_text(
     font = ImageFont.truetype(font_name, font_size)
     extra_width, extra_height = position
     # get text size
-    text_width, text_height = font.getsize(text)
+    bbox = font.getbbox(text)
+    text_height = bbox[3] - bbox[1]
     width = 50 + extra_width
     hight = 30 + extra_height
     # wrap the text & save in a list
@@ -348,10 +350,9 @@ def higlighted_text(
         else:
             operator = "+"
         for i, items in enumerate(list_text):
-            x, y = (
-                font.getsize(list_text[i])[0] + 50,
-                int(text_height * 2 - (text_height / 2)),
-            )
+            line_bbox = font.getbbox(list_text[i])
+            x = line_bbox[2] - line_bbox[0] + 50
+            y = int(text_height * 2 - (text_height / 2))
             # align masks on the image....left,right & center
             if align == "center":
                 width_align = "((mask_size-x)/2)"

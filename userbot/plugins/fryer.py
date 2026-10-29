@@ -27,17 +27,17 @@ async def deepfry(img: Image) -> Image:
     width, height = img.width, img.height
     img = img.resize(
         (int(width ** uniform(0.8, 0.9)), int(height ** uniform(0.8, 0.9))),
-        resample=Image.LANCZOS,
+        resample=Image.Resampling.LANCZOS,
     )
     img = img.resize(
         (int(width ** uniform(0.85, 0.95)), int(height ** uniform(0.85, 0.95))),
-        resample=Image.BILINEAR,
+        resample=Image.Resampling.BILINEAR,
     )
     img = img.resize(
         (int(width ** uniform(0.89, 0.98)), int(height ** uniform(0.89, 0.98))),
-        resample=Image.BICUBIC,
+        resample=Image.Resampling.BICUBIC,
     )
-    img = img.resize((width, height), resample=Image.BICUBIC)
+    img = img.resize((width, height), resample=Image.Resampling.BICUBIC)
     img = ImageOps.posterize(img, randint(3, 7))
     # Generate colour overlay
     overlay = img.split()[0]

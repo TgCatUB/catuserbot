@@ -3,8 +3,6 @@
 import io
 import os
 import re
-import textwrap
-from textwrap import wrap
 
 import requests
 from PIL import Image, ImageDraw, ImageFont
@@ -33,6 +31,41 @@ class Forward_Lock:
 
 def get_warp_length(width):
     return int((20.0 / 1024.0) * (width + 0.0))
+
+
+def _fit_quote_text(draw, text, font_path, max_width, max_height):
+    for font_size in range(50, 6, -2):
+        font = ImageFont.truetype(font_path, font_size)
+        lines = []
+        for paragraph in text.splitlines() or [text]:
+            line = ""
+            for word in paragraph.split():
+                if draw.textlength(word, font=font) > max_width:
+                    if line:
+                        lines.append(line)
+                        line = ""
+                    chunk = ""
+                    for character in word:
+                        if chunk and draw.textlength(chunk + character, font=font) > max_width:
+                            lines.append(chunk)
+                            chunk = character
+                        else:
+                            chunk += character
+                    line = chunk
+                    continue
+                candidate = f"{line} {word}".strip()
+                if line and draw.textlength(candidate, font=font) > max_width:
+                    lines.append(line)
+                    line = word
+                else:
+                    line = candidate
+            lines.append(line)
+
+        wrapped_text = "\n".join(lines)
+        bbox = draw.multiline_textbbox((0, 0), wrapped_text, font=font, align="center")
+        if bbox[2] - bbox[0] <= max_width and bbox[3] - bbox[1] <= max_height:
+            return wrapped_text, font, bbox
+    return wrapped_text, font, bbox
 
 
 @catub.cat_cmd(
@@ -86,10 +119,8 @@ async def q_pic(event):  # sourcery no-metrics  # sourcery skip: low-code-qualit
         pfp = "profilepic.jpg"
         with open(pfp, "wb") as f:
             f.write(requests.get("https://graph.org/file/1fd74fa4a4dbf1655f3ec.jpg").content)
-    text = "\n".join(textwrap.wrap(text, 25))
     text = f"“{text}„"
     textf = "./temp/ArialUnicodeMS.ttf" if await fontTest(text[0]) else "./temp/Quivira.otf"
-    textfont = ImageFont.truetype(textf, 50)
     img = Image.open(pfp)
     if black:
         img = img.convert("L")
@@ -100,21 +131,42 @@ async def q_pic(event):  # sourcery no-metrics  # sourcery skip: low-code-qualit
     nimg.putalpha(150)
     img.paste(nimg, (nw // 2, nh // 2), nimg)
     draw = ImageDraw.Draw(img)
-    tw, th = draw.textsize(text=text, font=textfont)
-    x, y = (w - tw) // 2, (h - th) // 2
+    text_left = nw // 2 + 40
+    text_right = w - nw // 2 - 40
+    text_top = nh // 2 + 40
+    text_bottom = h - nh // 2 - 40 - (180 if user is not None else 0)
+    max_text_width = text_right - text_left
+    max_text_height = text_bottom - text_top
+    text, textfont, bbox = _fit_quote_text(
+        draw, text, textf, max_text_width, max_text_height
+    )
+    tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
+    x = (text_left + text_right - tw) // 2 - bbox[0]
+    y = (text_top + text_bottom - th) // 2 - bbox[1]
     draw.text((x, y), text=text, font=textfont, fill="#ffffff", align="center")
     if user is not None:
         usrname = get_display_name(user)
         namef = "./temp/ArialUnicodeMS.ttf" if await fontTest(usrname[0]) else "./temp/Quivira.otf"
-        namefont = ImageFont.truetype(namef, 50)
-        credit = "\n".join(wrap(f"by {usrname}", int(get_warp_length(w / 2.5))))
-        tw, th = draw.textsize(text=credit, font=namefont)
+        credit_left = text_left
+        credit_right = text_right
+        credit_top = text_bottom + 20
+        credit_bottom = h - nh // 2 - 40
+        credit, namefont, bbox = _fit_quote_text(
+            draw,
+            f"by {usrname}",
+            namef,
+            credit_right - credit_left,
+            credit_bottom - credit_top,
+        )
+        tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
+        x = credit_right - bbox[2]
+        y = credit_bottom - bbox[3]
         draw.text(
-            ((w - nw + tw) // 1.6, (h - nh - th)),
+            (x, y),
             text=credit,
             font=namefont,
             fill="#ffffff",
-            align="left",
+            align="right",
         )
     output = io.BytesIO()
     if sticker:

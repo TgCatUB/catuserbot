@@ -10,12 +10,12 @@
 #    You should have received a copy of the GNU General Public License
 #    along with NiceGrill.  If not, see <https://www.gnu.org/licenses/>.
 
-import json
 import logging
 import os
 import random
 import textwrap
-import urllib
+import urllib.request
+from urllib.error import HTTPError
 
 import emoji
 from fontTools.ttLib import TTFont
@@ -39,6 +39,14 @@ COLORS = [
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
+
+
+def _font_width(font, text):
+    try:
+        bbox = font.getbbox(text)
+    except RuntimeError:
+        return max(1, round(font.size * 0.6)) * len(text)
+    return bbox[2] - bbox[0]
 
 
 def file_check(re=True, me=True, mo=True, it=True, fa=True, sp=True, go=False):
@@ -108,18 +116,18 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
         if length > 43:
             text += textwrap.wrap(line, 43)
             maxlength = 43
-            if width < fallback.getsize(line[:43])[0]:
+            if width < _font_width(fallback, line[:43]):
                 if reply and "MessageEntityCode" in str(reply.entities):
-                    width = mono.getsize(line[:43])[0] + 30
+                    width = _font_width(mono, line[:43]) + 30
                 else:
-                    width = fallback.getsize(line[:43])[0]
+                    width = _font_width(fallback, line[:43])
         else:
             text.append(line + "\n")
-            if width < fallback.getsize(line)[0]:
+            if width < _font_width(fallback, line):
                 if reply and "MessageEntityCode" in str(reply.entities):
-                    width = mono.getsize(line)[0] + 30
+                    width = _font_width(mono, line) + 30
                 else:
-                    width = fallback.getsize(line)[0]
+                    width = _font_width(fallback, line)
             maxlength = max(maxlength, length)
     title = ""
     # try:
@@ -134,13 +142,13 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
     #     pass
     # except ValueError:
     #     pass
-    titlewidth = font2.getsize(title)[0]
+    titlewidth = _font_width(font2, title)
 
     # Get user name
     lname = user.last_name or ""
     tot = f"{user.first_name} {lname}"
 
-    namewidth = fallback.getsize(tot)[0] + 10
+    namewidth = _font_width(fallback, tot) + 10
 
     if namewidth > width:
         width = namewidth
@@ -253,7 +261,7 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
             docsize = f"{str(round(reply.document.size / 1024**2, 2))} MB "
         else:
             docsize = f"{str(round(reply.document.size / 1024**3, 2))} GB "
-        docbglen = font.getsize(docsize)[0] if font.getsize(docsize)[0] > font.getsize(docname)[0] else font.getsize(docname)[0]
+        docbglen = max(_font_width(font, docsize), _font_width(font, docname))
         canvas = canvas.resize((pfpbg.width + width + docbglen, 160 + height))
         top, middle, bottom = await drawer(width + docbglen, height + 30)
         canvas.paste(pfpbg, (0, 0))
@@ -272,17 +280,17 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
     space = pfpbg.width + 30
     namefallback = ImageFont.truetype("./temp/Quivira.otf", 43, encoding="utf-16")
     for letter in tot:
-        if letter in emoji.UNICODE_EMOJI["en"]:
+        if emoji.is_emoji(letter):
             newemoji, mask = await emoji_fetch(letter)
             canvas.paste(newemoji, (space, 24), mask)
             space += 40
         elif await fontTest(letter):
             draw.text((space, 20), letter, font=sepcialn, fill=color)
-            space += sepcialn.getsize(letter)[0]
+            space += _font_width(sepcialn, letter)
 
         else:
             draw.text((space, 20), letter, font=namefallback, fill=color)
-            space += namefallback.getsize(letter)[0]
+            space += _font_width(namefallback, letter)
     if title:
         draw.text((canvas.width - titlewidth - 20, 25), title, font=font2, fill="#898989")
 
@@ -312,17 +320,17 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
                 if index in range(offset, length):
                     font2 = ImageFont.truetype("./temp/Roboto-Regular.ttf", 35, encoding="utf-16")
                     textcolor = "#59a7f6"
-            if letter in emoji.UNICODE_EMOJI["en"]:
+            if emoji.is_emoji(letter):
                 newemoji, mask = await emoji_fetch(letter)
                 canvas.paste(newemoji, (x, y - 2), mask)
                 x += 45
                 emojicount += 1
             elif await fontTest(letter):
                 draw.text((x, y), letter, font=sepcialt, fill=textcolor)
-                x += sepcialt.getsize(letter)[0]
+                x += _font_width(sepcialt, letter)
             else:
                 draw.text((x, y), letter, font=textfallback, fill=textcolor)
-                x += textfallback.getsize(letter)[0]
+                x += _font_width(textfallback, letter)
             msg = msg.replace(letter, "¶", 1)
         y += 40
         x = pfpbg.width + 30
@@ -404,13 +412,22 @@ async def no_photo(tot):
     return pfp, color
 
 
-async def emoji_fetch(emoji):
-    emojis = json.loads(urllib.request.urlopen("https://github.com/erenmetesar/modules-repo/raw/master/emojis.txt").read().decode())
-    if emoji in emojis:
-        img = emojis[emoji]
-        return await transparent(urllib.request.urlretrieve(img, "./temp/emoji.png")[0])
-    img = emojis["⛔"]
-    return await transparent(urllib.request.urlretrieve(img, "./temp/emoji.png")[0])
+async def emoji_fetch(emoji_character):
+    codepoints = "-".join(
+        f"{ord(character):x}"
+        for character in emoji_character
+        if ord(character) != 0xFE0F
+    )
+    image_url = (
+        "https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/"
+        f"{codepoints}.png"
+    )
+    try:
+        image_path = urllib.request.urlretrieve(image_url, "./temp/emoji.png")[0]
+    except HTTPError:
+        fallback_url = "https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/26d4.png"
+        image_path = urllib.request.urlretrieve(fallback_url, "./temp/emoji.png")[0]
+    return await transparent(image_path)
 
 
 async def transparent(emoji):
@@ -436,15 +453,15 @@ async def replied_user(draw, tot, text, maxlength, title):
     for letter in tot:
         if not await fontTest(letter):
             draw.text((180 + space, 86), letter, font=namefallback, fill="#888888")
-            space += namefallback.getsize(letter)[0]
+            space += _font_width(namefallback, letter)
         else:
             draw.text((180 + space, 86), letter, font=namefont, fill="#888888")
-            space += namefont.getsize(letter)[0]
+            space += _font_width(namefont, letter)
     space = 0
     for letter in text:
         if not await fontTest(letter):
             draw.text((180 + space, 132), letter, font=textfallback, fill="#888888")
-            space += textfallback.getsize(letter)[0]
+            space += _font_width(textfallback, letter)
         else:
             draw.text((180 + space, 132), letter, font=textfont, fill="white")
-            space += textfont.getsize(letter)[0]
+            space += _font_width(textfont, letter)

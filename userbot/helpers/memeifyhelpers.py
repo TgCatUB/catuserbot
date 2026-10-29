@@ -15,11 +15,15 @@ from .utils import _catutils
 MARGINS = [50, 150, 250, 350, 450]
 
 
+def _text_size(font, text):
+    bbox = font.getbbox(text)
+    return bbox[2] - bbox[0], bbox[3] - bbox[1]
+
+
 def asciiart(in_f, SC, GCF, out_f, color1, color2, bgcolor="black"):
     chars = np.asarray(list(" .,:irs?@9B&#"))
     font = ImageFont.load_default()
-    letter_width = font.getsize("x")[0]
-    letter_height = font.getsize("x")[1]
+    letter_width, letter_height = _text_size(font, "x")
     WCF = letter_height / letter_width
     img = Image.open(in_f)
     widthByLetter = round(img.size[0] * SC * WCF)
@@ -57,13 +61,13 @@ async def cat_meme(CNG_FONTS, topString, bottomString, filename, endname):
     # find biggest font size that works
     fontSize = int(imageSize[1] / 5)
     font = ImageFont.truetype(CNG_FONTS, fontSize)
-    topTextSize = font.getsize(topString)
-    bottomTextSize = font.getsize(bottomString)
+    topTextSize = _text_size(font, topString)
+    bottomTextSize = _text_size(font, bottomString)
     while topTextSize[0] > imageSize[0] - 20 or bottomTextSize[0] > imageSize[0] - 20:
         fontSize -= 1
         font = ImageFont.truetype(CNG_FONTS, fontSize)
-        topTextSize = font.getsize(topString)
-        bottomTextSize = font.getsize(bottomString)
+        topTextSize = _text_size(font, topString)
+        bottomTextSize = _text_size(font, bottomString)
 
     # find top centered position for top text
     topTextPositionX = (imageSize[0] / 2) - (topTextSize[0] / 2)

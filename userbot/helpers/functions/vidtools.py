@@ -50,7 +50,7 @@ async def ud_frames(image, w, h, outframes, flip=False):
 
 
 async def spin_frames(image, w, h, outframes):
-    image.thumbnail((512, 512), Image.ANTIALIAS)
+    image.thumbnail((512, 512), Image.Resampling.LANCZOS)
     img = Image.new("RGB", (512, 512), "black")
     img.paste(image, ((512 - w) // 2, (512 - h) // 2))
     image = img
