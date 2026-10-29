@@ -1,11 +1,11 @@
 import contextlib
 from datetime import datetime, timedelta
 
-from sqlalchemy import JSON, Column, DateTime, Integer, String
+from sqlalchemy import JSON, Column, DateTime, Integer, String, delete, select
 
 from userbot import catub
 
-from . import BASE, SESSION
+from . import BASE, SESSION, create_table
 
 
 class CatScheduler(BASE):
@@ -21,7 +21,7 @@ class CatScheduler(BASE):
         return f"Message(id={self.id}, recipient='{self.recipient}', message='{self.message}', scheduled_time='{self.scheduled_time}', day_of_week='{self.day_of_week}')"
 
 
-CatScheduler.__table__.create(checkfirst=True)
+create_table(CatScheduler.__table__)
 
 
 def add_message_to_database(recipient, message, scheduled_time, day_of_week=None):
@@ -39,13 +39,15 @@ def add_message_to_database(recipient, message, scheduled_time, day_of_week=None
 
 def get_messages_to_send():
     current_time = datetime.now().replace(second=0, microsecond=0)
-    result = SESSION.query(CatScheduler).filter(CatScheduler.scheduled_time == current_time).all()
+    result = SESSION.scalars(
+        select(CatScheduler).where(CatScheduler.scheduled_time == current_time)
+    ).all()
     SESSION.close()
     return result
 
 
 def get_all_messages():
-    messages = SESSION.query(CatScheduler).all()
+    messages = SESSION.scalars(select(CatScheduler)).all()
     SESSION.close()
     return messages
 
@@ -62,7 +64,9 @@ def reassign_message(message):
 
 
 def delete_message_by_id(id):
-    message = SESSION.query(CatScheduler).filter_by(id=id).first()
+    message = SESSION.scalars(
+        select(CatScheduler).filter_by(id=id)
+    ).first()
     out = f"There no task active with Id : `{id}`"
     if message:
         SESSION.delete(message)
@@ -73,7 +77,7 @@ def delete_message_by_id(id):
 
 
 def delete_all_messages():
-    SESSION.query(CatScheduler).delete()
+    SESSION.execute(delete(CatScheduler))
     SESSION.commit()
     SESSION.close()
 

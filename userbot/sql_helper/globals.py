@@ -1,6 +1,6 @@
-from sqlalchemy import Column, String, UnicodeText
+from sqlalchemy import Column, String, UnicodeText, delete, select
 
-from . import BASE, SESSION
+from . import BASE, SESSION, create_table
 
 
 class Globals(BASE):
@@ -13,12 +13,14 @@ class Globals(BASE):
         self.value = value
 
 
-Globals.__table__.create(checkfirst=True)
+create_table(Globals.__table__)
 
 
 def gvarstatus(variable):
     try:
-        return SESSION.query(Globals).filter(Globals.variable == str(variable)).first().value
+        return SESSION.scalars(
+            select(Globals).where(Globals.variable == str(variable))
+        ).first().value
     except BaseException:
         return None
     finally:
@@ -26,7 +28,9 @@ def gvarstatus(variable):
 
 
 def addgvar(variable, value):
-    if SESSION.query(Globals).filter(Globals.variable == str(variable)).one_or_none():
+    if SESSION.scalars(
+        select(Globals).where(Globals.variable == str(variable))
+    ).one_or_none():
         delgvar(variable)
     adder = Globals(str(variable), value)
     SESSION.add(adder)
@@ -34,5 +38,10 @@ def addgvar(variable, value):
 
 
 def delgvar(variable):
-    if SESSION.query(Globals).filter(Globals.variable == str(variable)).delete(synchronize_session="fetch"):
+    result = SESSION.execute(
+        delete(Globals)
+        .where(Globals.variable == str(variable))
+        .execution_options(synchronize_session="fetch")
+    )
+    if result.rowcount:
         SESSION.commit()

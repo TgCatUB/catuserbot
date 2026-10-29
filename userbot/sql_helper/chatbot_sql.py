@@ -1,6 +1,6 @@
-from sqlalchemy import Column, String, UnicodeText
+from sqlalchemy import Column, String, UnicodeText, delete, select
 
-from . import BASE, SESSION
+from . import BASE, SESSION, create_table
 
 
 class ChatBot(BASE):
@@ -24,12 +24,12 @@ class ChatBot(BASE):
         return isinstance(other, ChatBot) and self.chat_id == other.chat_id and self.user_id == other.user_id
 
 
-ChatBot.__table__.create(checkfirst=True)
+create_table(ChatBot.__table__)
 
 
 def is_added(chat_id, user_id):
     try:
-        return SESSION.query(ChatBot).get((str(chat_id), str(user_id)))
+        return SESSION.get(ChatBot, (str(chat_id), str(user_id)))
     except BaseException:
         return None
     finally:
@@ -38,14 +38,16 @@ def is_added(chat_id, user_id):
 
 def get_users(chat_id):
     try:
-        return SESSION.query(ChatBot).filter(ChatBot.chat_id == str(chat_id)).all()
+        return SESSION.scalars(
+            select(ChatBot).where(ChatBot.chat_id == str(chat_id))
+        ).all()
     finally:
         SESSION.close()
 
 
 def get_all_users():
     try:
-        return SESSION.query(ChatBot).all()
+        return SESSION.scalars(select(ChatBot)).all()
     except BaseException:
         return None
     finally:
@@ -59,7 +61,7 @@ def addai(chat_id, user_id, chat_name, user_name, user_username, chat_type):
         SESSION.add(adder)
         SESSION.commit()
         return True
-    rem = SESSION.query(ChatBot).get((str(chat_id), str(user_id)))
+    rem = SESSION.get(ChatBot, (str(chat_id), str(user_id)))
     SESSION.delete(rem)
     SESSION.commit()
     adder = ChatBot(str(chat_id), str(user_id), chat_name, user_name, user_username, chat_type)
@@ -72,19 +74,17 @@ def remove_ai(chat_id, user_id):
     to_check = is_added(chat_id, user_id)
     if not to_check:
         return False
-    rem = SESSION.query(ChatBot).get((str(chat_id), str(user_id)))
+    rem = SESSION.get(ChatBot, (str(chat_id), str(user_id)))
     SESSION.delete(rem)
     SESSION.commit()
     return True
 
 
 def remove_users(chat_id):
-    if saved_filter := SESSION.query(ChatBot).filter(ChatBot.chat_id == str(chat_id)):
-        saved_filter.delete()
-        SESSION.commit()
+    SESSION.execute(delete(ChatBot).where(ChatBot.chat_id == str(chat_id)))
+    SESSION.commit()
 
 
 def remove_all_users():
-    if saved_filter := SESSION.query(ChatBot):
-        saved_filter.delete()
-        SESSION.commit()
+    SESSION.execute(delete(ChatBot))
+    SESSION.commit()

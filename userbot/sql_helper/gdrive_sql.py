@@ -1,6 +1,6 @@
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String, delete, select
 
-from . import BASE, SESSION
+from . import BASE, SESSION, create_table
 
 
 class Gdrive(BASE):
@@ -11,12 +11,14 @@ class Gdrive(BASE):
         self.cat = cat
 
 
-Gdrive.__table__.create(checkfirst=True)
+create_table(Gdrive.__table__)
 
 
 def is_folder(folder_id):
     try:
-        return SESSION.query(Gdrive).filter(Gdrive.cat == str(folder_id))
+        return SESSION.scalars(
+            select(Gdrive).where(Gdrive.cat == str(folder_id))
+        ).all()
     except BaseException:
         return None
     finally:
@@ -24,7 +26,7 @@ def is_folder(folder_id):
 
 
 def gparent_id(folder_id):
-    adder = SESSION.query(Gdrive).get(folder_id)
+    adder = SESSION.get(Gdrive, folder_id)
     if not adder:
         adder = Gdrive(folder_id)
     SESSION.add(adder)
@@ -33,7 +35,7 @@ def gparent_id(folder_id):
 
 def get_parent_id():
     try:
-        return SESSION.query(Gdrive).all()
+        return SESSION.scalars(select(Gdrive)).all()
     except BaseException:
         return None
     finally:
@@ -41,6 +43,5 @@ def get_parent_id():
 
 
 def rmparent_id(folder_id):
-    if note := SESSION.query(Gdrive).filter(Gdrive.cat == folder_id):
-        note.delete()
-        SESSION.commit()
+    SESSION.execute(delete(Gdrive).where(Gdrive.cat == folder_id))
+    SESSION.commit()

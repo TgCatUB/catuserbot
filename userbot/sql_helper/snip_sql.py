@@ -1,6 +1,6 @@
-from sqlalchemy import Column, Numeric, UnicodeText
+from sqlalchemy import Column, Numeric, UnicodeText, select
 
-from . import BASE, SESSION
+from . import BASE, SESSION, create_table
 
 
 class Note(BASE):
@@ -15,19 +15,19 @@ class Note(BASE):
         self.f_mesg_id = f_mesg_id
 
 
-Note.__table__.create(checkfirst=True)
+create_table(Note.__table__)
 
 
 def get_note(keyword):
     try:
-        return SESSION.query(Note).get(keyword)
+        return SESSION.get(Note, keyword)
     finally:
         SESSION.close()
 
 
 def get_notes():
     try:
-        return SESSION.query(Note).all()
+        return SESSION.scalars(select(Note)).all()
     finally:
         SESSION.close()
 
@@ -39,7 +39,7 @@ def add_note(keyword, reply, f_mesg_id):
         SESSION.add(adder)
         SESSION.commit()
         return True
-    rem = SESSION.query(Note).get(keyword)
+    rem = SESSION.get(Note, keyword)
     SESSION.delete(rem)
     SESSION.commit()
     adder = Note(keyword, reply, f_mesg_id)
@@ -52,7 +52,7 @@ def rm_note(keyword):
     to_check = get_note(keyword)
     if not to_check:
         return False
-    rem = SESSION.query(Note).get(keyword)
+    rem = SESSION.get(Note, keyword)
     SESSION.delete(rem)
     SESSION.commit()
     return True

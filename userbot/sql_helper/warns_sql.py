@@ -1,8 +1,8 @@
 import threading
 
-from sqlalchemy import Boolean, Column, Integer, String, UnicodeText, distinct, func
+from sqlalchemy import Boolean, Column, Integer, String, UnicodeText, distinct, func, select
 
-from . import BASE, SESSION
+from . import BASE, SESSION, create_table
 
 
 class Warns(BASE):
@@ -37,8 +37,8 @@ class WarnSettings(BASE):
         return f"<{self.chat_id} has {self.warn_limit} possible warns.>"
 
 
-Warns.__table__.create(checkfirst=True)
-WarnSettings.__table__.create(checkfirst=True)
+create_table(Warns.__table__)
+create_table(WarnSettings.__table__)
 
 WARN_INSERTION_LOCK = threading.RLock()
 WARN_SETTINGS_LOCK = threading.RLock()
@@ -46,7 +46,7 @@ WARN_SETTINGS_LOCK = threading.RLock()
 
 def warn_user(user_id, chat_id, reason=None):
     with WARN_INSERTION_LOCK:
-        warned_user = SESSION.query(Warns).get((user_id, str(chat_id)))
+        warned_user = SESSION.get(Warns, (user_id, str(chat_id)))
         if not warned_user:
             warned_user = Warns(user_id, str(chat_id))
         warned_user.num_warns += 1
@@ -62,7 +62,7 @@ def warn_user(user_id, chat_id, reason=None):
 def remove_warn(user_id, chat_id):
     with WARN_INSERTION_LOCK:
         removed = False
-        warned_user = SESSION.query(Warns).get((user_id, str(chat_id)))
+        warned_user = SESSION.get(Warns, (user_id, str(chat_id)))
         if warned_user and warned_user.num_warns > 0:
             warned_user.num_warns -= 1
             SESSION.add(warned_user)
@@ -74,7 +74,7 @@ def remove_warn(user_id, chat_id):
 
 def reset_warns(user_id, chat_id):
     with WARN_INSERTION_LOCK:
-        if warned_user := SESSION.query(Warns).get((user_id, str(chat_id))):
+        if warned_user := SESSION.get(Warns, (user_id, str(chat_id))):
             warned_user.num_warns = 0
             warned_user.reasons = ""
             SESSION.add(warned_user)
@@ -84,7 +84,7 @@ def reset_warns(user_id, chat_id):
 
 def get_warns(user_id, chat_id):
     try:
-        user = SESSION.query(Warns).get((user_id, str(chat_id)))
+        user = SESSION.get(Warns, (user_id, str(chat_id)))
         return (user.num_warns, user.reasons) if user else None
     finally:
         SESSION.close()
@@ -92,7 +92,7 @@ def get_warns(user_id, chat_id):
 
 def set_warn_limit(chat_id, warn_limit):
     with WARN_SETTINGS_LOCK:
-        curr_setting = SESSION.query(WarnSettings).get(str(chat_id))
+        curr_setting = SESSION.get(WarnSettings, str(chat_id))
         if not curr_setting:
             curr_setting = WarnSettings(chat_id, warn_limit=warn_limit)
         curr_setting.warn_limit = warn_limit
@@ -102,7 +102,7 @@ def set_warn_limit(chat_id, warn_limit):
 
 def set_warn_strength(chat_id, soft_warn):
     with WARN_SETTINGS_LOCK:
-        curr_setting = SESSION.query(WarnSettings).get(str(chat_id))
+        curr_setting = SESSION.get(WarnSettings, str(chat_id))
         if not curr_setting:
             curr_setting = WarnSettings(chat_id, soft_warn=soft_warn)
         curr_setting.soft_warn = soft_warn
@@ -112,7 +112,7 @@ def set_warn_strength(chat_id, soft_warn):
 
 def get_warn_setting(chat_id):
     try:
-        if setting := SESSION.query(WarnSettings).get(str(chat_id)):
+        if setting := SESSION.get(WarnSettings, str(chat_id)):
             return setting.warn_limit, setting.soft_warn
         return 3, False
     finally:
@@ -121,13 +121,13 @@ def get_warn_setting(chat_id):
 
 def num_warns():
     try:
-        return SESSION.query(func.sum(Warns.num_warns)).scalar() or 0
+        return SESSION.scalar(select(func.sum(Warns.num_warns))) or 0
     finally:
         SESSION.close()
 
 
 def num_warn_chats():
     try:
-        return SESSION.query(func.count(distinct(Warns.chat_id))).scalar()
+        return SESSION.scalar(select(func.count(distinct(Warns.chat_id))))
     finally:
         SESSION.close()

@@ -1,6 +1,6 @@
-from sqlalchemy import Column, Numeric, String, UnicodeText
+from sqlalchemy import Column, Numeric, String, UnicodeText, delete, select
 
-from . import BASE, SESSION
+from . import BASE, SESSION, create_table
 
 
 class Filter(BASE):
@@ -20,19 +20,21 @@ class Filter(BASE):
         return isinstance(other, Filter) and self.chat_id == other.chat_id and self.keyword == other.keyword
 
 
-Filter.__table__.create(checkfirst=True)
+create_table(Filter.__table__)
 
 
 def get_filter(chat_id, keyword):
     try:
-        return SESSION.query(Filter).get((str(chat_id), keyword))
+        return SESSION.get(Filter, (str(chat_id), keyword))
     finally:
         SESSION.close()
 
 
 def get_filters(chat_id):
     try:
-        return SESSION.query(Filter).filter(Filter.chat_id == str(chat_id)).all()
+        return SESSION.scalars(
+            select(Filter).where(Filter.chat_id == str(chat_id))
+        ).all()
     finally:
         SESSION.close()
 
@@ -44,7 +46,7 @@ def add_filter(chat_id, keyword, reply, f_mesg_id):
         SESSION.add(adder)
         SESSION.commit()
         return True
-    rem = SESSION.query(Filter).get((str(chat_id), keyword))
+    rem = SESSION.get(Filter, (str(chat_id), keyword))
     SESSION.delete(rem)
     SESSION.commit()
     adder = Filter(str(chat_id), keyword, reply, f_mesg_id)
@@ -57,13 +59,12 @@ def remove_filter(chat_id, keyword):
     to_check = get_filter(chat_id, keyword)
     if not to_check:
         return False
-    rem = SESSION.query(Filter).get((str(chat_id), keyword))
+    rem = SESSION.get(Filter, (str(chat_id), keyword))
     SESSION.delete(rem)
     SESSION.commit()
     return True
 
 
 def remove_all_filters(chat_id):
-    if saved_filter := SESSION.query(Filter).filter(Filter.chat_id == str(chat_id)):
-        saved_filter.delete()
-        SESSION.commit()
+    SESSION.execute(delete(Filter).where(Filter.chat_id == str(chat_id)))
+    SESSION.commit()

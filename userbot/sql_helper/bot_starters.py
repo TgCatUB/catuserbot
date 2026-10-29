@@ -1,6 +1,6 @@
-from sqlalchemy import Column, String, UnicodeText
+from sqlalchemy import Column, String, UnicodeText, select
 
-from . import BASE, SESSION
+from . import BASE, SESSION, create_table
 
 
 class Bot_Starters(BASE):
@@ -17,7 +17,7 @@ class Bot_Starters(BASE):
         self.username = username
 
 
-Bot_Starters.__table__.create(checkfirst=True)
+create_table(Bot_Starters.__table__)
 
 
 def add_starter_to_db(
@@ -32,7 +32,7 @@ def add_starter_to_db(
         SESSION.add(user)
         SESSION.commit()
         return True
-    rem = SESSION.query(Bot_Starters).get(str(user_id))
+    rem = SESSION.get(Bot_Starters, str(user_id))
     SESSION.delete(rem)
     SESSION.commit()
     user = Bot_Starters(str(user_id), first_name, date, username)
@@ -45,7 +45,7 @@ def del_starter_from_db(user_id):
     to_check = get_starter_details(user_id)
     if not to_check:
         return False
-    rem = SESSION.query(Bot_Starters).get(str(user_id))
+    rem = SESSION.get(Bot_Starters, str(user_id))
     SESSION.delete(rem)
     SESSION.commit()
     return True
@@ -53,7 +53,7 @@ def del_starter_from_db(user_id):
 
 def get_starter_details(user_id):
     try:
-        if _result := SESSION.query(Bot_Starters).get(str(user_id)):
+        if _result := SESSION.get(Bot_Starters, str(user_id)):
             return _result
         return None
     finally:
@@ -62,7 +62,7 @@ def get_starter_details(user_id):
 
 def get_all_starters():
     try:
-        return SESSION.query(Bot_Starters).all()
+        return SESSION.scalars(select(Bot_Starters)).all()
     except BaseException:
         return None
     finally:

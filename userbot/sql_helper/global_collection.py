@@ -1,8 +1,8 @@
 import threading
 
-from sqlalchemy import Column, PickleType, UnicodeText, distinct, func
+from sqlalchemy import Column, PickleType, UnicodeText, delete, distinct, func, select
 
-from . import BASE, SESSION
+from . import BASE, SESSION, create_table
 
 
 class Cat_GlobalCollection(BASE):
@@ -21,7 +21,7 @@ class Cat_GlobalCollection(BASE):
         return isinstance(other, Cat_GlobalCollection) and self.keywoard == other.keywoard and self.contents == other.contents
 
 
-Cat_GlobalCollection.__table__.create(checkfirst=True)
+create_table(Cat_GlobalCollection.__table__)
 
 CAT_GLOBALCOLLECTION = threading.RLock()
 
@@ -45,7 +45,7 @@ def add_to_collectionlist(keywoard, contents):
 
 def rm_from_collectionlist(keywoard, contents):
     with CAT_GLOBALCOLLECTION:
-        if keyword_items := SESSION.query(Cat_GlobalCollection).get((keywoard, tuple(contents))):
+        if keyword_items := SESSION.get(Cat_GlobalCollection, (keywoard, tuple(contents))):
             if tuple(contents) in COLLECTION_SQL_.CONTENTS_LIST.get(keywoard, set()):
                 COLLECTION_SQL_.CONTENTS_LIST.get(keywoard, set()).remove(tuple(contents))
             SESSION.delete(keyword_items)
@@ -64,7 +64,9 @@ def is_in_collectionlist(keywoard, contents):
 
 def del_keyword_collectionlist(keywoard):
     with CAT_GLOBALCOLLECTION:
-        SESSION.query(Cat_GlobalCollection.keywoard).filter(Cat_GlobalCollection.keywoard == keywoard).delete()
+        SESSION.execute(
+            delete(Cat_GlobalCollection).where(Cat_GlobalCollection.keywoard == keywoard)
+        )
         COLLECTION_SQL_.CONTENTS_LIST.pop(keywoard)
         SESSION.commit()
 
@@ -75,7 +77,7 @@ def get_item_collectionlist(keywoard):
 
 def get_collectionlist_items():
     try:
-        chats = SESSION.query(Cat_GlobalCollection.keywoard).distinct().all()
+        chats = SESSION.execute(select(Cat_GlobalCollection.keywoard).distinct()).all()
         return [i[0] for i in chats]
     finally:
         SESSION.close()
@@ -83,32 +85,35 @@ def get_collectionlist_items():
 
 def num_collectionlist():
     try:
-        return SESSION.query(Cat_GlobalCollection).count()
+        return SESSION.scalar(select(func.count()).select_from(Cat_GlobalCollection))
     finally:
         SESSION.close()
 
 
 def num_collectionlist_item(keywoard):
     try:
-        return SESSION.query(Cat_GlobalCollection.keywoard).filter(Cat_GlobalCollection.keywoard == keywoard).count()
+        statement = select(func.count()).select_from(Cat_GlobalCollection).where(
+            Cat_GlobalCollection.keywoard == keywoard
+        )
+        return SESSION.scalar(statement)
     finally:
         SESSION.close()
 
 
 def num_collectionlist_items():
     try:
-        return SESSION.query(func.count(distinct(Cat_GlobalCollection.keywoard))).scalar()
+        return SESSION.scalar(select(func.count(distinct(Cat_GlobalCollection.keywoard))))
     finally:
         SESSION.close()
 
 
 def __load_item_collectionlists():
     try:
-        chats = SESSION.query(Cat_GlobalCollection.keywoard).distinct().all()
+        chats = SESSION.execute(select(Cat_GlobalCollection.keywoard).distinct()).all()
         for (keywoard,) in chats:
             COLLECTION_SQL_.CONTENTS_LIST[keywoard] = []
 
-        all_groups = SESSION.query(Cat_GlobalCollection).all()
+        all_groups = SESSION.scalars(select(Cat_GlobalCollection)).all()
         for x in all_groups:
             COLLECTION_SQL_.CONTENTS_LIST[x.keywoard] += [x.contents]
 

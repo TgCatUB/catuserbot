@@ -1,8 +1,8 @@
 import threading
 
-from sqlalchemy import Column, String, UnicodeText, distinct, func
+from sqlalchemy import Column, String, UnicodeText, distinct, func, select
 
-from . import BASE, SESSION
+from . import BASE, SESSION, create_table
 
 
 class BlackListFilters(BASE):
@@ -21,7 +21,7 @@ class BlackListFilters(BASE):
         return isinstance(other, BlackListFilters) and self.chat_id == other.chat_id and self.trigger == other.trigger
 
 
-BlackListFilters.__table__.create(checkfirst=True)
+create_table(BlackListFilters.__table__)
 
 BLACKLIST_FILTER_INSERTION_LOCK = threading.RLock()
 
@@ -45,7 +45,7 @@ def add_to_blacklist(chat_id, trigger):
 
 def rm_from_blacklist(chat_id, trigger):
     with BLACKLIST_FILTER_INSERTION_LOCK:
-        if blacklist_filt := SESSION.query(BlackListFilters).get((str(chat_id), trigger)):
+        if blacklist_filt := SESSION.get(BlackListFilters, (str(chat_id), trigger)):
             if trigger in BLACKLIST_SQL_.CHAT_BLACKLISTS.get(str(chat_id), set()):  # sanity check
                 BLACKLIST_SQL_.CHAT_BLACKLISTS.get(str(chat_id), set()).remove(trigger)
 
@@ -63,32 +63,35 @@ def get_chat_blacklist(chat_id):
 
 def num_blacklist_filters():
     try:
-        return SESSION.query(BlackListFilters).count()
+        return SESSION.scalar(select(func.count()).select_from(BlackListFilters))
     finally:
         SESSION.close()
 
 
 def num_blacklist_chat_filters(chat_id):
     try:
-        return SESSION.query(BlackListFilters.chat_id).filter(BlackListFilters.chat_id == str(chat_id)).count()
+        statement = select(func.count()).select_from(BlackListFilters).where(
+            BlackListFilters.chat_id == str(chat_id)
+        )
+        return SESSION.scalar(statement)
     finally:
         SESSION.close()
 
 
 def num_blacklist_filter_chats():
     try:
-        return SESSION.query(func.count(distinct(BlackListFilters.chat_id))).scalar()
+        return SESSION.scalar(select(func.count(distinct(BlackListFilters.chat_id))))
     finally:
         SESSION.close()
 
 
 def __load_chat_blacklists():
     try:
-        chats = SESSION.query(BlackListFilters.chat_id).distinct().all()
+        chats = SESSION.execute(select(BlackListFilters.chat_id).distinct()).all()
         for (chat_id,) in chats:  # remove tuple by ( ,)
             BLACKLIST_SQL_.CHAT_BLACKLISTS[chat_id] = []
 
-        all_filters = SESSION.query(BlackListFilters).all()
+        all_filters = SESSION.scalars(select(BlackListFilters)).all()
         for x in all_filters:
             BLACKLIST_SQL_.CHAT_BLACKLISTS[x.chat_id] += [x.trigger]
 
