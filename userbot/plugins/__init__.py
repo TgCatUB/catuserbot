@@ -49,7 +49,11 @@ TMP_DOWNLOAD_DIRECTORY = Config.TMP_DOWNLOAD_DIRECTORY
 # spamwatch support
 if Config.SPAMWATCH_API:
     token = Config.SPAMWATCH_API
-    spamwatch = spam_watch.Client(token)
+    try:
+        spamwatch = spam_watch.Client(token)
+    except Exception as e:
+        LOGS.info(f"SpamWatch initialization failed: {e}")
+        spamwatch = None
 else:
     spamwatch = None
 
