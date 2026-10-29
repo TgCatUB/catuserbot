@@ -4,6 +4,7 @@ import io
 import os
 import pathlib
 from time import time
+from uuid import uuid4
 
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl import types
@@ -39,6 +40,7 @@ video_opts = {
     "prefer_ffmpeg": True,
     "geo_bypass": True,
     "nocheckcertificate": True,
+    "remote_components": ["ejs:github"],
     "postprocessors": [
         {"key": "FFmpegVideoConvertor", "preferedformat": "mp4"},
         {"key": "FFmpegMetadata"},
@@ -144,7 +146,7 @@ async def download_audio(event):  # sourcery skip: low-code-quality
     reply_to_id = await reply_id(event)
     for url in urls:
         try:
-            vid_data = YoutubeDL({"no-playlist": True}).extract_info(url, download=False)
+            vid_data = YoutubeDL({"no-playlist": True, "remote_components": ["ejs:github"]}).extract_info(url, download=False)
         except ExtractorError:
             vid_data = {"title": url, "uploader": "Catuserbot", "formats": []}
         startTime = time()
@@ -226,14 +228,14 @@ async def download_video(event):
     catevent = await edit_or_reply(event, "`Preparing to download...`")
     reply_to_id = await reply_id(event)
     for url in urls:
-        ytdl_data = await ytdl_down(catevent, video_opts, url)
+        f = pathlib.Path(f"cat_ytv_{uuid4().hex}.mp4")
+        ytdl_data = await ytdl_down(catevent, {**video_opts, "outtmpl": str(f)}, url)
         if ytdl_down is None:
             return
         try:
-            f = pathlib.Path("cat_ytv.mp4")
-            catthumb = pathlib.Path("cat_ytv.jpg")
+            catthumb = f.with_suffix(".jpg")
             if not os.path.exists(catthumb):
-                catthumb = pathlib.Path("cat_ytv.webp")
+                catthumb = f.with_suffix(".webp")
             if not os.path.exists(catthumb):
                 catthumb = None
             await catevent.edit(
