@@ -72,7 +72,7 @@ def pack_name(userid, pack, is_anim, is_video):
 
 
 def char_is_emoji(character):
-    return character in catemoji.UNICODE_EMOJI["en"]
+    return catemoji.is_emoji(character)
 
 
 def pack_nick(username, pack, is_anim, is_video):

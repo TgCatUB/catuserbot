@@ -4,7 +4,7 @@ cinemagoer
 cloudscraper
 colour
 cowpy
-emoji==1.7.0
+emoji==2.16.0
 fonttools
 flask
 geopy

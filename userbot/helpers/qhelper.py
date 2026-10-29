@@ -10,12 +10,12 @@
 #    You should have received a copy of the GNU General Public License
 #    along with NiceGrill.  If not, see <https://www.gnu.org/licenses/>.
 
-import json
 import logging
 import os
 import random
 import textwrap
-import urllib
+import urllib.request
+from urllib.error import HTTPError
 
 import emoji
 from fontTools.ttLib import TTFont
@@ -280,7 +280,7 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
     space = pfpbg.width + 30
     namefallback = ImageFont.truetype("./temp/Quivira.otf", 43, encoding="utf-16")
     for letter in tot:
-        if letter in emoji.UNICODE_EMOJI["en"]:
+        if emoji.is_emoji(letter):
             newemoji, mask = await emoji_fetch(letter)
             canvas.paste(newemoji, (space, 24), mask)
             space += 40
@@ -320,7 +320,7 @@ async def process(msg, user, client, reply, event, replied=None):  # sourcery no
                 if index in range(offset, length):
                     font2 = ImageFont.truetype("./temp/Roboto-Regular.ttf", 35, encoding="utf-16")
                     textcolor = "#59a7f6"
-            if letter in emoji.UNICODE_EMOJI["en"]:
+            if emoji.is_emoji(letter):
                 newemoji, mask = await emoji_fetch(letter)
                 canvas.paste(newemoji, (x, y - 2), mask)
                 x += 45
@@ -412,13 +412,22 @@ async def no_photo(tot):
     return pfp, color
 
 
-async def emoji_fetch(emoji):
-    emojis = json.loads(urllib.request.urlopen("https://github.com/erenmetesar/modules-repo/raw/master/emojis.txt").read().decode())
-    if emoji in emojis:
-        img = emojis[emoji]
-        return await transparent(urllib.request.urlretrieve(img, "./temp/emoji.png")[0])
-    img = emojis["⛔"]
-    return await transparent(urllib.request.urlretrieve(img, "./temp/emoji.png")[0])
+async def emoji_fetch(emoji_character):
+    codepoints = "-".join(
+        f"{ord(character):x}"
+        for character in emoji_character
+        if ord(character) != 0xFE0F
+    )
+    image_url = (
+        "https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/"
+        f"{codepoints}.png"
+    )
+    try:
+        image_path = urllib.request.urlretrieve(image_url, "./temp/emoji.png")[0]
+    except HTTPError:
+        fallback_url = "https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/26d4.png"
+        image_path = urllib.request.urlretrieve(fallback_url, "./temp/emoji.png")[0]
+    return await transparent(image_path)
 
 
 async def transparent(emoji):
