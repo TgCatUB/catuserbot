@@ -59,7 +59,6 @@ tgcrypto
 ujson
 urlextract
 validators
-vcsi==7.0.15
 wand
 wget
 
