@@ -196,7 +196,7 @@ def yt_search_btns(data_key: str, page: int, vid: str, total: int, del_back: boo
 def download_button(vid: str, body: bool = False):  # sourcery no-metrics
     # sourcery skip: low-code-quality
     try:
-        vid_data = yt_dlp.YoutubeDL({"no-playlist": True}).extract_info(BASE_YT_URL + vid, download=False)
+        vid_data = yt_dlp.YoutubeDL({"no-playlist": True, "remote_components": ["ejs:github"]}).extract_info(BASE_YT_URL + vid, download=False)
     except ExtractorError:
         vid_data = {"formats": []}
     buttons = [
@@ -290,6 +290,7 @@ def _mp3Dl(url: str, starttime, uid: str):
         "format": "bestaudio/best",
         "geo_bypass": True,
         "nocheckcertificate": True,
+        "remote_components": ["ejs:github"],
         "postprocessors": [
             {
                 "key": "FFmpegExtractAudio",
