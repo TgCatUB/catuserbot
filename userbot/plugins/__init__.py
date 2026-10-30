@@ -4,7 +4,7 @@ import re  # noqa F401
 import time  # noqa F401
 
 import heroku3
-import requests
+import httpx
 import spamwatch as spam_watch
 from validators.url import url
 
@@ -69,7 +69,7 @@ if Config.THUMB_IMAGE is not None:
     if check := url(Config.THUMB_IMAGE):
         try:
             with open(thumb_image_path, "wb") as f:
-                f.write(requests.get(Config.THUMB_IMAGE).content)
+                f.write(httpx.get(Config.THUMB_IMAGE, follow_redirects=True).content)
         except Exception as e:
             LOGS.info(str(e))
 
