@@ -6,7 +6,8 @@ from random import choice
 from textwrap import wrap
 from uuid import uuid4
 
-import requests
+import aiofiles
+import httpx
 from googletrans import Translator
 from html_telegraph_poster import TelegraphPoster
 from imdb import Cinemagoer
@@ -77,7 +78,8 @@ def sanga_seperator(sanga_list):
 # covid india data
 async def covidindia(state):
     url = "https://www.mohfw.gov.in/data/datanew.json"
-    req = requests.get(url).json()
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        req = (await client.get(url)).json()
     return next((req[states.index(i)] for i in states if i == state), None)
 
 
@@ -253,8 +255,10 @@ async def wall_download(piclink, query, ext=".jpg"):
             while os.path.exists(picpath) and i < 11:
                 picpath = f"./temp/{query.title().replace(' ', '')}-{i}{ext}"
                 i += 1
-        with open(picpath, "wb") as f:
-            f.write(requests.get(piclink).content)
+        async with httpx.AsyncClient(follow_redirects=True, timeout=60) as client:
+            resp = await client.get(piclink)
+        async with aiofiles.open(picpath, "wb") as f:
+            await f.write(resp.content)
         return picpath
     except Exception as e:
         LOGS.info(str(e))
