@@ -1,8 +1,10 @@
+import asyncio
 import os
 import re
-import urllib.request
+import urllib.parse
 from collections import defaultdict
 
+import httpx
 import ujson
 import yt_dlp
 from telethon import Button
@@ -31,9 +33,10 @@ name_dl = "yt-dlp --force-ipv4 --get-filename -o './temp/%(title)s.%(ext)s' {vid
 async def yt_search(cat):
     try:
         cat = urllib.parse.quote(cat)
-        html = urllib.request.urlopen(f"https://www.youtube.com/results?search_query={cat}")
+        async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+            html = await client.get(f"https://www.youtube.com/results?search_query={cat}")
 
-        user_data = re.findall(r"watch\?v=(\S{11})", html.read().decode())
+        user_data = re.findall(r"watch\?v=(\S{11})", html.text)
         video_link = []
         k = 0
         for i in user_data:
@@ -49,7 +52,7 @@ async def yt_search(cat):
 
 async def ytsearch(query, limit):
     result = ""
-    videolinks = VideosSearch(query.lower(), limit=limit)
+    videolinks = await asyncio.to_thread(VideosSearch, query.lower(), limit=limit)
     for v in videolinks.result()["result"]:
         textresult = f"[{v['title']}](https://www.youtube.com/watch?v={v['id']})\n"
         try:
