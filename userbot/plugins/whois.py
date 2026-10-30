@@ -1,8 +1,9 @@
+import asyncio
 import contextlib
 import html
 import os
 
-from requests import get
+import httpx
 from telethon.tl.functions.photos import GetUserPhotosRequest
 from telethon.tl.functions.users import GetFullUserRequest
 
@@ -95,7 +96,7 @@ async def _(event):
     except AttributeError:
         dc_id = "Can't get dc id"
     if spamwatch:
-        if ban := spamwatch.get_ban(user_id):
+        if ban := await asyncio.to_thread(spamwatch.get_ban, user_id):
             sw = f"**Spamwatch Banned :** `True` \n       **-**🤷‍♂️**Reason : **`{ban.reason}`"
         else:
             sw = "**Spamwatch Banned :** `False`"
@@ -103,7 +104,8 @@ async def _(event):
         sw = "**Spamwatch Banned :**`Not Connected`"
     try:
         casurl = f"https://api.cas.chat/check?user_id={user_id}"
-        data = get(casurl).json()
+        async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+            data = (await client.get(casurl)).json()
     except Exception as e:
         LOGS.info(e)
         data = None
