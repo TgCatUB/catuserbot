@@ -1,4 +1,4 @@
-import requests
+import httpx
 from bs4 import BeautifulSoup
 
 from userbot import catub
@@ -21,7 +21,8 @@ async def _(event):
     "Shows you the detailed information of given extension type."
     sample_url = "https://www.fileext.com/file-extension/{}.html"
     input_str = event.pattern_match.group(1).lower()
-    response_api = requests.get(sample_url.format(input_str))
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        response_api = await client.get(sample_url.format(input_str))
     status_code = response_api.status_code
     if status_code == 200:
         raw_html = response_api.content
