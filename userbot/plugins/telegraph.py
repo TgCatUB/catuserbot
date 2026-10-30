@@ -1,9 +1,11 @@
+import asyncio
 import json
 import os
 import random
 import string
 from datetime import datetime
 
+import aiofiles
 from PIL import Image
 from telegraph import Telegraph, exceptions, upload_file
 from telethon.errors.rpcerrorlist import YouBlockedUserError
@@ -18,8 +20,8 @@ from ..helpers.functions import delete_conv
 from . import BOTLOG, BOTLOG_CHATID, catub, reply_id
 
 
-def safe_upload_file(file):
-    resp = upload_file(file)
+async def safe_upload_file(file):
+    resp = await asyncio.to_thread(upload_file, file)
     if isinstance(resp, str):
         resp = json.loads(resp)
     return resp
@@ -82,7 +84,7 @@ async def _(event):
         if downloaded_file_name.endswith((".webp")):
             resize_image(downloaded_file_name)
         try:
-            media_urls = safe_upload_file(downloaded_file_name)
+            media_urls = await safe_upload_file(downloaded_file_name)
         except exceptions.TelegraphException as exc:
             await catevent.edit(f"**Error : **\n`{exc}`")
             os.remove(downloaded_file_name)
@@ -107,18 +109,18 @@ async def _(event):
                 title_of_page = page_content
             downloaded_file_name = await event.client.download_media(r_message, Config.TEMP_DIR)
             m_list = None
-            with open(downloaded_file_name, "rb") as fd:
-                m_list = fd.readlines()
+            async with aiofiles.open(downloaded_file_name, "rb") as fd:
+                m_list = await fd.readlines()
             for m in m_list:
                 page_content += m.decode("UTF-8") + "\n"
             os.remove(downloaded_file_name)
         page_content = page_content.replace("\n", "<br>")
         try:
-            response = telegraph.create_page(title_of_page, html_content=page_content)
+            response = await asyncio.to_thread(telegraph.create_page, title_of_page, html_content=page_content)
         except Exception as e:
             LOGS.info(e)
             title_of_page = "".join(random.choice(list(string.ascii_lowercase + string.ascii_uppercase)) for _ in range(16))
-            response = telegraph.create_page(title_of_page, html_content=page_content)
+            response = await asyncio.to_thread(telegraph.create_page, title_of_page, html_content=page_content)
         end = datetime.now()
         ms = (end - start).seconds
         cat = f"https://graph.org/{response['path']}"
