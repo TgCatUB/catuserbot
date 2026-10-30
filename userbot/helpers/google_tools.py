@@ -4,7 +4,7 @@ import re
 import time
 from datetime import datetime
 
-import requests
+import httpx
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.common.by import By
@@ -124,11 +124,11 @@ class GooglePic:
         with open(image_filename, mode="rb") as f:
             url = f"https://lens.google.com/upload?ep=ccm&s=&st={int(time.time())}"
             try:
-                res1 = requests.post(url, files={"encoded_image": f})
-                if res1.ok:
+                res1 = httpx.post(url, files={"encoded_image": f}, follow_redirects=True, timeout=60)
+                if res1.is_success:
                     data["lens"] = re.search(r"https?://[^\"]+", res1.text).group()
-                    res2 = requests.get(data["lens"])
-                    if res2.ok:
+                    res2 = httpx.get(data["lens"], follow_redirects=True, timeout=60)
+                    if res2.is_success:
                         html = res2.text.encode().decode("unicode_escape")
                         with contextlib.suppress(Exception):
                             data["google"] = re.search(r"https://www.google.com/search\?tbs.+?(?=\")", html).group()
