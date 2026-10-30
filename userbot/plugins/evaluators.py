@@ -1,5 +1,6 @@
 """Tools for lazy devs"""
 
+import aiofiles
 import asyncio
 import importlib
 import inspect
@@ -167,9 +168,9 @@ async def search_func(event):
 
     filepath = inspect.getfile(source)
     caption = f"**Source:**  `{filepath}`"
-    with open(filename, "w") as f:
+    async with aiofiles.open(filename, "w") as f:
         text = inspect.getsource(source)
-        f.write(text)
+        await f.write(text)
 
     await catevent.delete()
     await catub.send_file(
