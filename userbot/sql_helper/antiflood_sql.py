@@ -1,8 +1,8 @@
 import threading
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, select
 
-from . import BASE, SESSION
+from . import BASE, SESSION, create_table
 
 DEF_COUNT = 0
 DEF_LIMIT = 0
@@ -23,7 +23,7 @@ class FloodControl(BASE):
         return f"<flood control for {self.chat_id}>"
 
 
-FloodControl.__table__.create(checkfirst=True)
+create_table(FloodControl.__table__)
 
 INSERTION_LOCK = threading.RLock()
 
@@ -38,7 +38,7 @@ ANTIFLOOD_SQL_ = ANTIFLOOD_SQL()
 
 def set_flood(chat_id, amount):
     with INSERTION_LOCK:
-        flood = SESSION.query(FloodControl).get(str(chat_id))
+        flood = SESSION.get(FloodControl, str(chat_id))
         if not flood:
             flood = FloodControl(str(chat_id))
 
@@ -77,7 +77,7 @@ def get_flood_limit(chat_id):
 
 def migrate_chat(old_chat_id, new_chat_id):
     with INSERTION_LOCK:
-        if flood := SESSION.query(FloodControl).get(str(old_chat_id)):
+        if flood := SESSION.get(FloodControl, str(old_chat_id)):
             ANTIFLOOD_SQL_.CHAT_FLOOD[str(new_chat_id)] = ANTIFLOOD_SQL_.CHAT_FLOOD.get(str(old_chat_id), DEF_OBJ)
             flood.chat_id = str(new_chat_id)
             SESSION.commit()
@@ -87,7 +87,7 @@ def migrate_chat(old_chat_id, new_chat_id):
 
 def __load_flood_settings():
     try:
-        all_chats = SESSION.query(FloodControl).all()
+        all_chats = SESSION.scalars(select(FloodControl)).all()
         ANTIFLOOD_SQL_.CHAT_FLOOD = {chat.chat_id: (None, DEF_COUNT, chat.limit) for chat in all_chats}
     finally:
         SESSION.close()

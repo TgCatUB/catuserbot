@@ -1,6 +1,6 @@
 from sqlalchemy import Boolean, Column, String
 
-from . import BASE, SESSION
+from . import BASE, SESSION, create_table
 
 
 class Locks(BASE):
@@ -22,11 +22,11 @@ class Locks(BASE):
         self.url = False
 
 
-Locks.__table__.create(checkfirst=True)
+create_table(Locks.__table__)
 
 
 def init_locks(chat_id, reset=False):
-    curr_restr = SESSION.query(Locks).get(str(chat_id))
+    curr_restr = SESSION.get(Locks, str(chat_id))
     if reset:
         SESSION.delete(curr_restr)
         SESSION.flush()
@@ -37,7 +37,7 @@ def init_locks(chat_id, reset=False):
 
 
 def update_lock(chat_id, lock_type, locked):
-    curr_perm = SESSION.query(Locks).get(str(chat_id))
+    curr_perm = SESSION.get(Locks, str(chat_id))
     if not curr_perm:
         curr_perm = init_locks(chat_id)
     if lock_type == "bots":
@@ -55,7 +55,7 @@ def update_lock(chat_id, lock_type, locked):
 
 
 def is_locked(chat_id, lock_type):
-    curr_perm = SESSION.query(Locks).get(str(chat_id))
+    curr_perm = SESSION.get(Locks, str(chat_id))
     SESSION.close()
     if not curr_perm:
         return False
@@ -73,6 +73,6 @@ def is_locked(chat_id, lock_type):
 
 def get_locks(chat_id):
     try:
-        return SESSION.query(Locks).get(str(chat_id))
+        return SESSION.get(Locks, str(chat_id))
     finally:
         SESSION.close()

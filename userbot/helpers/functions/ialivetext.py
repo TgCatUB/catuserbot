@@ -3,6 +3,7 @@ import time
 
 import heroku3
 import requests
+from sqlalchemy import text
 
 from ...Config import Config
 from .utils import get_readable_time
@@ -28,7 +29,7 @@ def check_data_base_heal_th():
 
     try:
         # to check database we will execute raw query
-        SESSION.execute("SELECT 1")
+        SESSION.execute(text("SELECT 1"))
     except Exception as e:
         output = f"❌ {e}"
         is_database_working = False

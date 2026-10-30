@@ -1,6 +1,6 @@
-from sqlalchemy import Column, String, UnicodeText
+from sqlalchemy import Column, String, UnicodeText, delete, select
 
-from . import BASE, SESSION
+from . import BASE, SESSION, create_table
 
 
 class Echos(BASE):
@@ -24,12 +24,12 @@ class Echos(BASE):
         return isinstance(other, Echos) and self.chat_id == other.chat_id and self.user_id == other.user_id
 
 
-Echos.__table__.create(checkfirst=True)
+create_table(Echos.__table__)
 
 
 def is_echo(chat_id, user_id):
     try:
-        return SESSION.query(Echos).get((str(chat_id), str(user_id)))
+        return SESSION.get(Echos, (str(chat_id), str(user_id)))
     except BaseException:
         return None
     finally:
@@ -38,14 +38,16 @@ def is_echo(chat_id, user_id):
 
 def get_echos(chat_id):
     try:
-        return SESSION.query(Echos).filter(Echos.chat_id == str(chat_id)).all()
+        return SESSION.scalars(
+            select(Echos).where(Echos.chat_id == str(chat_id))
+        ).all()
     finally:
         SESSION.close()
 
 
 def get_all_echos():
     try:
-        return SESSION.query(Echos).all()
+        return SESSION.scalars(select(Echos)).all()
     except BaseException:
         return None
     finally:
@@ -59,7 +61,7 @@ def addecho(chat_id, user_id, chat_name, user_name, user_username, chat_type):
         SESSION.add(adder)
         SESSION.commit()
         return True
-    rem = SESSION.query(Echos).get((str(chat_id), str(user_id)))
+    rem = SESSION.get(Echos, (str(chat_id), str(user_id)))
     SESSION.delete(rem)
     SESSION.commit()
     adder = Echos(str(chat_id), str(user_id), chat_name, user_name, user_username, chat_type)
@@ -72,19 +74,17 @@ def remove_echo(chat_id, user_id):
     to_check = is_echo(chat_id, user_id)
     if not to_check:
         return False
-    rem = SESSION.query(Echos).get((str(chat_id), str(user_id)))
+    rem = SESSION.get(Echos, (str(chat_id), str(user_id)))
     SESSION.delete(rem)
     SESSION.commit()
     return True
 
 
 def remove_echos(chat_id):
-    if saved_filter := SESSION.query(Echos).filter(Echos.chat_id == str(chat_id)):
-        saved_filter.delete()
-        SESSION.commit()
+    SESSION.execute(delete(Echos).where(Echos.chat_id == str(chat_id)))
+    SESSION.commit()
 
 
 def remove_all_echos():
-    if saved_filter := SESSION.query(Echos):
-        saved_filter.delete()
-        SESSION.commit()
+    SESSION.execute(delete(Echos))
+    SESSION.commit()

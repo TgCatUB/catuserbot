@@ -1,7 +1,7 @@
-from sqlalchemy import Column, UnicodeText
+from sqlalchemy import Column, UnicodeText, select
 from sqlalchemy_json import MutableJson, NestedMutableJson
 
-from . import BASE, SESSION
+from . import BASE, SESSION, create_table
 
 
 class Cat_GlobalCollection_Json(BASE):
@@ -16,12 +16,12 @@ class Cat_GlobalCollection_Json(BASE):
         self.njson = njson
 
 
-Cat_GlobalCollection_Json.__table__.create(checkfirst=True)
+create_table(Cat_GlobalCollection_Json.__table__)
 
 
 def get_collection(keywoard):
     try:
-        return SESSION.query(Cat_GlobalCollection_Json).get(keywoard)
+        return SESSION.get(Cat_GlobalCollection_Json, keywoard)
     finally:
         SESSION.close()
 
@@ -30,7 +30,7 @@ def add_collection(keywoard, json, njson=None):
     if njson is None:
         njson = {}
     if to_check := get_collection(keywoard):  # noqa F841
-        keyword_items = SESSION.query(Cat_GlobalCollection_Json).get(keywoard)
+        keyword_items = SESSION.get(Cat_GlobalCollection_Json, keywoard)
         SESSION.delete(keyword_items)
     keyword_items = Cat_GlobalCollection_Json(keywoard, json, njson)
     SESSION.add(keyword_items)
@@ -42,7 +42,7 @@ def del_collection(keywoard):
     to_check = get_collection(keywoard)
     if not to_check:
         return False
-    keyword_items = SESSION.query(Cat_GlobalCollection_Json).get(keywoard)
+    keyword_items = SESSION.get(Cat_GlobalCollection_Json, keywoard)
     SESSION.delete(keyword_items)
     SESSION.commit()
     return True
@@ -50,6 +50,6 @@ def del_collection(keywoard):
 
 def get_collections():
     try:
-        return SESSION.query(Cat_GlobalCollection_Json).all()
+        return SESSION.scalars(select(Cat_GlobalCollection_Json)).all()
     finally:
         SESSION.close()

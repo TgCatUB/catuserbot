@@ -1,6 +1,6 @@
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String, select
 
-from . import BASE, SESSION
+from . import BASE, SESSION, create_table
 
 
 class GMute(BASE):
@@ -11,12 +11,12 @@ class GMute(BASE):
         self.sender = str(sender)
 
 
-GMute.__table__.create(checkfirst=True)
+create_table(GMute.__table__)
 
 
 def is_gmuted(sender_id):
     try:
-        return SESSION.query(GMute).all()
+        return SESSION.scalars(select(GMute)).all()
     except BaseException:
         return None
     finally:
@@ -30,6 +30,6 @@ def gmute(sender):
 
 
 def ungmute(sender):
-    if rem := SESSION.query(GMute).get((str(sender))):
+    if rem := SESSION.get(GMute, str(sender)):
         SESSION.delete(rem)
         SESSION.commit()

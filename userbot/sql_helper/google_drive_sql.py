@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, Text
 
-from . import BASE, SESSION
+from . import BASE, SESSION, create_table
 
 
 class GoogleDriveCreds(BASE):
@@ -12,11 +12,11 @@ class GoogleDriveCreds(BASE):
         self.user = user
 
 
-GoogleDriveCreds.__table__.create(checkfirst=True)
+create_table(GoogleDriveCreds.__table__)
 
 
 def save_credentials(user, credentials):
-    saved_credentials = SESSION.query(GoogleDriveCreds).get(user)
+    saved_credentials = SESSION.get(GoogleDriveCreds, user)
     if not saved_credentials:
         saved_credentials = GoogleDriveCreds(user)
 
@@ -29,14 +29,14 @@ def save_credentials(user, credentials):
 
 def get_credentials(user):
     try:
-        saved_credentials = SESSION.query(GoogleDriveCreds).get(user)
+        saved_credentials = SESSION.get(GoogleDriveCreds, user)
         return saved_credentials.credentials if saved_credentials is not None else None
     finally:
         SESSION.close()
 
 
 def clear_credentials(user):
-    if saved_credentials := SESSION.query(GoogleDriveCreds).get(user):
+    if saved_credentials := SESSION.get(GoogleDriveCreds, user):
         SESSION.delete(saved_credentials)
         SESSION.commit()
         return True

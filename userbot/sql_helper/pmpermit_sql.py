@@ -1,6 +1,6 @@
-from sqlalchemy import Column, String, UnicodeText
+from sqlalchemy import Column, String, UnicodeText, delete, select
 
-from . import BASE, SESSION
+from . import BASE, SESSION, create_table
 
 
 class PmPermit_Sql(BASE):
@@ -19,7 +19,7 @@ class PmPermit_Sql(BASE):
         self.reason = reason
 
 
-PmPermit_Sql.__table__.create(checkfirst=True)
+create_table(PmPermit_Sql.__table__)
 
 
 def approve(user_id, first_name, date, username, reason):
@@ -29,7 +29,7 @@ def approve(user_id, first_name, date, username, reason):
         SESSION.add(user)
         SESSION.commit()
         return True
-    rem = SESSION.query(PmPermit_Sql).get(str(user_id))
+    rem = SESSION.get(PmPermit_Sql, str(user_id))
     SESSION.delete(rem)
     SESSION.commit()
     user = PmPermit_Sql(str(user_id), first_name, date, username, reason)
@@ -42,7 +42,7 @@ def disapprove(user_id):
     to_check = is_approved(user_id)
     if not to_check:
         return False
-    rem = SESSION.query(PmPermit_Sql).get(str(user_id))
+    rem = SESSION.get(PmPermit_Sql, str(user_id))
     SESSION.delete(rem)
     SESSION.commit()
     return True
@@ -50,7 +50,7 @@ def disapprove(user_id):
 
 def is_approved(user_id):
     try:
-        if _result := SESSION.query(PmPermit_Sql).get(str(user_id)):
+        if _result := SESSION.get(PmPermit_Sql, str(user_id)):
             return _result
         return None
     finally:
@@ -59,7 +59,7 @@ def is_approved(user_id):
 
 def get_all_approved():
     try:
-        return SESSION.query(PmPermit_Sql).all()
+        return SESSION.scalars(select(PmPermit_Sql)).all()
     except BaseException:
         return None
     finally:
@@ -68,7 +68,7 @@ def get_all_approved():
 
 def disapprove_all():
     try:
-        SESSION.query(PmPermit_Sql).delete()
+        SESSION.execute(delete(PmPermit_Sql))
         SESSION.commit()
         return True
     except BaseException:

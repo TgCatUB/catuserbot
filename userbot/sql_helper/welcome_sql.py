@@ -1,6 +1,6 @@
-from sqlalchemy import BigInteger, Column, Numeric, String, UnicodeText
+from sqlalchemy import BigInteger, Column, Numeric, String, UnicodeText, select
 
-from . import BASE, SESSION
+from . import BASE, SESSION, create_table
 
 
 class Welcome(BASE):
@@ -17,19 +17,21 @@ class Welcome(BASE):
         self.f_mesg_id = f_mesg_id
 
 
-Welcome.__table__.create(checkfirst=True)
+create_table(Welcome.__table__)
 
 
 def get_welcome(chat_id):
     try:
-        return SESSION.query(Welcome).get(str(chat_id))
+        return SESSION.get(Welcome, str(chat_id))
     finally:
         SESSION.close()
 
 
 def get_current_welcome_settings(chat_id):
     try:
-        return SESSION.query(Welcome).filter(Welcome.chat_id == str(chat_id)).one()
+        return SESSION.scalars(
+            select(Welcome).where(Welcome.chat_id == str(chat_id))
+        ).one()
     except BaseException:
         return None
     finally:
@@ -43,7 +45,7 @@ def add_welcome_setting(chat_id, previous_welcome, reply, f_mesg_id):
         SESSION.add(adder)
         SESSION.commit()
         return True
-    rem = SESSION.query(Welcome).get(str(chat_id))
+    rem = SESSION.get(Welcome, str(chat_id))
     SESSION.delete(rem)
     SESSION.commit()
     adder = Welcome(chat_id, previous_welcome, reply, f_mesg_id)
@@ -53,7 +55,7 @@ def add_welcome_setting(chat_id, previous_welcome, reply, f_mesg_id):
 
 def rm_welcome_setting(chat_id):
     try:
-        if rem := SESSION.query(Welcome).get(str(chat_id)):
+        if rem := SESSION.get(Welcome, str(chat_id)):
             SESSION.delete(rem)
             SESSION.commit()
             return True
@@ -62,6 +64,6 @@ def rm_welcome_setting(chat_id):
 
 
 def update_previous_welcome(chat_id, previous_welcome):
-    row = SESSION.query(Welcome).get(str(chat_id))
+    row = SESSION.get(Welcome, str(chat_id))
     row.previous_welcome = previous_welcome
     SESSION.commit()

@@ -1,6 +1,6 @@
-from sqlalchemy import Column, Integer, String, UnicodeText
+from sqlalchemy import Column, Integer, String, UnicodeText, select
 
-from . import BASE, SESSION
+from . import BASE, SESSION, create_table
 
 
 class Bot_Users(BASE):
@@ -25,7 +25,7 @@ class Bot_Users(BASE):
         self.result_id = result_id
 
 
-Bot_Users.__table__.create(checkfirst=True)
+create_table(Bot_Users.__table__)
 
 
 def add_user_to_db(message_id, first_name, chat_id, reply_id, logger_id, result_id):
@@ -37,7 +37,9 @@ def add_user_to_db(message_id, first_name, chat_id, reply_id, logger_id, result_
 
 def get_user_id(message_id):
     try:
-        if _result := (SESSION.query(Bot_Users).filter(Bot_Users.message_id == str(message_id)).all()):
+        if _result := SESSION.scalars(
+            select(Bot_Users).where(Bot_Users.message_id == str(message_id))
+        ).all():
             return _result
         return None
     finally:
@@ -46,9 +48,11 @@ def get_user_id(message_id):
 
 def del_user_from_db(message_id):
     try:
-        if _result := (SESSION.query(Bot_Users).filter(Bot_Users.message_id == str(message_id)).all()):
+        if _result := SESSION.scalars(
+            select(Bot_Users).where(Bot_Users.message_id == str(message_id))
+        ).all():
             for rst in _result:
-                rem = SESSION.query(Bot_Users).get((str(rst.message_id), rst.result_id))
+                rem = SESSION.get(Bot_Users, (str(rst.message_id), rst.result_id))
                 SESSION.delete(rem)
                 SESSION.commit()
             return True
@@ -59,7 +63,9 @@ def del_user_from_db(message_id):
 
 def get_user_reply(reply_id):
     try:
-        if _result := (SESSION.query(Bot_Users).filter(Bot_Users.reply_id == str(reply_id)).all()):
+        if _result := SESSION.scalars(
+            select(Bot_Users).where(Bot_Users.reply_id == str(reply_id))
+        ).all():
             return _result
         return None
     finally:
@@ -68,7 +74,9 @@ def get_user_reply(reply_id):
 
 def get_user_results(result_id):
     try:
-        if _result := (SESSION.query(Bot_Users).filter(Bot_Users.result_id == str(result_id)).all()):
+        if _result := SESSION.scalars(
+            select(Bot_Users).where(Bot_Users.result_id == str(result_id))
+        ).all():
             return _result
         return None
     finally:
@@ -77,7 +85,9 @@ def get_user_results(result_id):
 
 def get_user_logging(logger_id):
     try:
-        if _result := (SESSION.query(Bot_Users).filter(Bot_Users.logger_id == str(logger_id)).all()):
+        if _result := SESSION.scalars(
+            select(Bot_Users).where(Bot_Users.logger_id == str(logger_id))
+        ).all():
             return _result
         return None
     finally:

@@ -1,6 +1,6 @@
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String, select
 
-from . import BASE, SESSION
+from . import BASE, SESSION, create_table
 
 
 class GBan(BASE):
@@ -13,12 +13,14 @@ class GBan(BASE):
         self.reason = reason
 
 
-GBan.__table__.create(checkfirst=True)
+create_table(GBan.__table__)
 
 
 def is_gbanned(chat_id):
     try:
-        return SESSION.query(GBan).filter(GBan.chat_id == str(chat_id)).one()
+        return SESSION.scalars(
+            select(GBan).where(GBan.chat_id == str(chat_id))
+        ).one()
     except BaseException:
         return None
     finally:
@@ -27,7 +29,7 @@ def is_gbanned(chat_id):
 
 def get_gbanuser(chat_id):
     try:
-        return SESSION.query(GBan).get(str(chat_id))
+        return SESSION.get(GBan, str(chat_id))
     finally:
         SESSION.close()
 
@@ -39,12 +41,12 @@ def catgban(chat_id, reason):
 
 
 def catungban(chat_id):
-    if rem := SESSION.query(GBan).get(str(chat_id)):
+    if rem := SESSION.get(GBan, str(chat_id)):
         SESSION.delete(rem)
         SESSION.commit()
 
 
 def get_all_gbanned():
-    rem = SESSION.query(GBan).all()
+    rem = SESSION.scalars(select(GBan)).all()
     SESSION.close()
     return rem
