@@ -3,8 +3,8 @@ Available Commands:
 .tts LanguageCode as reply to a message
 .tts LangaugeCode | text to speak"""
 
+import asyncio
 import os
-import subprocess
 from datetime import datetime
 
 from gtts import gTTS
@@ -54,7 +54,7 @@ async def _(event):
     try:
         # https://github.com/SpEcHiDe/UniBorg/commit/17f8682d5d2df7f3921f50271b5b6722c80f4106
         tts = gTTS(text, lang=lan)
-        tts.save(required_file_name)
+        await asyncio.to_thread(tts.save, required_file_name)
         command_to_execute = [
             "ffmpeg",
             "-i",
@@ -71,8 +71,15 @@ async def _(event):
         ]
 
         try:
-            subprocess.check_output(command_to_execute, stderr=subprocess.STDOUT)
-        except (subprocess.CalledProcessError, NameError, FileNotFoundError) as exc:
+            process = await asyncio.create_subprocess_exec(
+                *command_to_execute,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.STDOUT,
+            )
+            output, _ = await process.communicate()
+            if process.returncode != 0:
+                raise RuntimeError(output.decode(errors="replace"))
+        except (RuntimeError, NameError, FileNotFoundError) as exc:
             await catevent.edit(str(exc))
             # continue sending required_file_name
         else:
