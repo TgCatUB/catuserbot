@@ -1,4 +1,6 @@
-from requests import get
+import asyncio
+
+import httpx
 from telethon.errors import ChatAdminRequiredError
 from telethon.events import ChatAction
 from telethon.tl.types import ChannelParticipantsAdmins
@@ -47,7 +49,7 @@ if Config.ANTISPAMBOT_BAN:
             except Exception as e:
                 LOGS.info(e)
         if spamwatch and not catbanned:
-            if ban := spamwatch.get_ban(user.id):
+            if ban := await asyncio.to_thread(spamwatch.get_ban, user.id):
                 hmm = await event.reply(f"[{user.first_name}](tg://user?id={user.id}) was banned by spamwatch for the reason `{ban.reason}`")
                 try:
                     await event.client.edit_permissions(event.chat_id, user.id, view_messages=False)
@@ -57,7 +59,8 @@ if Config.ANTISPAMBOT_BAN:
         if not catbanned:
             try:
                 casurl = f"https://api.cas.chat/check?user_id={user.id}"
-                data = get(casurl).json()
+                async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+                    data = (await client.get(casurl)).json()
             except Exception as e:
                 LOGS.info(e)
                 data = None
@@ -102,7 +105,7 @@ async def caschecker(event):
         cas_count, members_count = (0,) * 2
         banned_users = ""
         async for user in event.client.iter_participants(info.id):
-            if banchecker(user.id):
+            if await banchecker(user.id):
                 cas_count += 1
                 banned_users += f"Deleted Account `{user.id}`\n" if user.deleted else f"{user.first_name}-`{user.id}`\n"
             members_count += 1
@@ -146,7 +149,7 @@ async def spam_check(event):
         cas_count, members_count = (0,) * 2
         banned_users = ""
         async for user in event.client.iter_participants(info.id):
-            if spamchecker(user.id):
+            if await spamchecker(user.id):
                 cas_count += 1
                 banned_users += f"Deleted Account `{user.id}`\n" if user.deleted else f"{user.first_name}-`{user.id}`\n"
 
@@ -164,16 +167,17 @@ async def spam_check(event):
     await catevent.edit(text)
 
 
-def banchecker(user_id):
+async def banchecker(user_id):
     try:
         casurl = f"https://api.cas.chat/check?user_id={user_id}"
-        data = get(casurl).json()
+        async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+            data = (await client.get(casurl)).json()
     except Exception as e:
         LOGS.info(e)
         data = None
     return bool(data and data["ok"])
 
 
-def spamchecker(user_id):
-    ban = spamwatch.get_ban(user_id) if spamwatch else None
+async def spamchecker(user_id):
+    ban = await asyncio.to_thread(spamwatch.get_ban, user_id) if spamwatch else None
     return bool(ban)
