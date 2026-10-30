@@ -1,7 +1,9 @@
+import asyncio
 import os
 
+import aiofiles
+import httpx
 from bs4 import BeautifulSoup
-from pySmartDL import SmartDL
 from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
 
@@ -29,7 +31,7 @@ async def wiki(event):
     match = event.pattern_match.group(1)
     result = None
     try:
-        result = summary(match, auto_suggest=False)
+        result = await asyncio.to_thread(summary, match, auto_suggest=False)
     except DisambiguationError as error:
         error = str(error).split("\n")
         result = "".join(f"`{i}`\n" if lineno > 1 else f"**{i}**\n" for lineno, i in enumerate(error, start=1))
@@ -38,7 +40,7 @@ async def wiki(event):
         pass
     if not result:
         try:
-            result = summary(match, auto_suggest=True)
+            result = await asyncio.to_thread(summary, match, auto_suggest=True)
         except DisambiguationError as error:
             error = str(error).split("\n")
             result = "".join(f"`{i}`\n" if lineno > 1 else f"**{i}**\n" for lineno, i in enumerate(error, start=1))
@@ -65,11 +67,11 @@ async def imdb_query(event):
     try:
         movie_name = event.pattern_match.group(1)
         try:
-            movies = imdb.search_movie(movie_name)
+            movies = await asyncio.to_thread(imdb.search_movie, movie_name)
         except Exception:
-            movies = imdb.search_movie_advanced(movie_name)
+            movies = await asyncio.to_thread(imdb.search_movie_advanced, movie_name)
         movieid = movies[0].movieID
-        movie = imdb.get_movie(movieid)
+        movie = await asyncio.to_thread(imdb.get_movie, movieid)
         moviekeys = list(movie.keys())
         for i in mov_titles:
             if i in moviekeys:
@@ -122,10 +124,10 @@ async def imdb_query(event):
             climit = len(resulttext) - extralimit - 20
             resulttext = f"{resulttext[:climit]}...........</i>"
         if imageurl:
-            downloader = SmartDL(imageurl, moviepath, progress_bar=False)
-            downloader.start(blocking=False)
-            while not downloader.isFinished():
-                pass
+            async with httpx.AsyncClient(follow_redirects=True, timeout=60) as client:
+                resp = await client.get(imageurl)
+            async with aiofiles.open(moviepath, "wb") as file:
+                await file.write(resp.content)
         if os.path.exists(moviepath):
             await event.client.send_file(
                 event.chat_id,
