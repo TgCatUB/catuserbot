@@ -1,10 +1,12 @@
 # Special Credit : Adek Maulana.
 
+import asyncio
 import math
 import os
 
+import aiofiles
 import heroku3
-import requests
+import httpx
 import urllib3
 
 from userbot import BOTLOG_CHATID, catub
@@ -21,7 +23,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 heroku_api = "https://api.heroku.com"
 
 
-def heroku_app():
+def _heroku_app():
     if (Config.HEROKU_APP_NAME is None) or (Config.HEROKU_API_KEY is None):
         return (
             None,
@@ -36,6 +38,10 @@ def heroku_app():
             None,
             "Please make sure your Heroku API Key, Your App name are configured correctly in the heroku",
         )
+
+
+async def heroku_app():
+    return await asyncio.to_thread(_heroku_app)
 
 
 @catub.cat_cmd(
@@ -62,7 +68,7 @@ def heroku_app():
 )
 async def variable(event):
     "Manage most of ConfigVars setting, set new var, get current var, or delete event..."
-    app, Heroku = heroku_app()
+    app, Heroku = await heroku_app()
     value = None
     if not app:
         return await edit_delete(event, Heroku)
@@ -79,7 +85,7 @@ async def variable(event):
         data = await dBcof.setup_vars(event, cmd, variable, value)
         return await edit_delete(cat, data)
 
-    heroku_var = app.config()
+    heroku_var = await asyncio.to_thread(app.config)
     if cmd == "get":
         cat = await edit_or_reply(event, "`Getting information...`")
         try:
@@ -94,10 +100,10 @@ async def variable(event):
             )
         except IndexError:
             configs = prettyjson(heroku_var.to_dict(), indent=2)
-            with open("configs.json", "w") as fp:
-                fp.write(configs)
-            with open("configs.json", "r") as fp:
-                result = fp.read()
+            async with aiofiles.open("configs.json", "w") as fp:
+                await fp.write(configs)
+            async with aiofiles.open("configs.json", "r") as fp:
+                result = await fp.read()
                 await edit_or_reply(
                     cat,
                     f"`[HEROKU]` ConfigVars:\n\n================================\n```{result}```\n================================",
@@ -121,14 +127,14 @@ async def variable(event):
                 f"#CONFIG_VAR  #ADDED\n\n`{variable}` = `{value}`",
                 silent=True,
             )
-        heroku_var[variable] = value
+        await asyncio.to_thread(heroku_var.__setitem__, variable, value)
     elif cmd == "del":
         cat = await edit_or_reply(event, "`Getting information to deleting variable...`")
         if variable not in heroku_var:
             return await edit_or_reply(cat, f"`{variable}`**  does not exist**")
         await edit_or_reply(cat, f"`{variable}`  **successfully deleted**")
         await event.client.send_message(BOTLOG_CHATID, f"#CONFIG_VAR  #DELETED\n\n`{variable}`", silent=True)
-        del heroku_var[variable]
+        await asyncio.to_thread(heroku_var.__delitem__, variable)
 
 
 @catub.cat_cmd(
@@ -141,21 +147,22 @@ async def variable(event):
 )
 async def dyno_usage(dyno):
     "Get your account Dyno Usage"
-    app, Heroku = heroku_app()
+    app, Heroku = await heroku_app()
     if not app:
         return await edit_delete(dyno, Heroku)
     dyno = await edit_or_reply(dyno, "`Processing...`")
     useragent = "Mozilla/5.0 (Linux; Android 10; SM-G975F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Mobile Safari/537.36"
-    user_id = Heroku.account().id
+    user_id = (await asyncio.to_thread(Heroku.account)).id
     headers = {
         "User-Agent": useragent,
         "Authorization": f"Bearer {Config.HEROKU_API_KEY}",
         "Accept": "application/vnd.heroku+json; version=3.account-quotas",
     }
     path = f"/accounts/{user_id}/actions/get-quota"
-    r = requests.get(heroku_api + path, headers=headers)
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        r = await client.get(heroku_api + path, headers=headers)
     if r.status_code != 200:
-        return await dyno.edit(f"`Error: something bad happened`\n\n>.`{r.reason}`\n")
+        return await dyno.edit(f"`Error: something bad happened`\n\n>.`{r.reason_phrase}`\n")
     result = r.json()
     quota = result["account_quota"]
     quota_used = result["quota_used"]
@@ -200,10 +207,10 @@ async def dyno_usage(dyno):
 )
 async def herokulogs(event):
     "To get recent 100 lines logs from heroku"
-    app, Heroku = heroku_app()
+    app, Heroku = await heroku_app()
     if not app:
         return await edit_delete(event, Heroku)
-    data = app.get_log()
+    data = await asyncio.to_thread(app.get_log)
     await edit_or_reply(event, data, deflink=True, linktext="**Recent 100 lines of heroku logs: **")
 
 
@@ -242,19 +249,19 @@ def prettyjson(obj, indent=2, maxlinelength=80):
 )
 async def buildpack(event):
     "Manange heroku buildpacks with heroku api"
-    app, Heroku = heroku_app()
+    app, Heroku = await heroku_app()
     if not app:
         return await edit_delete(event, Heroku)
     cmd = event.pattern_match.group(1).lower()
     link = event.pattern_match.group(2)
-    buidpacks = [item.buildpack.url for item in app.buildpacks()]
+    buidpacks = [item.buildpack.url for item in await asyncio.to_thread(app.buildpacks)]
     if cmd and not link:
         return await edit_delete(event, "**Error::** `Give buildpack link..`")
     elif cmd == "add":
         if link in buidpacks:
             return await edit_delete(event, "**Error::** __Buildpack is already connected to this app..__")
         buidpacks.append(link)
-        app.update_buildpacks(buidpacks)
+        await asyncio.to_thread(app.update_buildpacks, buidpacks)
         return await edit_delete(
             event,
             "**Success:** __Buildpack connected.\nDo `.update deploy` to complete updating__",
@@ -266,7 +273,7 @@ async def buildpack(event):
                 "**Error::** __Unable to delete, buildpack is not connected to this app...__",
             )
         buidpacks.remove(link)
-        app.update_buildpacks(buidpacks)
+        await asyncio.to_thread(app.update_buildpacks, buidpacks)
         return await edit_delete(
             event,
             "**Success:** __Buildpack removed.\nDo `.update deploy` to complete updating__",
