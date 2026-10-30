@@ -1,6 +1,6 @@
 import urllib.parse
 
-import aiohttp
+import httpx
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from userbot import LOGS
@@ -24,9 +24,9 @@ async def ping():
         LOGS.info("[UPTIME PINGER] No PING_URL set, skipping ping")
         return
     try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(PING_URL, timeout=10) as response:
-                LOGS.info(f"[UPTIME PINGER] Pinged {PING_URL} - Status {response.status}")
+        async with httpx.AsyncClient(follow_redirects=True, timeout=10) as client:
+            response = await client.get(PING_URL)
+        LOGS.info(f"[UPTIME PINGER] Pinged {PING_URL} - Status {response.status_code}")
     except Exception as e:
         LOGS.warning(f"[UPTIME PINGER] Failed: {e}")
 
