@@ -1,10 +1,13 @@
 # Special credits: [Sumanjay](https://github.com/cyberboysumanjay) (ported from uniborg)
 
+import asyncio
 import os
+
+import aiofiles
+import httpx
 
 # imported from uniborg
 from justwatch import JustWatch, justwatchapi
-from pySmartDL import SmartDL
 
 from userbot import catub
 
@@ -96,7 +99,7 @@ async def _(event):
     query = event.pattern_match.group(1)
     et = await edit_or_reply(event, "`Finding Sites...`")
     try:
-        streams = get_stream_data(query)
+        streams = await asyncio.to_thread(get_stream_data, query)
     except Exception as e:
         return await et.edit(f"**Error :** `{e}`")
     title = streams["title"]
@@ -128,10 +131,10 @@ async def _(event):
         if "sonyliv" in link:
             link = link.replace(" ", "%20")
         output_ += f"[{pretty(provider)}]({link})\n"
-    downloader = SmartDL(thumb_link, moviepath, progress_bar=False)
-    downloader.start(blocking=False)
-    while not downloader.isFinished():
-        pass
+    async with httpx.AsyncClient(follow_redirects=True, timeout=60) as client:
+        resp = await client.get(thumb_link)
+    async with aiofiles.open(moviepath, "wb") as file:
+        await file.write(resp.content)
     await event.client.send_file(
         event.chat_id,
         caption=output_,
