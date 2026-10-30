@@ -2,9 +2,8 @@ import asyncio
 import json
 import os
 import re
-import subprocess
 
-import requests
+import httpx
 
 from userbot import catub
 from userbot.core.logger import logging
@@ -75,7 +74,8 @@ async def labstack(event):
         "ttl": 604800,
         "files": [{"name": filename, "type": "", "size": filesize}],
     }
-    r2 = requests.post("https://up.labstack.com/api/v1/links", json=files2, headers=headers2)
+    async with httpx.AsyncClient(follow_redirects=True, timeout=60) as client:
+        r2 = await client.post("https://up.labstack.com/api/v1/links", json=files2, headers=headers2)
     r2json = json.loads(r2.text)
     url = f"https://up.labstack.com/api/v1/links/{r2json['code']}/send"
     max_days = 7
@@ -90,14 +90,17 @@ async def labstack(event):
         url,
     ]
 
-    try:
-        t_response = subprocess.check_output(command_to_exec, stderr=subprocess.STDOUT)
-    except subprocess.CalledProcessError as exc:
-        LOGS.info("Status : FAIL", exc.returncode, exc.output)
-        return await editor.edit(exc.output.decode("UTF-8"))
-    else:
-        LOGS.info(t_response)
-        t_response_arry = f"https://up.labstack.com/api/v1/links/{r2json['code']}/receive"
+    process = await asyncio.create_subprocess_exec(
+        *command_to_exec,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.STDOUT,
+    )
+    t_response, _ = await process.communicate()
+    if process.returncode != 0:
+        LOGS.info("Status : FAIL %s %s", process.returncode, t_response)
+        return await editor.edit(t_response.decode("UTF-8"))
+    LOGS.info(t_response)
+    t_response_arry = f"https://up.labstack.com/api/v1/links/{r2json['code']}/receive"
     await editor.edit(t_response_arry + "\nMax Days:" + str(max_days), link_preview=False)
 
 
