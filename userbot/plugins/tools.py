@@ -5,9 +5,10 @@ import re
 from datetime import datetime
 from urllib.parse import quote
 
+import aiofiles
 import barcode
+import httpx
 import qrcode
-import requests
 from barcode.writer import ImageWriter
 from bs4 import BeautifulSoup
 from PIL import Image, ImageColor
@@ -186,8 +187,8 @@ async def _(event):
                 Config.TMP_DOWNLOAD_DIRECTORY,
             )
             m_list = None
-            with open(downloaded_file_name, "rb") as fd:
-                m_list = fd.readlines()
+            async with aiofiles.open(downloaded_file_name, "rb") as fd:
+                m_list = await fd.readlines()
             message = "".join(m.decode("UTF-8") + "\r\n" for m in m_list)
             os.remove(downloaded_file_name)
         else:
@@ -233,8 +234,8 @@ async def make_qr(makeqr):
         if previous_message.media:
             downloaded_file_name = await makeqr.client.download_media(previous_message)
             m_list = None
-            with open(downloaded_file_name, "rb") as file:
-                m_list = file.readlines()
+            async with aiofiles.open(downloaded_file_name, "rb") as file:
+                m_list = await file.readlines()
             message = "".join(media.decode("UTF-8") + "\r\n" for media in m_list)
             os.remove(downloaded_file_name)
         else:
@@ -305,7 +306,8 @@ async def spy(event):
             "**Get an API key from [Ipdata](https://dashboard.ipdata.co/sign-up.html) & set that in heroku var `IPDATA_API`**",
             80,
         )
-    url = requests.get(f"https://api.ipdata.co/{check}?api-key={API}")
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        url = await client.get(f"https://api.ipdata.co/{check}?api-key={API}")
     r = url.json()
     try:
         return await edit_delete(event, f"**{r['message']}**", 60)
@@ -374,7 +376,8 @@ async def _(event):
     "to get details of the relevant bank or branch."
     input_str = event.pattern_match.group(1)
     url = f"https://ifsc.razorpay.com/{input_str}"
-    r = requests.get(url)
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        r = await client.get(url)
     if r.status_code != 200:
         return await edit_or_reply(event, f"`{input_str}`: {r.text}")
     b = r.json()
@@ -435,14 +438,16 @@ async def _(event):
             xkcd_id = input_str
         else:
             xkcd_search_url = "https://relevantxkcd.appspot.com/process?"
-            queryresult = requests.get(xkcd_search_url, params={"action": "xkcd", "query": quote(input_str)}).text
+            async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+                queryresult = (await client.get(xkcd_search_url, params={"action": "xkcd", "query": quote(input_str)})).text
             xkcd_id = queryresult.split(" ")[2].lstrip("\n")
     if xkcd_id is None:
         xkcd_url = "https://xkcd.com/info.0.json"
     else:
         xkcd_url = f"https://xkcd.com/{xkcd_id}/info.0.json"
-    r = requests.get(xkcd_url)
-    if not r.ok:
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        r = await client.get(xkcd_url)
+    if not r.is_success:
         return await catevent.edit(f"xkcd n.{xkcd_id} not found!")
     data = r.json()
     year = data.get("year")
