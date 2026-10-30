@@ -1,3 +1,4 @@
+import aiofiles
 import asyncio
 import base64
 import contextlib
@@ -12,7 +13,7 @@ from datetime import datetime
 from mimetypes import guess_type
 from urllib.parse import quote
 
-import requests
+import httpx
 from bs4 import BeautifulSoup
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -122,7 +123,7 @@ async def create_app(gdrive):
         if creds and creds.expired and creds.refresh_token:
             await gdrive.edit("`Refreshing credentials...`")
             """Refresh credentials"""
-            creds.refresh(Request())
+            await asyncio.to_thread(creds.refresh, Request())
             helper.save_credentials(str(hmm), base64.b64encode(pickle.dumps(creds)).decode())
         else:
             await gdrive.edit("`Credentials is empty, please generate it...`")
@@ -270,7 +271,7 @@ async def list_drive_dir(service, file_id):
     page_size = 100
     files = []
     while True:
-        response = (
+        response = await asyncio.to_thread(
             service.files()
             .list(
                 supportsTeamDrives=True,
@@ -283,7 +284,7 @@ async def list_drive_dir(service, file_id):
                 corpora="allDrives",
                 orderBy="folder, name",
             )
-            .execute()
+            .execute
         )
         files.extend(response.get("files", []))
         page_token = response.get("nextPageToken", None)
@@ -298,7 +299,7 @@ async def copy_file(service, file_id, dir_id):
     body = {}
     if dir_id:
         body["parents"] = [dir_id]
-    drive_file = service.files().copy(body=body, fileId=file_id, supportsTeamDrives=True).execute()
+    drive_file = await asyncio.to_thread(service.files().copy(body=body, fileId=file_id, supportsTeamDrives=True).execute)
     return drive_file["id"]
 
 
@@ -321,12 +322,12 @@ async def gdrive_download(event, gdrive, service, uri, path=os.path.join(os.getc
         if "404" in str(e):
             drive = "https://drive.google.com"
             url = f"{drive}/uc?export=download&id={file_Id}"
-            session = requests.session()
-            download = session.get(url, stream=True)
+            client = httpx.AsyncClient(follow_redirects=True, timeout=None)
+            download = await client.send(client.build_request("GET", url), stream=True)
             try:
                 download.headers["Content-Disposition"]
             except KeyError:
-                page = BeautifulSoup(download.content, "lxml")
+                page = BeautifulSoup(await download.aread(), "lxml")
                 try:
                     export = drive + page.find("a", {"id": "uc-download-link"}).get("href")
                 except AttributeError:
@@ -339,22 +340,26 @@ async def gdrive_download(event, gdrive, service, uri, path=os.path.join(os.getc
                     else:
                         reply += f"**[FILE - ERROR]**\n\n**Status : **BAD - failed to download.\n**Reason : **`{error}`"
 
+                    await download.aclose()
+                    await client.aclose()
                     return reply, "Error"
-                download = session.get(export, stream=True)
+                await download.aclose()
+                download = await client.send(client.build_request("GET", export), stream=True)
                 file_size = humanbytes(page.find("span", {"class": "uc-name-size"}).text.split()[-1].strip("()"))
 
             else:
                 file_size = int(download.headers["Content-Length"])
             file_name = re.search("filename='(.)'", download.headers["Content-Disposition"])[1]
             file_path = os.path.join(path, file_name)
-            with io.FileIO(file_path, "wb") as files:
-                CHUNK_SIZE = None
+            async with aiofiles.open(file_path, "wb") as files:
                 current_time = time.time()
                 display_message = None
                 first = True
                 GDRIVE_.is_cancelled = False
-                for chunk in download.iter_content(CHUNK_SIZE):
+                async for chunk in download.aiter_bytes():
                     if GDRIVE_.is_cancelled:
+                        await download.aclose()
+                        await client.aclose()
                         raise CancelProcess from e
                     if not chunk:
                         break
@@ -378,7 +383,9 @@ async def gdrive_download(event, gdrive, service, uri, path=os.path.join(os.getc
                     if display_message != current_message:
                         await gdrive.edit(current_message)
                         display_message = current_message
-                    files.write(chunk)
+                    await files.write(chunk)
+            await download.aclose()
+            await client.aclose()
     else:
         file_name = file.get("name")
         mimeType = file.get("mimeType")
@@ -404,7 +411,7 @@ async def gdrive_download(event, gdrive, service, uri, path=os.path.join(os.getc
             while not complete:
                 if GDRIVE_.is_cancelled:
                     raise CancelProcess
-                status, complete = downloader.next_chunk()
+                status, complete = await asyncio.to_thread(downloader.next_chunk)
                 if status:
                     file_size = status.total_size
                     diff = time.time() - current_time
@@ -433,7 +440,7 @@ async def download_gdrive(gdrive, service, uri, dir_id=GDRIVE_.parent_Id):
     start = datetime.now()
     file_Id, _ = await get_file_id(uri)
     try:
-        file = service.files().get(fileId=file_Id, fields="name, mimeType", supportsTeamDrives=True).execute()
+        file = await asyncio.to_thread(service.files().get(fileId=file_Id, fields="name, mimeType", supportsTeamDrives=True).execute)
         if file["mimeType"] == "application/vnd.google-apps.folder":
             folder = await create_dir(service, file["name"], dir_id)
             filespath_d = await list_drive_dir(service, file_Id)
@@ -455,7 +462,7 @@ async def download_gdrive(gdrive, service, uri, dir_id=GDRIVE_.parent_Id):
 async def change_permission(service, Id):
     permission = {"role": "reader", "type": "anyone"}
     try:
-        service.permissions().create(fileId=Id, body=permission).execute()
+        await asyncio.to_thread(service.permissions().create(fileId=Id, body=permission).execute)
     except HttpError as e:
         """it's not possible to change permission per file for teamdrive"""
         if f'"File not found: {Id}."' in str(e) or ('"Sharing folders that are inside a shared drive is not supported."' in str(e)):
@@ -466,14 +473,14 @@ async def change_permission(service, Id):
 
 
 async def get_information(service, Id):
-    return (
+    return await asyncio.to_thread(
         service.files()
         .get(
             fileId=Id,
             fields="name, id, size, mimeType, webViewLink, webContentLink,description",
             supportsAllDrives=True,
         )
-        .execute()
+        .execute
     )
 
 
@@ -494,7 +501,7 @@ async def create_dir(service, folder_name, dir_id=None):
             metadata["parents"] = [GDRIVE_.parent_Id]
     else:
         metadata["parents"] = [dir_id]
-    folder = service.files().create(body=metadata, fields="id, webViewLink", supportsAllDrives=True).execute()
+    folder = await asyncio.to_thread(service.files().create(body=metadata, fields="id, webViewLink", supportsAllDrives=True).execute)
     await change_permission(service, folder.get("id"))
     return folder
 
@@ -529,7 +536,7 @@ async def upload(gdrive, service, file_path, file_name, mimeType, dir_id=None):
     while response is None:
         if GDRIVE_.is_cancelled:
             raise CancelProcess
-        status, response = file.next_chunk()
+        status, response = await asyncio.to_thread(file.next_chunk)
         if status:
             file_size = status.total_size
             diff = time.time() - current_time
@@ -588,27 +595,27 @@ async def gshare(service, event, url):
     await event.edit(f"**Shareable Links**\n\n{result}")
 
 
-def get_file_path(service, file_id, file_name):
+async def get_file_path(service, file_id, file_name):
     tmp_path = [file_name]
     while True:
-        response = service.files().get(fileId=file_id, fields="parents", supportsTeamDrives=True).execute()
+        response = await asyncio.to_thread(service.files().get(fileId=file_id, fields="parents", supportsTeamDrives=True).execute)
         if not response:
             break
         file_id = response["parents"][0]
-        response = service.files().get(fileId=file_id, fields="name", supportsTeamDrives=True).execute()
+        response = await asyncio.to_thread(service.files().get(fileId=file_id, fields="name", supportsTeamDrives=True).execute)
         tmp_path.append(response["name"])
     return "/".join(reversed(tmp_path[:-1]))
 
 
 async def get_output(service, file_id, event):
-    file_ = (
+    file_ = await asyncio.to_thread(
         service.files()
         .get(
             fileId=file_id,
             fields="id, name, size, mimeType",
             supportsTeamDrives=True,
         )
-        .execute()
+        .execute
     )
     file_id = file_.get("id")
     file_name = file_.get("name")
@@ -622,18 +629,18 @@ async def get_output(service, file_id, event):
         if Config.G_DRIVE_FOLDER_ID:
             dfile_id, _ = await get_file_id(Config.G_DRIVE_FOLDER_ID)
             try:
-                dfile_ = (
+                dfile_ = await asyncio.to_thread(
                     service.files()
                     .get(
                         fileId=dfile_id,
                         fields="id, name, size, mimeType",
                         supportsTeamDrives=True,
                     )
-                    .execute()
+                    .execute
                 )
                 dfile_name = dfile_.get("name")
-                result1 = get_file_path(service, dfile_id, dfile_name)
-                result2 = get_file_path(service, file_id, file_name)
+                result1 = await get_file_path(service, dfile_id, dfile_name)
+                result2 = await get_file_path(service, file_id, file_name)
                 finalresult = result2.replace(result1, "")
                 finalresult = finalresult[1:] if finalresult[0] == "/" else finalresult
                 link = os.path.join(
@@ -649,7 +656,7 @@ async def get_output(service, file_id, event):
         else:
             link = os.path.join(
                 Config.G_DRIVE_INDEX_LINK.rstrip("/"),
-                quote(get_file_path(service, file_id, file_name)),
+                quote(await get_file_path(service, file_id, file_name)),
             )
         if mime_type == "application/vnd.google-apps.folder":
             link += "/"
@@ -768,7 +775,7 @@ async def glists(gdrive):
     result = []
     while True:
         try:
-            response = (
+            response = await asyncio.to_thread(
                 service.files()
                 .list(
                     supportsAllDrives=True,
@@ -781,7 +788,7 @@ async def glists(gdrive):
                     orderBy="modifiedTime desc, folder",
                     pageToken=page_token,
                 )
-                .execute()
+                .execute
             )
         except HttpError as e:
             await edit_or_reply(
@@ -881,7 +888,7 @@ async def generate_credentials(gdrive):
             await edit_or_reply(gdrive, "Given link is wrong. recheck your link")
             return
         try:
-            flow.fetch_token(code=code)
+            await asyncio.to_thread(flow.fetch_token, code=code)
         except Exception as e:
             LOGS.exeception(e)
             await edit_or_reply(gdrive, "Given link is wrong. recheck your link")
@@ -996,7 +1003,7 @@ async def google_drive_managers(gdrive):  # sourcery no-metrics
             """Override G_DRIVE_FOLDER_ID because parent_Id not empty"""
             metadata["parents"] = [GDRIVE_.parent_Id]
         page_token = None
-        result = (
+        result = await asyncio.to_thread(
             service.files()
             .list(
                 q=f'name="{name_or_id}"',
@@ -1005,7 +1012,7 @@ async def google_drive_managers(gdrive):  # sourcery no-metrics
                 supportsAllDrives=True,
                 pageToken=page_token,
             )
-            .execute()
+            .execute
         )
         if exe == "mkdir":
             """
@@ -1045,7 +1052,7 @@ async def google_drive_managers(gdrive):  # sourcery no-metrics
             else:
                 status = "FILE - DELETION"
             try:
-                service.files().delete(fileId=f_id, supportsAllDrives=True).execute()
+                await asyncio.to_thread(service.files().delete(fileId=f_id, supportsAllDrives=True).execute)
             except HttpError as e:
                 status.replace("DELETE", "ERROR")
                 reply += f"**{status}**\n\n**Status : **`BAD`\n**Reason : **`{e}`\n\n"
