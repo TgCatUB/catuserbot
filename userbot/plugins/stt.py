@@ -3,7 +3,8 @@
 import os
 from datetime import datetime
 
-import requests
+import aiofiles
+import httpx
 
 from userbot import catub
 
@@ -46,13 +47,15 @@ async def _(event):
     headers = {
         "Content-Type": reply.media.document.mime_type,
     }
-    data = open(required_file_name, "rb").read()
-    response = requests.post(
-        f"{Config.IBM_WATSON_CRED_URL}/v1/recognize",
-        headers=headers,
-        data=data,
-        auth=("apikey", Config.IBM_WATSON_CRED_PASSWORD),
-    )
+    async with aiofiles.open(required_file_name, "rb") as audio:
+        data = await audio.read()
+    async with httpx.AsyncClient(follow_redirects=True, timeout=120) as client:
+        response = await client.post(
+            f"{Config.IBM_WATSON_CRED_URL}/v1/recognize",
+            headers=headers,
+            content=data,
+            auth=("apikey", Config.IBM_WATSON_CRED_PASSWORD),
+        )
 
     r = response.json()
     if "results" not in r:
