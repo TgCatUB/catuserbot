@@ -1,5 +1,7 @@
 # Special Credits: @odi for Somnium <image gen>
 
+import asyncio
+
 from somnium import Somnium
 
 from ..core.managers import edit_delete, edit_or_reply
@@ -62,7 +64,7 @@ async def gen_img(odi):
             time=120,
         )
     await edit_or_reply(catevent, "`Generating ai image ...`")
-    getart = Somnium.Generate(query, styleid)
+    getart = await asyncio.to_thread(Somnium.Generate, query, styleid)
     if getart is None:
         return await edit_delete(catevent, "`Process failed or contains NSFW.`")
     await catub.send_file(
@@ -95,7 +97,7 @@ async def gen_txt(event):
         return await edit_delete(event, "`What should I do ??`")
 
     catevent = await edit_or_reply(event, "`Generating ai response ...`")
-    if generated_text := catai.get_response(query):
+    if generated_text := await asyncio.to_thread(catai.get_response, query):
         await edit_or_reply(catevent, generated_text)
     else:
         await edit_delete(catevent, "`Sorry, unable to generate response`")
