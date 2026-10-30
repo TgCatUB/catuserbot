@@ -1,12 +1,13 @@
 import random
 
-import requests
+import httpx
 from bs4 import BeautifulSoup
 
 
 async def extract_quote(url):
     results = []
-    request = requests.get(url).text
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        request = (await client.get(url)).text
     soup = BeautifulSoup(request, "html.parser")
     for quote in soup.find_all("div", class_="quote"):
         response = quote.find("div", {"class": "quoteText"}).text
