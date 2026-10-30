@@ -1,3 +1,4 @@
+import asyncio
 import re
 
 from ..Config import Config
@@ -66,13 +67,13 @@ async def lyrics(event):  # sourcery no-metrics
         song = args[1].strip(" ")
         songinfo = f"{artist} - {song}"
         catevent = await edit_or_reply(event, f"`Searching lyrics for {songinfo}...`")
-        lyrics = LyricsGen.lyrics(song, artist)[1]
+        lyrics = (await asyncio.to_thread(LyricsGen.lyrics, song, artist))[1]
         if lyrics is None:
             return await catevent.edit(f"Song **{songinfo}** not found!")
         result = f"**Search query**: \n`{songinfo}`\n\n```{lyrics}```"
     else:
         catevent = await edit_or_reply(event, f"`Searching lyrics for {query}...`")
-        response = LyricsGen.songs(song)
+        response = await asyncio.to_thread(LyricsGen.songs, song)
         msg = f"**The songs found for the given query:** `{query}`\n\n"
         for i, an in enumerate(response, start=1):
             msg += f"{i}. `{an['result']['title']}`\n"
@@ -86,5 +87,5 @@ async def lyrics(event):  # sourcery no-metrics
                     f"**Invalid song selection for the query select proper number**\n{msg}",
                 )
             songtitle = response[songno - 1]["result"]["title"]
-            result += f"`{LyricsGen.lyrics(songtitle)[1]}`"
+            result += f"`{(await asyncio.to_thread(LyricsGen.lyrics, songtitle))[1]}`"
     await edit_or_reply(catevent, result)
