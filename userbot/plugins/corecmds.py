@@ -2,6 +2,8 @@ import contextlib
 import os
 from pathlib import Path
 
+import aiofiles
+
 from ..Config import Config
 from ..core import CMD_INFO, PLG_INFO
 from ..helpers.google_tools import chromeDriver
@@ -199,12 +201,12 @@ async def app_log(event):
     if flag and (flag[0] != "-" or any(i not in ["-", "f", "r", "t"] for i in flag)):
         return await edit_delete(event, "**Invalid flag...**")
 
-    with open("catub.log", "r") as file:
+    async with aiofiles.open("catub.log", "r") as file:
         if "f" in flag:
-            log = file.read()
+            log = await file.read()
             linktext = "**Full logs: **"
         else:
-            lines = file.readlines()[-100:]
+            lines = (await file.readlines())[-100:]
             log = "".join(lines)
             linktext = "**Recent 100 lines of logs: **"
     if "t" in flag:
