@@ -1,6 +1,6 @@
 import random
 
-import requests
+import httpx
 
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import reply_id, unsavegif
@@ -33,10 +33,11 @@ async def some(event):
     if int(count) < 0 and int(count) > 20:
         await edit_delete(event, "`Give value in range 1-20`")
     catevent = await edit_or_reply(event, "`Sending gif....`")
-    res = requests.get("https://giphy.com/")
-    res = res.text.split("GIPHY_FE_WEB_API_KEY =")[1].split("\n")[0]
-    api_key = res[2:-1]
-    r = requests.get(f"https://api.giphy.com/v1/gifs/search?q={inpt}&api_key={api_key}&limit=50").json()
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        res = await client.get("https://giphy.com/")
+        res = res.text.split("GIPHY_FE_WEB_API_KEY =")[1].split("\n")[0]
+        api_key = res[2:-1]
+        r = (await client.get(f"https://api.giphy.com/v1/gifs/search?q={inpt}&api_key={api_key}&limit=50")).json()
     list_id = [r["data"][i]["id"] for i in range(len(r["data"]))]
     rlist = random.sample(list_id, int(count))
     for items in rlist:
