@@ -3,7 +3,7 @@ import random
 import time
 from datetime import datetime
 
-import requests
+import httpx
 from telethon.errors.rpcerrorlist import MediaEmptyError, WebpageCurlFailedError, WebpageMediaEmptyError
 
 from ..Config import Config
@@ -55,7 +55,8 @@ async def _(event):
         ping_temp = gvarstatus("PING_TEMPLATE") or temp
         PING_PIC = gvarstatus("PING_PIC")
         if "ANIME" in ping_temp:
-            data = requests.get("https://animechan.vercel.app/api/random").json()
+            async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+                data = (await client.get("https://animechan.vercel.app/api/random")).json()
             ANIME = f"**“{data['quote']}” - {data['character']} ({data['anime']})**"
         caption = ping_temp.format(
             ANIME=ANIME,
