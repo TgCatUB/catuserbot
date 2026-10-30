@@ -1,8 +1,9 @@
+import asyncio
 import math
 import time
 
 import heroku3
-import requests
+import httpx
 from sqlalchemy import text
 
 from ...Config import Config
@@ -47,14 +48,15 @@ async def catalive(StartTime):
     uptime = await get_readable_time((time.time() - StartTime))
     try:
         useragent = "Mozilla/5.0 (Linux; Android 10; SM-G975F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Mobile Safari/537.36"
-        user_id = Heroku.account().id
+        user_id = (await asyncio.to_thread(Heroku.account)).id
         headers = {
             "User-Agent": useragent,
             "Authorization": f"Bearer {Config.HEROKU_API_KEY}",
             "Accept": "application/vnd.heroku+json; version=3.account-quotas",
         }
         path = f"/accounts/{user_id}/actions/get-quota"
-        r = requests.get(heroku_api + path, headers=headers)
+        async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+            r = await client.get(heroku_api + path, headers=headers)
         result = r.json()
         quota = result["account_quota"]
         quota_used = result["quota_used"]
