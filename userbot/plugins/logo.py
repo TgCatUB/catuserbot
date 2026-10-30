@@ -1,10 +1,11 @@
+import asyncio
 import os
 import random
 import re
 from io import BytesIO
 
 import PIL
-import requests
+import httpx
 from bs4 import BeautifulSoup
 from PIL import Image, ImageDraw, ImageFont
 from telegraph import upload_file
@@ -111,7 +112,8 @@ async def very(event):  # sourcery no-metrics
     LOGO_FONT = loader3 = gvarstatus("LOGO_FONT") or "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Logo/Fonts/Streamster.ttf?raw=true"
     rcheck = random_checker(LOGO_FONT, LOGO_FONT_COLOR, LOGO_BACKGROUND)
     if rcheck:
-        rjson = requests.get("https://raw.githubusercontent.com/TgCatUB/CatUserbot-Resources/master/Resources/Logo/resources.txt").json()
+        async with httpx.AsyncClient(follow_redirects=True, timeout=60) as client:
+            rjson = (await client.get("https://raw.githubusercontent.com/TgCatUB/CatUserbot-Resources/master/Resources/Logo/resources.txt")).json()
     if count > 1 and not rcheck:
         count = 1
         catevent = await edit_or_reply(event, "Not using random value,Changing limit to 1..")
@@ -121,7 +123,8 @@ async def very(event):  # sourcery no-metrics
         if rcheck:
             LOGO_FONT, LOGO_FONT_COLOR, LOGO_BACKGROUND = random_loader(LOGO_FONT, LOGO_FONT_COLOR, LOGO_BACKGROUND, rjson)
         try:
-            template = requests.get(LOGO_BACKGROUND)
+            async with httpx.AsyncClient(follow_redirects=True, timeout=60) as client:
+                template = await client.get(LOGO_BACKGROUND)
             temp_img = Image.open(BytesIO(template.content))
         except Exception as e:
             await edit_or_reply(catevent, f"**Bad Url:** {LOGO_BACKGROUND}\n\n{e}")
@@ -129,7 +132,8 @@ async def very(event):  # sourcery no-metrics
         resized_width, resized_height = (1024, int(1024 * raw_height / raw_width)) if raw_width > raw_height else (int(1024 * raw_width / raw_height), 1024)
         img = temp_img.convert("RGBA").resize((resized_width, resized_height))
         draw = ImageDraw.Draw(img)
-        logo = requests.get(LOGO_FONT)
+        async with httpx.AsyncClient(follow_redirects=True, timeout=60) as client:
+            logo = await client.get(LOGO_FONT)
         fontsize = int(LOGO_FONT_SIZE)
         font = ImageFont.truetype(BytesIO(logo.content), fontsize)
         while font.getlength(max(text.splitlines(), key=len)) > 0.70 * resized_width:
@@ -220,7 +224,7 @@ async def bad(event):
         reply_message = await event.get_reply_message()
         if not input_str and event.reply_to_msg_id and reply_message.media:
             output = await Convert.to_image(event, reply_message, dirct="./temp", file="lbg.png", noedits=True)
-            myphoto_urls = upload_file(output[1])
+            myphoto_urls = await asyncio.to_thread(upload_file, output[1])
             input_str = f"https://graph.org{myphoto_urls[0]}"
             os.remove(output[1])
         if not input_str.startswith("https://"):
@@ -275,7 +279,8 @@ async def pussy(event):  # sourcery no-metrics
     cmd = event.pattern_match.group(1).lower()
     input_str = event.pattern_match.group(2)
     if cmd == "":
-        source = requests.get("https://github.com/TgCatUB/CatUserbot-Resources/tree/master/Resources/Logo/Fonts")
+        async with httpx.AsyncClient(follow_redirects=True, timeout=60) as client:
+            source = await client.get("https://github.com/TgCatUB/CatUserbot-Resources/tree/master/Resources/Logo/Fonts")
         soup = BeautifulSoup(source.text, features="html.parser")
         links = soup.find_all("a", class_="js-navigation-open Link--primary")
         logo_font = []
