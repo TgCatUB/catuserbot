@@ -1,3 +1,4 @@
+import aiofiles
 import glob
 import os
 import re
@@ -41,8 +42,8 @@ cmds = [
 
 
 async def reload_codebase():
-    with open(config, "r") as f:
-        configs = f.read()
+    async with aiofiles.open(config, "r") as f:
+        configs = await f.read()
     BRANCH = "master"
     REPO = "https://github.com/TgCatUB/catuserbot"
     for match in re.finditer(
@@ -108,8 +109,8 @@ async def variable(event):
         return await edit_delete(cat, data)
     string = ""
     match = None
-    with open(config, "r") as f:
-        configs = f.readlines()
+    async with aiofiles.open(config, "r") as f:
+        configs = await f.readlines()
 
     if cmd == "get":
         cat = await edit_or_reply(event, "`Getting information...`")
@@ -163,9 +164,8 @@ async def variable(event):
         logtext = f"#DELETED\n\n`{variable}`"
 
     if cmd != "get":
-        with open(config, "w") as f1:
-            f1.write(string)
-            f1.close()
+        async with aiofiles.open(config, "w") as f1:
+            await f1.write(string)
         await event.client.send_message(BOTLOG_CHATID, f"#VAR #CONFIG_VAR {logtext}", silent=True)
         await reload_codebase()
         await event.client.reload(cat)
