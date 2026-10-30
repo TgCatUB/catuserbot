@@ -1,8 +1,8 @@
 import os
-import urllib.request
 
+import aiofiles
 import bs4
-import requests
+import httpx
 from PIL import Image, ImageDraw, ImageFont
 
 from ..helpers import ellipse_create, file_check
@@ -45,7 +45,8 @@ async def app_search(event):
     await edit_or_reply(event, "`Searching!...`")
     try:
         final_name = query.replace(" ", "+")
-        page = requests.get(f"https://play.google.com/store/search?q={final_name}&c=apps")
+        async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+            page = await client.get(f"https://play.google.com/store/search?q={final_name}&c=apps")
         soup = bs4.BeautifulSoup(page.content, "lxml")
         fullapp_name = app_name = (soup.find("div", "vWM94c") or soup.find("span", "DdYX5")).text
         dev_name = (soup.find("div", "LbQbAe") or soup.find("span", "wMUdtb")).text
@@ -62,14 +63,16 @@ async def app_search(event):
     info = info.text if info else None
     review = review.text if review else None
     bgurl = bg_url_1 if downloads and review else bg_url_2
-    file_check(re=False, me=False, mo=False, it=False, fa=False, sp=False, go=True)
+    await file_check(re=False, me=False, mo=False, it=False, fa=False, sp=False, go=True)
     if len(app_name) > 14:
         app_name = f"{app_name[:14]}..."
     pic_name = "playstore.png"
     logo = "app_logo.png"
     font = "temp/GoogleSans-Medium.ttf"
-    urllib.request.urlretrieve(app_icon, logo)
-    urllib.request.urlretrieve(bgurl, pic_name)
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        for url, path in ((app_icon, logo), (bgurl, pic_name)):
+            async with aiofiles.open(path, "wb") as file:
+                await file.write((await client.get(url)).content)
     background = Image.open(pic_name).resize((1024, 512))
 
     thumbmask = Image.new("RGBA", (1024, 512), 0)
