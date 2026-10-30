@@ -1,3 +1,4 @@
+import aiofiles
 import asyncio
 import io
 import logging
@@ -72,8 +73,8 @@ async def pic_gifcmd(event):  # sourcery no-metrics
     output.name = "Output.gif"
     outframes[0].save(output, save_all=True, append_images=outframes[1:], duration=1)
     output.seek(0)
-    with open("Output.gif", "wb") as outfile:
-        outfile.write(output.getbuffer())
+    async with aiofiles.open("Output.gif", "wb") as outfile:
+        await outfile.write(output.getbuffer())
     final = await Convert.to_gif(event, "Output.gif", file="spin.mp4", noedits=True)
     if final[1] is None:
         return await edit_delete(catevent, "__Unable to make spin gif.__")
@@ -340,8 +341,8 @@ async def text_to_file(event):
         return
     m = await event.get_reply_message()
     if m.text:
-        with open(name, "w") as f:
-            f.write(m.message)
+        async with aiofiles.open(name, "w") as f:
+            await f.write(m.message)
         await event.delete()
         await event.client.send_file(event.chat_id, name, force_document=True)
         os.remove(name)
@@ -368,8 +369,8 @@ async def file_to_text(event):
     file_loc = await reply.download_media()
     file_content = ""
     try:
-        with open(file_loc) as f:
-            file_content = f.read().rstrip("\n")
+        async with aiofiles.open(file_loc) as f:
+            file_content = (await f.read()).rstrip("\n")
     except UnicodeDecodeError:
         pass
     except Exception as e:
@@ -645,8 +646,8 @@ async def image_to_pic(event):  # sourcery no-metrics
     output.name = "Output.gif"
     outframes[0].save(output, save_all=True, append_images=outframes[1:], duration=0.7)
     output.seek(0)
-    with open("Output.gif", "wb") as outfile:
-        outfile.write(output.getbuffer())
+    async with aiofiles.open("Output.gif", "wb") as outfile:
+        await outfile.write(output.getbuffer())
     output = await Convert.to_gif(event, "Output.gif", file="output.mp4", noedits=True)
     if output[0] is None:
         await edit_delete(catevent, "__There was some error in the media. I can't format it to gif.__")
