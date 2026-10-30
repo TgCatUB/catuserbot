@@ -1,3 +1,4 @@
+import asyncio
 import contextlib
 import html
 import os
@@ -6,12 +7,11 @@ import textwrap
 from datetime import datetime
 from urllib.parse import quote_plus
 
-import aiohttp
+import aiofiles
 import bs4
-import requests
+import httpx
 from jikanpy import Jikan
 from jikanpy.exceptions import APIException
-from pySmartDL import SmartDL
 from telegraph import exceptions, upload_file
 
 from userbot import Convert, catub
@@ -48,6 +48,13 @@ anime_path = os.path.join(os.getcwd(), "temp", "animeresult.jpg")
 plugin_category = "extra"
 
 
+async def _download(url, path):
+    async with httpx.AsyncClient(follow_redirects=True, timeout=60) as client:
+        resp = await client.get(url)
+    async with aiofiles.open(path, "wb") as file:
+        await file.write(resp.content)
+
+
 @catub.cat_cmd(
     pattern=r"aq$",
     command=("aq", plugin_category),
@@ -58,7 +65,8 @@ plugin_category = "extra"
     },
 )
 async def anime_quote(event):
-    data = requests.get("https://animechan.vercel.app/api/random").json()
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        data = (await client.get("https://animechan.vercel.app/api/random")).json()
     anime = data["anime"]
     character = data["character"]
     quote = data["quote"]
@@ -92,10 +100,7 @@ async def anilist_usersearch(event):
     searchresult = await anilist_user(search_query)
     if len(searchresult) == 1:
         return await edit_or_reply(catevent, f"**Error while searching user profile:**\n{searchresult[0]}")
-    downloader = SmartDL(searchresult[1], ppath, progress_bar=False)
-    downloader.start(blocking=False)
-    while not downloader.isFinished():
-        pass
+    await _download(searchresult[1], ppath)
     await event.client.send_file(
         event.chat_id,
         ppath,
@@ -126,7 +131,7 @@ async def user(event):
         else:
             return await edit_delete(event, "__Whom should i search.__")
     try:
-        user = jikan.user(search_query)
+        user = await asyncio.to_thread(jikan.user, search_query)
     except APIException:
         return await edit_delete(event, "__No User found with given username__", 5)
     date_format = "%Y-%m-%d"
@@ -185,7 +190,8 @@ async def anilist(event):
     if not search:
         return await edit_delete(event, "__which anime results should i fetch__")
     variables = {"search": search}
-    response = requests.post(anilistapiurl, json={"query": airing_query, "variables": variables}).json()["data"]["Media"]
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        response = (await client.post(anilistapiurl, json={"query": airing_query, "variables": variables})).json()["data"]["Media"]
     if response is None:
         return await edit_delete(event, "__Unable to find the anime.__")
     ms_g = f"**Name**: **{response['title']['romaji']}**(`{response['title']['native']}`)\n**ID**: `{response['id']}`"
@@ -286,10 +292,7 @@ async def anilist_anime(event):  # sourcery no-metrics
         await edit_or_reply(catevent, caption, parse_mode="html")
         return
     try:
-        downloader = SmartDL(image, anime_path, progress_bar=False)
-        downloader.start(blocking=False)
-        while not downloader.isFinished():
-            pass
+        await _download(image, anime_path)
         await event.client.send_file(
             event.chat_id,
             file=anime_path,
@@ -300,7 +303,7 @@ async def anilist_anime(event):  # sourcery no-metrics
         await catevent.delete()
         os.remove(anime_path)
     except BaseException:
-        image = getBannerLink(first_mal_id, True)  # noqa F821
+        image = await getBannerLink(first_mal_id, True)  # noqa F821
         await event.client.send_file(
             event.chat_id,
             file=image,
@@ -398,10 +401,7 @@ async def anilist_manga(event):  # sourcery no-metrics
         await edit_or_reply(catevent, caption, parse_mode="html")
         return
     try:
-        downloader = SmartDL(image, anime_path, progress_bar=False)
-        downloader.start(blocking=False)
-        while not downloader.isFinished():
-            pass
+        await _download(image, anime_path)
         await event.client.send_file(
             event.chat_id,
             file=anime_path,
@@ -412,7 +412,7 @@ async def anilist_manga(event):  # sourcery no-metrics
         await catevent.delete()
         os.remove(anime_path)
     except BaseException:
-        image = getBannerLink(first_mal_id, True)  # noqa F821
+        image = await getBannerLink(first_mal_id, True)  # noqa F821
         await event.client.send_file(
             event.chat_id,
             file=image,
@@ -640,7 +640,7 @@ async def anime_download(event):  # sourcery no-metrics
     search_query = search_query.replace(" ", "+")
     if input_str == "kaizoku":
         search_url = f"https://animekaizoku.com/?s={search_query}"
-        html_text = requests.get(search_url, headers=headers).text
+        html_text = await _fetch_text(search_url)
         soup = bs4.BeautifulSoup(html_text, "html.parser")
         if search_result := soup.find_all("h2", {"class": "post-title"}):
             result = f"<a href={search_url}>Click Here For More Results</a> <b>of</b> <code>{html.escape(search_query)}</code> <b>on</b> <code>AnimeKaizoku</code>: \n\n"
@@ -652,7 +652,7 @@ async def anime_download(event):  # sourcery no-metrics
             result = f"<b>No result found for</b> <code>{html.escape(search_query)}</code> <b>on</b> <code>AnimeKaizoku</code>"
     elif input_str == "kayo":
         search_url = f"https://animekayo.com/?s={search_query}"
-        html_text = requests.get(search_url, headers=headers).text
+        html_text = await _fetch_text(search_url)
         soup = bs4.BeautifulSoup(html_text, "html.parser")
         search_result = soup.find_all("h2", {"class": "title"})
         result = f"<a href={search_url}>Click Here For More Results</a> <b>of</b> <code>{html.escape(search_query)}</code> <b>on</b> <code>AnimeKayo</code>: \n\n"
@@ -668,7 +668,7 @@ async def anime_download(event):  # sourcery no-metrics
             result = f"<b>No result found for</b> <code>{html.escape(search_query)}</code> <b>on</b> <code>AnimeKayo</code>"
     elif input_str == "indi":
         search_url = f"https://indianime.com/?s={search_query}"
-        html_text = requests.get(search_url, headers=headers).text
+        html_text = await _fetch_text(search_url)
         soup = bs4.BeautifulSoup(html_text, "html.parser")
         search_result = soup.find_all("h1", {"class": "elementor-post__title"})
         result = f"<a href={search_url}>Click Here For More Results</a> <b>of</b> <code>{html.escape(search_query)}</code> <b>on</b> <code>indianime</code>: \n\n"
@@ -685,6 +685,11 @@ async def anime_download(event):  # sourcery no-metrics
     await catevent.edit(result, parse_mode="html")
 
 
+async def _fetch_text(url):
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30, headers=headers) as client:
+        return (await client.get(url)).text
+
+
 @catub.cat_cmd(
     pattern=r"upcoming$",
     command=("upcoming", plugin_category),
@@ -696,7 +701,7 @@ async def anime_download(event):  # sourcery no-metrics
 async def upcoming(event):
     "Shows you Upcoming anime's."
     rep = "<b>Upcoming anime</b>\n"
-    later = jikan.season_later()
+    later = await asyncio.to_thread(jikan.season_later)
     anime = later.get("anime")
     for new in anime:
         name = new.get("title")
@@ -764,17 +769,16 @@ async def whatanime(event):
         return await edit_delete(output[0], "__Unable to extract image from the replied message.__")
     file = memory_file("anime.jpg", output[1])
     try:
-        response = upload_file(file)
+        response = await asyncio.to_thread(upload_file, file)
     except exceptions.TelegraphException:
         try:
-            response = upload_file(output[1])
+            response = await asyncio.to_thread(upload_file, output[1])
         except exceptions.TelegraphException as exc:
             return await edit_delete(output[0], f"**Error :**\n__{exc}__")
     cat = f"https://graph.org{response[0]}"
     await output[0].edit("`Searching for result..`")
-    async with aiohttp.ClientSession() as session:
-        async with session.post(f"https://api.trace.moe/search?anilistInfo&url={quote_plus(cat)}") as raw_resp0:
-            resp0 = await raw_resp0.json()
+    async with httpx.AsyncClient(follow_redirects=True, timeout=60) as client:
+        resp0 = (await client.post(f"https://api.trace.moe/search?anilistInfo&url={quote_plus(cat)}")).json()
         framecount = resp0["frameCount"]
         error = resp0["error"]
         if error != "":
