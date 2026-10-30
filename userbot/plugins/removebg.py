@@ -2,7 +2,8 @@
 
 import os
 
-import requests
+import aiofiles
+import httpx
 
 from userbot import Convert, catub
 
@@ -15,34 +16,33 @@ plugin_category = "utils"
 
 # this method will call the API, and return in the appropriate format
 # with the name provided.
-def ReTrieveFile(input_file_name):
+async def ReTrieveFile(input_file_name):
     headers = {
         "X-API-Key": Config.REM_BG_API_KEY,
     }
-    files = {
-        "image_file": (input_file_name, open(input_file_name, "rb")),
-    }
-    return requests.post(
-        "https://api.remove.bg/v1.0/removebg",
-        headers=headers,
-        files=files,
-        allow_redirects=True,
-        stream=True,
-    )
+    async with aiofiles.open(input_file_name, "rb") as image:
+        files = {
+            "image_file": (input_file_name, await image.read()),
+        }
+    async with httpx.AsyncClient(follow_redirects=True, timeout=60) as client:
+        return await client.post(
+            "https://api.remove.bg/v1.0/removebg",
+            headers=headers,
+            files=files,
+        )
 
 
-def ReTrieveURL(input_url):
+async def ReTrieveURL(input_url):
     headers = {
         "X-API-Key": Config.REM_BG_API_KEY,
     }
     data = {"image_url": input_url}
-    return requests.post(
-        "https://api.remove.bg/v1.0/removebg",
-        headers=headers,
-        data=data,
-        allow_redirects=True,
-        stream=True,
-    )
+    async with httpx.AsyncClient(follow_redirects=True, timeout=60) as client:
+        return await client.post(
+            "https://api.remove.bg/v1.0/removebg",
+            headers=headers,
+            data=data,
+        )
 
 
 @catub.cat_cmd(
@@ -79,11 +79,11 @@ async def remove_background(event):
         file_name = await Convert.to_image(event, reply_message, dirct="./temp", file="rmbgimage.png", noedits=True)
         if not file_name[1]:
             return await edit_delete(event, "**Error:** __Unable to process with this media__")
-        response = ReTrieveFile(file_name[1])
+        response = await ReTrieveFile(file_name[1])
         os.remove(file_name[1])
     elif input_str:
         catevent = await edit_or_reply(event, "`Removing Background of this media`")
-        response = ReTrieveURL(input_str)
+        response = await ReTrieveURL(input_str)
     else:
         return await edit_delete(
             event,
@@ -93,8 +93,8 @@ async def remove_background(event):
     remove_bg_image = "./temp/backgroundless.png"
     if "image" not in contentType:
         return await edit_delete(catevent, f"`{response.content.decode('UTF-8')}`", 5)
-    with open("./temp/backgroundless.png", "wb") as file:
-        file.write(response.content)
+    async with aiofiles.open("./temp/backgroundless.png", "wb") as file:
+        await file.write(response.content)
     await catevent.delete()
     if cmd == "srmbg":
         file = (await Convert.to_sticker(catevent, remove_bg_image, file="rmbgsticker.webp", noedits=True))[1]
