@@ -1,7 +1,7 @@
 import glob
 import os
 import sys
-import requests
+import httpx
 from datetime import timedelta
 from pathlib import Path
 
@@ -222,7 +222,8 @@ async def install_externalrepo(repo, branch, cfolder):
         gcmd = f"git clone {CATREPO} {cfolder}"
         errtext = f"The link({CATREPO}) you provided for `EXTERNAL_REPO` in vars is invalid. please recheck that link"
     api_url = repourl.replace("github.com", "api.github.com/repos").replace("tree", "branches")
-    response = requests.get(api_url)
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        response = await client.get(api_url)
     if response.status_code != 200:
         LOGS.error(errtext)
         return await catub.tgbot.send_message(BOTLOG_CHATID, errtext)
