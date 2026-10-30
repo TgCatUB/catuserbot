@@ -1,3 +1,4 @@
+import aiofiles
 import asyncio
 import contextlib
 
@@ -226,8 +227,8 @@ async def add_fed_to(event):  # sourcery no-metrics
                             "fedlist",
                         )
                         await asyncio.sleep(5)
-                        fedfile = open(fed_file, errors="ignore")
-                        lines = fedfile.readlines()
+                        async with aiofiles.open(fed_file, errors="ignore") as fedfile:
+                            lines = await fedfile.readlines()
                         for line in lines:
                             with contextlib.suppress(Exception):
                                 fedidstoadd.append(line[:36])
