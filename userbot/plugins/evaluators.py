@@ -1,6 +1,5 @@
 """Tools for lazy devs"""
 
-import aiofiles
 import asyncio
 import importlib
 import inspect
@@ -8,6 +7,8 @@ import io
 import os
 import sys
 import traceback
+
+import aiofiles
 
 from ..helpers.utils import _format
 from . import *
@@ -103,9 +104,10 @@ async def aexec(code, smessatatus):
     message = event = smessatatus
     p = lambda _x: print(_format.yaml_format(_x))  # noqa E731
     reply = await event.get_reply_message()
-    exec(("async def __aexec(message, event , reply, client, p, chat): " + "".join(f"\n {line}" for line in code.split("\n"))))
+    namespace = {}
+    exec(("async def __aexec(message, event , reply, client, p, chat): " + "".join(f"\n {line}" for line in code.split("\n"))), globals(), namespace)
 
-    return await locals()["__aexec"](message, event, reply, message.client, p, message.chat_id)
+    return await namespace["__aexec"](message, event, reply, message.client, p, message.chat_id)
 
 
 @catub.cat_cmd(
