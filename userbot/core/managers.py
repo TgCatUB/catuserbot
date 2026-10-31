@@ -1,6 +1,8 @@
 import asyncio
 import os
 
+import aiofiles
+
 from ..helpers.utils.format import md_to_text, paste_message
 from .data import _sudousers_list
 
@@ -44,8 +46,8 @@ async def edit_or_reply(
         return event
     file_name = file_name or "output.txt"
     caption = caption or None
-    with open(file_name, "w+") as output:
-        output.write(text)
+    async with aiofiles.open(file_name, "w+") as output:
+        await output.write(text)
     if reply_to:
         await reply_to.reply(caption, file=file_name)
         await event.delete()

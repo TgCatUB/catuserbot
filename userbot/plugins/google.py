@@ -1,10 +1,12 @@
 """Reverse search image and Google search"""
 
+import asyncio
 import contextlib
 import os
 import re
 from datetime import datetime
 
+import aiofiles
 from search_engine_parser import BingSearch, GoogleSearch, YahooSearch
 from search_engine_parser.core.exceptions import NoResultsOrTrafficError
 
@@ -155,7 +157,7 @@ async def reverse(event):
     catevent = await edit_or_reply(event, "`Processing...`")
     # get data accoding to cmd
     flag = cmd != "grs"
-    data = GooglePic.reverse_data(photo[1], flag)
+    data = await asyncio.to_thread(GooglePic.reverse_data, photo[1], flag)
     if data["error"]:
         return await edit_delete(catevent, data["error"])
     if data["lens"] is None:
@@ -166,8 +168,8 @@ async def reverse(event):
         # save screenshot from lens url
         pic, _ = await chromeDriver.get_screenshot(data["lens"])
         if pic:
-            with open(outfile, "wb") as file:
-                file.write(pic)
+            async with aiofiles.open(outfile, "wb") as file:
+                await file.write(pic)
     else:
         for checker, item in enumerate(data["image_set"], 1):
             url = item.image if item.image.endswith((".jpg", ".jpeg", ".png", ".gif")) else item.site

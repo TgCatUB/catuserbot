@@ -4,6 +4,7 @@ import os
 import sys
 from asyncio.exceptions import CancelledError
 
+import aiofiles
 import heroku3
 import urllib3
 from git import Repo
@@ -47,15 +48,15 @@ requirements_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname
 
 async def gen_chlog(repo, diff):
     d_form = "%d/%m/%y"
-    return "".join(f"  • {c.summary} ({c.committed_datetime.strftime(d_form)}) <{c.author}>\n" for c in repo.iter_commits(diff))
+    return await asyncio.to_thread(lambda: "".join(f"  • {c.summary} ({c.committed_datetime.strftime(d_form)}) <{c.author}>\n" for c in repo.iter_commits(diff)))
 
 
 async def print_changelogs(event, ac_br, changelog):
     changelog_str = f"**New UPDATE available for [{ac_br}]:\n\nCHANGELOG:**\n`{changelog}`"
     if len(changelog_str) > 4096:
         await event.edit("`Changelog is too big, view the file to see it.`")
-        with open("output.txt", "w+") as file:
-            file.write(changelog_str)
+        async with aiofiles.open("output.txt", "w+") as file:
+            await file.write(changelog_str)
         await event.client.send_file(
             event.chat_id,
             "output.txt",
@@ -87,9 +88,9 @@ async def update_requirements():
 
 async def update_bot(event, repo, ups_rem, ac_br):
     try:
-        ups_rem.pull(ac_br)
+        await asyncio.to_thread(ups_rem.pull, ac_br)
     except GitCommandError:
-        repo.git.reset("--hard", "FETCH_HEAD")
+        await asyncio.to_thread(repo.git.reset, "--hard", "FETCH_HEAD")
     await update_requirements()
     sandy = await event.edit("`Successfully Updated!\nBot is restarting... Wait for a minute!`")
     if os.path.exists(".env"):
@@ -103,7 +104,7 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
     if HEROKU_API_KEY is None:
         return await event.edit("`Please set up`  **HEROKU_API_KEY**  ` Var...`")
     heroku = heroku3.from_key(HEROKU_API_KEY)
-    heroku_applications = heroku.apps()
+    heroku_applications = await asyncio.to_thread(heroku.apps)
     if HEROKU_APP_NAME is None:
         await event.edit("`Please set up the` **HEROKU_APP_NAME** `Var` to be able to deploy your userbot...`")
         repo.__del__()
@@ -128,8 +129,8 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
         add_to_collectionlist("restart_update", [sandy.chat_id, sandy.id])
     except Exception as e:
         LOGS.error(e)
-    ups_rem.fetch(ac_br)
-    repo.git.reset("--hard", "FETCH_HEAD")
+    await asyncio.to_thread(ups_rem.fetch, ac_br)
+    await asyncio.to_thread(repo.git.reset, "--hard", "FETCH_HEAD")
     heroku_git_url = heroku_app.git_url.replace("https://", f"https://api:{HEROKU_API_KEY}@")
 
     if "heroku" in repo.remotes:
@@ -138,15 +139,15 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
     else:
         remote = repo.create_remote("heroku", heroku_git_url)
     try:
-        remote.push(refspec="HEAD:refs/heads/master", force=True)
+        await asyncio.to_thread(remote.push, refspec="HEAD:refs/heads/master", force=True)
     except Exception as error:
         await event.edit(f"{txt}\n**Error log:**\n`{error}`")
         return repo.__del__()
-    build_status = heroku_app.builds(order_by="created_at", sort="desc")[0]
+    build_status = (await asyncio.to_thread(heroku_app.builds, order_by="created_at", sort="desc"))[0]
     if build_status.status == "failed":
         return await edit_delete(event, "`Build failed!\nCancelled or there were some errors...`")
     try:
-        remote.push("master:main", force=True)
+        await asyncio.to_thread(remote.push, "master:main", force=True)
     except Exception as error:
         await event.edit(f"{txt}\n**Here is the error log:**\n`{error}`")
         return repo.__del__()
@@ -154,7 +155,7 @@ async def deploy(event, repo, ups_rem, ac_br, txt):
     with contextlib.suppress(CancelledError):
         await event.client.disconnect()
         if HEROKU_APP is not None:
-            HEROKU_APP.restart()
+            await asyncio.to_thread(HEROKU_APP.restart)
 
 
 @catub.cat_cmd(
@@ -185,7 +186,7 @@ async def upstream(event):
     try:
         txt = "`Oops.. Updater cannot continue due to " + "some problems occured`\n\n**LOGTRACE:**\n"
 
-        repo = Repo()
+        repo = await asyncio.to_thread(Repo)
     except NoSuchPathError as error:
         await event.edit(f"{txt}\n`directory {error} is not found`")
         return repo.__del__()
@@ -196,9 +197,9 @@ async def upstream(event):
         if conf is None:
             return await event.edit(f"`Unfortunately, the directory {error} does not seem to be a git repository.\nBut we can fix that by force updating the userbot using .update now.`")
 
-        repo = Repo.init()
+        repo = await asyncio.to_thread(Repo.init)
         origin = repo.create_remote("upstream", off_repo)
-        origin.fetch()
+        await asyncio.to_thread(origin.fetch)
         force_update = True
         repo.create_head("master", origin.refs.master)
         repo.heads.master.set_tracking_branch(origin.refs.master)
@@ -210,7 +211,7 @@ async def upstream(event):
     with contextlib.suppress(BaseException):
         repo.create_remote("upstream", off_repo)
     ups_rem = repo.remote("upstream")
-    ups_rem.fetch(ac_br)
+    await asyncio.to_thread(ups_rem.fetch, ac_br)
     changelog = await gen_chlog(repo, f"HEAD..upstream/{ac_br}")
     # Special case for deploy
     if changelog == "" and not force_update:
@@ -247,7 +248,7 @@ async def update_deploy(event):
     try:
         txt = "`Oops.. Updater cannot continue due to " + "some problems occured`\n\n**LOGTRACE:**\n"
 
-        repo = Repo()
+        repo = await asyncio.to_thread(Repo)
     except NoSuchPathError as error:
         await event.edit(f"{txt}\n`directory {error} is not found`")
         return repo.__del__()
@@ -255,9 +256,9 @@ async def update_deploy(event):
         await event.edit(f"{txt}\n`Early failure! {error}`")
         return repo.__del__()
     except InvalidGitRepositoryError:
-        repo = Repo.init()
+        repo = await asyncio.to_thread(Repo.init)
         origin = repo.create_remote("upstream", off_repo)
-        origin.fetch()
+        await asyncio.to_thread(origin.fetch)
         repo.create_head("master", origin.refs.master)
         repo.heads.master.set_tracking_branch(origin.refs.master)
         repo.heads.master.checkout(True)
@@ -265,7 +266,7 @@ async def update_deploy(event):
         repo.create_remote("upstream", off_repo)
     ac_br = repo.active_branch.name
     ups_rem = repo.remote("upstream")
-    ups_rem.fetch(ac_br)
+    await asyncio.to_thread(ups_rem.fetch, ac_br)
     await event.edit("`Deploying userbot, please wait....`")
     await deploy(event, repo, ups_rem, ac_br, txt)
 
@@ -292,24 +293,24 @@ async def variable(event):  # sourcery skip: low-code-quality
                 event,
                 "Set the required vars in heroku to function this normally `HEROKU_API_KEY` and `HEROKU_APP_NAME`.",
             )
-        app = Heroku.app(Config.HEROKU_APP_NAME)
-        heroku_var = app.config()
+        app = await asyncio.to_thread(Heroku.app, Config.HEROKU_APP_NAME)
+        heroku_var = await asyncio.to_thread(app.config)
         if cmd == "good":
             if BADCAT:
                 await edit_or_reply(event, "`Changing badcat to goodcat wait for 2-3 minutes.`")
-                del heroku_var[switch]
+                await asyncio.to_thread(heroku_var.__delitem__, switch)
                 return
             await edit_delete(event, "`You already using GoodCat`", 6)
         else:
             if BADCAT:
                 return await edit_delete(event, "`You already using BadCat`", 6)
             await edit_or_reply(event, "`Changing goodcat to badcat wait for 2-3 minutes.`")
-            heroku_var[switch] = "True"
+            await asyncio.to_thread(heroku_var.__setitem__, switch, "True")
     elif os.path.exists(config):
         string = ""
         match = None
-        with open(config, "r") as f:
-            configs = f.readlines()
+        async with aiofiles.open(config, "r") as f:
+            configs = await f.readlines()
         for i in configs:
             if switch in i:
                 match = True
@@ -318,9 +319,8 @@ async def variable(event):  # sourcery skip: low-code-quality
         if cmd == "good":
             if match and not BADCAT:
                 cat = await edit_or_reply(event, "`Changing badcat to goodcat wait for 2-3 minutes.`")
-                with open(config, "w") as f1:
-                    f1.write(string)
-                    f1.close()
+                async with aiofiles.open(config, "w") as f1:
+                    await f1.write(string)
                 await _catutils.runcmd("rm -rf badcatext")
                 return await event.client.reload(cat)
             await edit_delete(event, "`You already using GoodCat`")
@@ -329,9 +329,8 @@ async def variable(event):  # sourcery skip: low-code-quality
                 return await edit_or_reply(event, "`You already using BadCat`")
             string += f'    {switch} = "True"\n'
             cat = await edit_or_reply(event, "`Changing goodcat to badcat wait for 2-3 minutes.`")
-            with open(config, "w") as f1:
-                f1.write(string)
-                f1.close()
+            async with aiofiles.open(config, "w") as f1:
+                await f1.write(string)
             await event.client.reload(cat)
     else:
         await edit_delete(event, "`There no Config file , You can't use this plugin.`")

@@ -7,10 +7,10 @@ import os
 import random
 import re
 import string
-import urllib.request
 
 import cloudscraper
 import emoji as catemoji
+import httpx
 from bs4 import BeautifulSoup as bs
 from PIL import Image
 from telethon import events
@@ -34,6 +34,12 @@ plugin_category = "fun"
 
 
 combot_stickers_url = "https://combot.org/stickers?q="
+
+
+async def get_pack_page(packname):
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        response = await client.get(f"http://t.me/addstickers/{packname}")
+    return response.text.split("\n")
 
 EMOJI_SEN = [
     "Можно отправить несколько смайлов в одном сообщении, однако мы рекомендуем использовать не больше одного или двух на каждый стикер.",
@@ -376,8 +382,7 @@ async def kang(args):  # sourcery no-metrics  # sourcery skip: low-code-quality
             image = await resize_photo(photo)
             stfile.name = "sticker.png"
             image.save(stfile, "PNG")
-        response = urllib.request.urlopen(urllib.request.Request(f"http://t.me/addstickers/{packname}"))
-        htmlstr = response.read().decode("utf8").split("\n")
+        htmlstr = await get_pack_page(packname)
         if "  A <strong>Telegram</strong> user has created the <strong>Sticker&nbsp;Set</strong>." not in htmlstr:
             async with args.client.conversation("@Stickers") as conv:
                 otherpack, packname, emoji = await add_to_pack(
@@ -556,8 +561,7 @@ async def pack_kang(event):  # sourcery no-metrics
                 image = await resize_photo(photo)
                 stfile.name = "sticker.png"
                 image.save(stfile, "PNG")
-            response = urllib.request.urlopen(urllib.request.Request(f"http://t.me/addstickers/{packname}"))
-            htmlstr = response.read().decode("utf8").split("\n")
+            htmlstr = await get_pack_page(packname)
             if "  A <strong>Telegram</strong> user has created the <strong>Sticker&nbsp;Set</strong>." in htmlstr:
                 async with event.client.conversation("@Stickers") as conv:
                     pack, catpackname = await newpacksticker(
@@ -631,8 +635,7 @@ async def pussycat(event):
     )
     await edit_or_reply(sticker[0], f"`{random.choice(KANGING_STR)}`")
     packname = f"Cat_{userid}_temp_pack"
-    response = urllib.request.urlopen(urllib.request.Request(f"http://t.me/addstickers/{packname}"))
-    htmlstr = response.read().decode("utf8").split("\n")
+    htmlstr = await get_pack_page(packname)
     if "  A <strong>Telegram</strong> user has created the <strong>Sticker&nbsp;Set</strong>." not in htmlstr:
         async with event.client.conversation("@Stickers") as xconv:
             await delpack(
@@ -827,7 +830,7 @@ async def cb_sticker(event):
     catevent = await edit_or_reply(event, "`Searching sticker packs....`")
 
     scraper = cloudscraper.create_scraper()
-    text = scraper.get(combot_stickers_url + split).text
+    text = (await asyncio.to_thread(scraper.get, combot_stickers_url + split)).text
     soup = bs(text, "lxml")
     results = soup.find_all("a", {"class": "stickerset__title"})
 

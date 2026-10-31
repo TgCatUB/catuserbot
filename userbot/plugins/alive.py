@@ -4,7 +4,7 @@ import time
 from datetime import datetime
 from platform import python_version
 
-import requests
+import httpx
 from telethon import version
 from telethon.errors.rpcerrorlist import MediaEmptyError, WebpageCurlFailedError, WebpageMediaEmptyError
 from telethon.events import CallbackQuery
@@ -40,8 +40,9 @@ async def amireallyalive(event):
     cat_caption = gvarstatus("ALIVE_TEMPLATE") or temp
     if "ANIME" in cat_caption:
         try:
-            response = requests.get("https://animechan.xyz/api/random", timeout=10)
-            if response.ok:
+            async with httpx.AsyncClient(follow_redirects=True, timeout=10) as client:
+                response = await client.get("https://animechan.xyz/api/random")
+            if response.is_success:
                 data = response.json()
                 ANIME = f"**“{data['quote']}” - {data['character']} ({data['anime']})**"
             else:

@@ -3,9 +3,9 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
+import asyncio
 import contextlib
 import os
-import subprocess
 
 from ..Config import Config
 from ..helpers.tools import media_type
@@ -41,12 +41,8 @@ async def get_media_channel(event):
             await event.client.download_media(msg, tempdir)
             i += 1
             await event.edit(f"Downloading Media From this Channel.\n **DOWNLOADED : **`{i}`")
-    ps = subprocess.Popen(("ls", tempdir), stdout=subprocess.PIPE)
-    output = subprocess.check_output(("wc", "-l"), stdin=ps.stdout)
-    ps.wait()
-    output = str(output)
-    output = output.replace("b'", " ")
-    output = output.replace("\\n'", " ")
+    output = len(await asyncio.to_thread(os.listdir, tempdir))
+    output = f" {output} "
     await event.edit(f"Successfully downloaded {output} number of media files from {channel_username} to tempdir")
 
 
@@ -75,10 +71,5 @@ async def get_media(event):
             await event.client.download_media(msg, tempdir)
             i += 1
             await event.edit(f"Downloading Media From this Channel.\n **DOWNLOADED : **`{i}`")
-    ps = subprocess.Popen(("ls", tempdir), stdout=subprocess.PIPE)
-    output = subprocess.check_output(("wc", "-l"), stdin=ps.stdout)
-    ps.wait()
-    output = str(output)
-    output = output.replace("b'", "")
-    output = output.replace("\\n'", "")
+    output = len(await asyncio.to_thread(os.listdir, tempdir))
     await event.edit(f"Successfully downloaded {output} number of media files from {channel_username} to tempdir")

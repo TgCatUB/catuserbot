@@ -56,7 +56,7 @@ async def ytdl_down(event, opts, url):
     try:
         await event.edit("`Fetching data, please wait..`")
         with YoutubeDL(opts) as ytdl:
-            ytdl_data = ytdl.extract_info(url)
+            ytdl_data = await asyncio.to_thread(ytdl.extract_info, url)
     except DownloadError as DE:
         await event.edit(f"`{DE}`")
     except ContentTooShortError:
@@ -146,7 +146,7 @@ async def download_audio(event):  # sourcery skip: low-code-quality
     reply_to_id = await reply_id(event)
     for url in urls:
         try:
-            vid_data = YoutubeDL({"no-playlist": True, "remote_components": ["ejs:github"]}).extract_info(url, download=False)
+            vid_data = await asyncio.to_thread(YoutubeDL({"no-playlist": True, "remote_components": ["ejs:github"]}).extract_info, url, download=False)
         except ExtractorError:
             vid_data = {"title": url, "uploader": "Catuserbot", "formats": []}
         startTime = time()

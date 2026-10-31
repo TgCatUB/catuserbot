@@ -1,7 +1,7 @@
 import os
 import random
 
-import requests
+import httpx
 from bs4 import BeautifulSoup
 
 from userbot import catub
@@ -36,7 +36,8 @@ async def noods(event):  # sourcery no-metrics  # sourcery skip: low-code-qualit
     if int(limit) > 10:
         return await edit_delete(event, "`Wallpaper search limit is 1-10`", 10)
     catevent = await edit_or_reply(event, "🔍 `Searching...`")
-    r = requests.get(f"https://wall.alphacoders.com/search.php?search={query.replace(' ', '+')}")
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        r = await client.get(f"https://wall.alphacoders.com/search.php?search={query.replace(' ', '+')}")
     soup = BeautifulSoup(r.content, "lxml")
     walls = soup.find_all("img", class_="img-responsive")
     if not walls:
@@ -57,9 +58,11 @@ async def noods(event):  # sourcery no-metrics  # sourcery skip: low-code-qualit
             "file_type": "jpg",
             "image_server": server,
         }
-        res = requests.post(url2, data=data)
-        a = res.json()["link"]
-        if "We are sorry," not in requests.get(a).text and a not in piclinks:
+        async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+            res = await client.post(url2, data=data)
+            a = res.json()["link"]
+            check_text = (await client.get(a)).text
+        if "We are sorry," not in check_text and a not in piclinks:
             await edit_or_reply(catevent, "📥** Downloading...**")
             pic = await wall_download(a, query)
             if pic is None:

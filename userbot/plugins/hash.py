@@ -2,8 +2,8 @@ import asyncio
 import base64
 import os
 import time
-from subprocess import PIPE
-from subprocess import run as runapp
+
+import aiofiles
 
 from userbot import catub
 
@@ -13,6 +13,12 @@ from ..helpers import progress
 from ..helpers.tools import media_type
 
 plugin_category = "tools"
+
+
+async def runapp(cmd):
+    process = await asyncio.create_subprocess_exec(*cmd, stdout=asyncio.subprocess.PIPE)
+    stdout, _ = await process.communicate()
+    return stdout.decode()
 
 
 @catub.cat_cmd(
@@ -27,17 +33,13 @@ plugin_category = "tools"
 async def gethash(hash_q):
     "Find the md5, sha1, sha256, sha512 of the string when written into a txt file."
     hashtxt_ = "".join(hash_q.text.split(maxsplit=1)[1:])
-    with open("hashdis.txt", "w+") as hashtxt:
-        hashtxt.write(hashtxt_)
-    md5 = runapp(["md5sum", "hashdis.txt"], stdout=PIPE)
-    md5 = md5.stdout.decode()
-    sha1 = runapp(["sha1sum", "hashdis.txt"], stdout=PIPE)
-    sha1 = sha1.stdout.decode()
-    sha256 = runapp(["sha256sum", "hashdis.txt"], stdout=PIPE)
-    sha256 = sha256.stdout.decode()
-    sha512 = runapp(["sha512sum", "hashdis.txt"], stdout=PIPE)
-    runapp(["rm", "hashdis.txt"], stdout=PIPE)
-    sha512 = sha512.stdout.decode()
+    async with aiofiles.open("hashdis.txt", "w+") as hashtxt:
+        await hashtxt.write(hashtxt_)
+    md5 = await runapp(["md5sum", "hashdis.txt"])
+    sha1 = await runapp(["sha1sum", "hashdis.txt"])
+    sha256 = await runapp(["sha256sum", "hashdis.txt"])
+    sha512 = await runapp(["sha512sum", "hashdis.txt"])
+    os.remove("hashdis.txt")
     ans = f"**Text : **\
             \n`{hashtxt_}`\
             \n**MD5 : **`\
@@ -90,8 +92,8 @@ async def endecrypt(event):
                     progress_callback=lambda d, t: asyncio.get_event_loop().create_task(progress(d, t, catevent, c_time, "trying to download")),
                 )
                 catevent = await edit_or_reply(event, "`Encoding ...`")
-                with open(downloaded_file_name, "rb") as image_file:
-                    result = base64.b64encode(image_file.read()).decode("utf-8")
+                async with aiofiles.open(downloaded_file_name, "rb") as image_file:
+                    result = base64.b64encode(await image_file.read()).decode("utf-8")
                 os.remove(downloaded_file_name)
         await edit_or_reply(catevent, result, file_name="encodedfile.txt", caption="It's Encoded")
     else:

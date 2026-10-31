@@ -5,7 +5,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
-import requests
+import httpx
 
 from userbot import catub
 
@@ -36,7 +36,8 @@ async def reddit_fetch(event):
     sub_r = event.pattern_match.group(1)
     subreddit_api = f"{API}/{sub_r}" if sub_r else API
     try:
-        cn = requests.get(subreddit_api)
+        async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+            cn = await client.get(subreddit_api)
         r = cn.json()
     except ValueError:
         return await edit_delete(event, "Value error!.")

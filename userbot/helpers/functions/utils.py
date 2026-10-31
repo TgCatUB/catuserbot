@@ -3,7 +3,8 @@ import time
 from datetime import datetime
 from typing import Optional
 
-import requests
+import aiofiles
+import httpx
 from emoji import replace_emoji
 from telethon.tl.types import Channel, PollAnswer
 
@@ -16,8 +17,10 @@ async def upload_to_temp_web(file_path: str, secret: bool = True, expires: Optio
         data["secret"] = ""
     if expires is not None:
         data["expires"] = str(expires)
-    with open(file_path, "rb") as f:
-        resp = requests.post(url, headers=headers, files={"file": f}, data=data)
+    async with aiofiles.open(file_path, "rb") as f:
+        content = await f.read()
+    async with httpx.AsyncClient(follow_redirects=True, timeout=60) as client:
+        resp = await client.post(url, headers=headers, files={"file": content}, data=data)
     if resp.status_code == 200:
         return resp.text.strip()
     return None

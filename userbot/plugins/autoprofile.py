@@ -7,12 +7,11 @@ import random
 import re
 import shutil
 import time
-import urllib
 from datetime import datetime
 
-import requests
+import aiofiles
+import httpx
 from PIL import Image, ImageDraw, ImageFont
-from pySmartDL import SmartDL
 from telethon.errors import FloodWaitError
 from telethon.tl import functions
 from urlextract import URLExtract
@@ -58,6 +57,13 @@ def fetch_data():
     digitalpfp = gvarstatus("DIGITAL_PIC") or "https://graph.org/file/aeaebe33b1f3988a0b690.jpg"
 
 
+async def _download(url, path):
+    async with httpx.AsyncClient(follow_redirects=True, timeout=60) as client:
+        resp = await client.get(url)
+    async with aiofiles.open(path, "wb") as file:
+        await file.write(resp.content)
+
+
 async def autopicloop():
     fetch_data()
     AUTOPICSTART = gvarstatus("autopic") == "true"
@@ -75,10 +81,7 @@ async def autopicloop():
             LOGS.warn(str(e))
     while AUTOPICSTART:
         if not os.path.exists(autopic_path):
-            downloader = SmartDL(DEFAULT_PIC, autopic_path, progress_bar=False)
-            downloader.start(blocking=False)
-            while not downloader.isFinished():
-                pass
+            await _download(DEFAULT_PIC, autopic_path)
         shutil.copy(autopic_path, autophoto_path)
         im = Image.open(autophoto_path)
         im.rotate(counter, expand=False).save(autophoto_path, "PNG")
@@ -108,7 +111,7 @@ async def custompfploop():
             LOGS.error("No custom pfp images to set.")
             return
         pic = random.choice(list(get_collection_list("CUSTOM_PFP_LINKS")))
-        urllib.request.urlretrieve(pic, "donottouch.jpg")
+        await _download(pic, "donottouch.jpg")
         file = await catub.upload_file("donottouch.jpg")
         try:
             if i > 0:
@@ -128,10 +131,7 @@ async def digitalpicloop():
     i = 0
     while DIGITALPICSTART:
         if not os.path.exists(digitalpic_path):
-            downloader = SmartDL(digitalpfp, digitalpic_path, progress_bar=False)
-            downloader.start(blocking=False)
-            while not downloader.isFinished():
-                pass
+            await _download(digitalpfp, digitalpic_path)
         shutil.copy(digitalpic_path, autophoto_path)
         Image.open(autophoto_path)
         current_time = datetime.now().strftime("%H:%M")
@@ -166,10 +166,7 @@ async def bloom_pfploop():
         return
     while BLOOMSTART:
         if not os.path.exists(autopic_path):
-            downloader = SmartDL(DEFAULT_PIC, autopic_path, progress_bar=False)
-            downloader.start(blocking=False)
-            while not downloader.isFinished():
-                pass
+            await _download(DEFAULT_PIC, autopic_path)
         # RIP Danger zone Here no editing here plox
         R = random.randint(0, 256)
         B = random.randint(0, 256)
@@ -232,18 +229,17 @@ async def autobio_loop():
 async def animeprofilepic(collection_images):
     rnd = random.randint(0, len(collection_images) - 1)
     pack = collection_images[rnd]
-    pc = requests.get(f"http://getwallpapers.com/collection/{pack}").text
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        pc = (await client.get(f"http://getwallpapers.com/collection/{pack}")).text
     f = re.compile(r"/\w+/full.+.jpg")
     f = f.findall(pc)
     fy = f"http://getwallpapers.com{random.choice(f)}"
     if not os.path.exists("f.ttf"):
-        urllib.request.urlretrieve(
+        await _download(
             "https://github.com/rebel6969/mym/raw/master/Rebel-robot-Regular.ttf",
             "f.ttf",
         )
-    img = requests.get(fy)
-    with open("donottouch.jpg", "wb") as outfile:
-        outfile.write(img.content)
+    await _download(fy, "donottouch.jpg")
     return "donottouch.jpg"
 
 
@@ -335,10 +331,7 @@ async def _(event):
             "**Error**\nFor functing of autopic you need to set DEFAULT_PIC var in Database vars",
             parse_mode=_format.parse_pre,
         )
-    downloader = SmartDL(DEFAULT_PIC, autopic_path, progress_bar=False)
-    downloader.start(blocking=False)
-    while not downloader.isFinished():
-        pass
+    await _download(DEFAULT_PIC, autopic_path)
     input_str = event.pattern_match.group(1)
     if input_str:
         try:
@@ -369,10 +362,7 @@ async def _(event):
 )
 async def _(event):
     "To set random colour pic with time to profile pic"
-    downloader = SmartDL(digitalpfp, digitalpic_path, progress_bar=False)
-    downloader.start(blocking=False)
-    while not downloader.isFinished():
-        pass
+    await _download(digitalpfp, digitalpic_path)
     if gvarstatus("digitalpic") is not None and gvarstatus("digitalpic") == "true":
         return await edit_delete(event, "`Digitalpic is already enabled`")
     addgvar("digitalpic", True)
@@ -401,10 +391,7 @@ async def _(event):
             "**Error**\nFor functing of bloom you need to set DEFAULT_PIC var in Database vars",
             parse_mode=_format.parse_pre,
         )
-    downloader = SmartDL(DEFAULT_PIC, autopic_path, progress_bar=True)
-    downloader.start(blocking=False)
-    while not downloader.isFinished():
-        pass
+    await _download(DEFAULT_PIC, autopic_path)
     if gvarstatus("bloom") is not None and gvarstatus("bloom") == "true":
         return await edit_delete(event, "`Bloom is already enabled`")
     addgvar("bloom", True)

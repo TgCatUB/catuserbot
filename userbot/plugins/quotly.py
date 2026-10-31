@@ -4,7 +4,8 @@ import io
 import os
 import re
 
-import requests
+import aiofiles
+import httpx
 from PIL import Image, ImageDraw, ImageFont
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
@@ -99,7 +100,7 @@ async def q_pic(event):  # sourcery no-metrics  # sourcery skip: low-code-qualit
         return await edit_delete(event, "__Provide input along with cmd or reply to text message.__")
     text = soft_deEmojify(text)
     catevent = await edit_or_reply(event, "__Making Quote pic....__")
-    file_check(re=False, me=False, mo=False, it=False)
+    await file_check(re=False, me=False, mo=False, it=False)
     mediatype = await media_type(reply)
     if (not reply) or (not mediatype) or (mediatype not in ["Photo", "Sticker"]) or (mediatype == "Sticker" and reply.document.mime_type == "application/i-tgsticker"):
         user = reply.sender_id if reply else event.client.uid
@@ -117,8 +118,10 @@ async def q_pic(event):  # sourcery no-metrics  # sourcery skip: low-code-qualit
         user = None
     if not pfp:
         pfp = "profilepic.jpg"
-        with open(pfp, "wb") as f:
-            f.write(requests.get("https://graph.org/file/1fd74fa4a4dbf1655f3ec.jpg").content)
+        async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+            resp = await client.get("https://graph.org/file/1fd74fa4a4dbf1655f3ec.jpg")
+        async with aiofiles.open(pfp, "wb") as f:
+            await f.write(resp.content)
     text = f"“{text}„"
     textf = "./temp/ArialUnicodeMS.ttf" if await fontTest(text[0]) else "./temp/Quivira.otf"
     img = Image.open(pfp)
@@ -137,9 +140,7 @@ async def q_pic(event):  # sourcery no-metrics  # sourcery skip: low-code-qualit
     text_bottom = h - nh // 2 - 40 - (180 if user is not None else 0)
     max_text_width = text_right - text_left
     max_text_height = text_bottom - text_top
-    text, textfont, bbox = _fit_quote_text(
-        draw, text, textf, max_text_width, max_text_height
-    )
+    text, textfont, bbox = _fit_quote_text(draw, text, textf, max_text_width, max_text_height)
     tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
     x = (text_left + text_right - tw) // 2 - bbox[0]
     y = (text_top + text_bottom - th) // 2 - bbox[1]

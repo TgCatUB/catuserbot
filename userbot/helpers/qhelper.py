@@ -14,10 +14,10 @@ import logging
 import os
 import random
 import textwrap
-import urllib.request
-from urllib.error import HTTPError
 
+import aiofiles
 import emoji
+import httpx
 from fontTools.ttLib import TTFont
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 from telethon.tl import types
@@ -49,55 +49,30 @@ def _font_width(font, text):
     return bbox[2] - bbox[0]
 
 
-def file_check(re=True, me=True, mo=True, it=True, fa=True, sp=True, go=False):
-    regular = "./temp/Roboto-Regular.ttf"
-    medium = "./temp/Roboto-Medium.ttf"
-    mono = "./temp/DroidSansMono.ttf"
-    italic = "./temp/Roboto-Italic.ttf"
-    fallback = "./temp/Quivira.otf"
-    special = "./temp/ArialUnicodeMS.ttf"
-    google = "./temp/GoogleSans-Medium.ttf"
+async def file_check(re=True, me=True, mo=True, it=True, fa=True, sp=True, go=False):
+    base = "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources"
+    fonts = [
+        (re, "./temp/Roboto-Regular.ttf", f"{base}/fonts/Roboto-Regular.ttf?raw=true"),
+        (me, "./temp/Roboto-Medium.ttf", f"{base}/fonts/Roboto-Medium.ttf?raw=true"),
+        (mo, "./temp/DroidSansMono.ttf", f"{base}/fonts/DroidSansMono.ttf?raw=true"),
+        (it, "./temp/Roboto-Italic.ttf", f"{base}/fonts/Roboto-Italic.ttf?raw=true"),
+        (fa, "./temp/Quivira.otf", f"{base}/fonts/Quivira.otf?raw=true"),
+        (sp, "./temp/ArialUnicodeMS.ttf", f"{base}/Spotify/ArialUnicodeMS.ttf?raw=true"),
+        (go, "./temp/GoogleSans-Medium.ttf", f"{base}/Spotify/GoogleSans-Medium.ttf?raw=true"),
+    ]
     if not os.path.isdir("./temp/"):
         os.mkdir("./temp/")
-    if re and not os.path.exists(regular):
-        urllib.request.urlretrieve(
-            "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/fonts/Roboto-Regular.ttf?raw=true",
-            regular,
-        )
-    if me and not os.path.exists(medium):
-        urllib.request.urlretrieve(
-            "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/fonts/Roboto-Medium.ttf?raw=true",
-            medium,
-        )
-    if mo and not os.path.exists(mono):
-        urllib.request.urlretrieve(
-            "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/fonts/DroidSansMono.ttf?raw=true",
-            mono,
-        )
-    if it and not os.path.exists(italic):
-        urllib.request.urlretrieve(
-            "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/fonts/Roboto-Italic.ttf?raw=true",
-            italic,
-        )
-    if fa and not os.path.exists(fallback):
-        urllib.request.urlretrieve(
-            "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/fonts/Quivira.otf?raw=true",
-            fallback,
-        )
-    if sp and not os.path.exists(special):
-        urllib.request.urlretrieve(
-            "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Spotify/ArialUnicodeMS.ttf?raw=true",
-            special,
-        )
-    if go and not os.path.exists(google):
-        urllib.request.urlretrieve(
-            "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Spotify/GoogleSans-Medium.ttf?raw=true",
-            google,
-        )
+    async with httpx.AsyncClient(follow_redirects=True, timeout=60) as client:
+        for wanted, path, link in fonts:
+            if wanted and not os.path.exists(path):
+                resp = await client.get(link)
+                resp.raise_for_status()
+                async with aiofiles.open(path, "wb") as file:
+                    await file.write(resp.content)
 
 
 async def process(msg, user, client, reply, event, replied=None):  # sourcery no-metrics
-    file_check()
+    await file_check()
     # Importıng fonts and gettings the size of text
     font = ImageFont.truetype("./temp/Roboto-Medium.ttf", 41, encoding="utf-16")
     font2 = ImageFont.truetype("./temp/Roboto-Regular.ttf", 33, encoding="utf-16")
@@ -422,11 +397,14 @@ async def emoji_fetch(emoji_character):
         "https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/"
         f"{codepoints}.png"
     )
-    try:
-        image_path = urllib.request.urlretrieve(image_url, "./temp/emoji.png")[0]
-    except HTTPError:
-        fallback_url = "https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/26d4.png"
-        image_path = urllib.request.urlretrieve(fallback_url, "./temp/emoji.png")[0]
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        resp = await client.get(image_url)
+        if resp.status_code == 404:
+            fallback_url = "https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/26d4.png"
+            resp = await client.get(fallback_url)
+    image_path = "./temp/emoji.png"
+    async with aiofiles.open(image_path, "wb") as file:
+        await file.write(resp.content)
     return await transparent(image_path)
 
 

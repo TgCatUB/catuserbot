@@ -4,8 +4,7 @@ import io
 import json
 from datetime import datetime
 
-import aiohttp
-import requests
+import httpx
 from pytz import country_names as c_n
 from pytz import country_timezones as c_tz
 from pytz import timezone as tz
@@ -79,10 +78,10 @@ async def get_weather(event):  # sourcery no-metrics
                 return await edit_or_reply(event, "`Invalid Country.`")
             CITY = f"{newcity[0].strip()},{countrycode.strip()}"
     url = f"https://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={Config.OPEN_WEATHER_MAP_APPID}"
-    async with aiohttp.ClientSession() as _session:
-        async with _session.get(url) as request:
-            requeststatus = request.status
-            requesttext = await request.text()
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        request = await client.get(url)
+    requeststatus = request.status_code
+    requesttext = request.text
     result = json.loads(requesttext)
     if requeststatus != 200:
         return await edit_or_reply(event, "`Invalid Country.`")
@@ -160,7 +159,8 @@ async def set_default_city(event):
                 return await edit_or_reply(event, "`Invalid country.`")
             CITY = f"{newcity[0].strip()},{countrycode.strip()}"
     url = f"https://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={Config.OPEN_WEATHER_MAP_APPID}"
-    request = requests.get(url)
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        request = await client.get(url)
     result = json.loads(request.text)
     if request.status_code != 200:
         return await edit_or_reply(event, "`Invalid country.`")
@@ -188,7 +188,8 @@ async def _(event):
     input_str = event.pattern_match.group(1)
     if not input_str:
         input_str = gvarstatus("DEFCITY") or "Delhi"
-    output = requests.get(f"https://wttr.in/{input_str}?mnTC0&lang=en").text
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        output = (await client.get(f"https://wttr.in/{input_str}?mnTC0&lang=en")).text
     await edit_or_reply(event, output, parse_mode=_format.parse_pre)
 
 
@@ -210,10 +211,9 @@ async def _(event):
     input_str = event.pattern_match.group(1)
     if not input_str:
         input_str = gvarstatus("DEFCITY") or "Delhi"
-    async with aiohttp.ClientSession() as session:
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
         sample_url = "https://wttr.in/{}.png"
-        response_api_zero = await session.get(sample_url.format(input_str))
-        response_api = await response_api_zero.read()
+        response_api = (await client.get(sample_url.format(input_str))).content
         with io.BytesIO(response_api) as out_file:
             await event.reply(f"**City : **`{input_str}`", file=out_file, reply_to=reply_to_id)
     try:

@@ -2,8 +2,9 @@ import os
 import random
 import re
 
+import aiofiles
+import httpx
 import pygments
-import requests
 from pygments.formatters import ImageFormatter
 from pygments.lexers import Python3Lexer
 from telethon.errors.rpcerrorlist import YouBlockedUserError
@@ -139,8 +140,8 @@ async def rayso_by_pro_odi(event):  # By @feelded
     elif rquery:
         if rquery.file and rquery.file.mime_type.startswith("text"):
             filename = await rquery.download_media()
-            with open(filename, "r") as f:
-                text = str(f.read())
+            async with aiofiles.open(filename, "r") as f:
+                text = str(await f.read())
             os.remove(filename)
         elif rquery.text:
             text = rquery.raw_text
@@ -205,8 +206,8 @@ async def paste_img(event):
         mediatype = await media_type(reply)
         if mediatype == "Document":
             d_file_name = await event.client.download_media(reply, Config.TEMP_DIR)
-            with open(d_file_name, "r") as f:
-                text_to_print = f.read()
+            async with aiofiles.open(d_file_name, "r") as f:
+                text_to_print = await f.read()
     if text_to_print == "":
         if reply and reply.text:
             text_to_print = reply.raw_text
@@ -279,8 +280,8 @@ async def paste_bin(event):
             d_file_name = await event.client.download_media(reply, Config.TEMP_DIR)
             if extension is None:
                 extension = get_extension(reply.document)
-            with open(d_file_name, "r") as f:
-                text_to_print = f.read()
+            async with aiofiles.open(d_file_name, "r") as f:
+                text_to_print = await f.read()
     if text_to_print == "":
         if reply and reply.text:
             text_to_print = reply.raw_text
@@ -363,14 +364,15 @@ async def get_dogbin_content(event):
             rawurl = f"http://catbin.up.railway.app/raw/{fid[0]}"
         else:
             return await edit_delete(event, "__This pastebin is not supported.__")
-    resp = requests.get(rawurl)
     try:
+        async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+            resp = await client.get(rawurl)
         resp.raise_for_status()
-    except requests.exceptions.HTTPError as HTTPErr:
+    except httpx.HTTPStatusError as HTTPErr:
         return await catevent.edit(f"**Request returned an unsuccessful status code.**\n\n__{str(HTTPErr)}__")
-    except requests.exceptions.Timeout as TimeoutErr:
+    except httpx.TimeoutException as TimeoutErr:
         return await catevent.edit(f"**Request timed out.**__{str(TimeoutErr)}__")
-    except requests.exceptions.TooManyRedirects as RedirectsErr:
+    except httpx.TooManyRedirects as RedirectsErr:
         return await catevent.edit((f"**Request exceeded the configured number of maximum redirections.**__{str(RedirectsErr)}__"))
     reply_text = f"**Fetched dogbin URL content successfully!**\n\n**Content:** \n```{resp.text}```"
     await edit_or_reply(catevent, reply_text)
@@ -395,8 +397,8 @@ async def _(event):
         mediatype = await media_type(reply)
         if mediatype == "Document":
             d_file_name = await event.client.download_media(reply, Config.TEMP_DIR)
-            with open(d_file_name, "r") as f:
-                text_to_print = f.read()
+            async with aiofiles.open(d_file_name, "r") as f:
+                text_to_print = await f.read()
     if text_to_print == "":
         if reply and reply.text:
             text_to_print = reply.raw_text

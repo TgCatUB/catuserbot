@@ -1,3 +1,4 @@
+import asyncio
 import os
 
 from telegraph import exceptions, upload_file
@@ -34,7 +35,7 @@ async def _(event):
         return await output[0].edit("the replied file size is not supported it must me below 5 mb")
     await output[0].edit("generating image..")
     try:
-        response = upload_file(output[1])
+        response = await asyncio.to_thread(upload_file, output[1])
     except exceptions.TelegraphException as exc:
         os.remove(output[1])
         return await output[0].edit(f"**Error: **\n`{exc}`")
@@ -68,7 +69,7 @@ async def _(event):
         return await output[0].edit("the replied file size is not supported it must me below 5 mb")
     await output[0].edit("generating image..")
     try:
-        response = upload_file(output[1])
+        response = await asyncio.to_thread(upload_file, output[1])
     except exceptions.TelegraphException as exc:
         os.remove(output[1])
         return await output[0].edit(f"**Error: **\n`{exc}`")
@@ -112,7 +113,7 @@ async def _(event):
         return await output[0].edit("the replied file size is not supported it must me below 5 mb")
     await output[0].edit("generating image..")
     try:
-        response = upload_file(output[1])
+        response = await asyncio.to_thread(upload_file, output[1])
     except exceptions.TelegraphException as exc:
         os.remove(output[1])
         return await output[0].edit(f"**Error: **\n`{exc}`")
@@ -157,7 +158,7 @@ async def _(event):
 
     await output[0].edit("generating image..")
     try:
-        response = upload_file(output[1])
+        response = await asyncio.to_thread(upload_file, output[1])
     except exceptions.TelegraphException as exc:
         os.remove(output[1])
         return await output[0].edit(f"**Error: **\n`{exc}`")

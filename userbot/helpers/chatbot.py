@@ -1,8 +1,11 @@
+import asyncio
+import io
 import json
 import os
 
+import aiofiles
+import httpx
 import openai
-import requests
 from fake_useragent import UserAgent
 
 from userbot.Config import Config
@@ -78,23 +81,29 @@ async def generate_dalle_image(text, reply, event, flag=None):
         if flag:
             filename = "dalle-in.png"
             await event.client.download_media(reply, filename)
-            format_image(filename)
+            await asyncio.to_thread(format_image, filename)
+            async with aiofiles.open(filename, "rb") as image_file:
+                image = io.BytesIO(await image_file.read())
+            image.name = filename
             if flag == "e":
-                response = openai.Image.create_edit(
-                    image=open(filename, "rb"),
+                response = await asyncio.to_thread(
+                    openai.Image.create_edit,
+                    image=image,
                     prompt=text,
                     n=limit,
                     size=f"{size}x{size}",
                 )
             elif flag == "v":
-                response = openai.Image.create_variation(
-                    image=open(filename, "rb"),
+                response = await asyncio.to_thread(
+                    openai.Image.create_variation,
+                    image=image,
                     n=limit,
                     size=f"{size}x{size}",
                 )
             os.remove(filename)
         else:
-            response = openai.Image.create(
+            response = await asyncio.to_thread(
+                openai.Image.create,
                 prompt=text,
                 n=limit,
                 size=f"{size}x{size}",
@@ -118,7 +127,7 @@ async def generate_dalle_image(text, reply, event, flag=None):
 
 class ThabAi:
     def __init__(self):
-        self.session = requests.Session()
+        self.session = httpx.Client(follow_redirects=True, timeout=60)
         self.session.headers = {
             "authority": "chatbot.theb.ai",
             "content-type": "application/json",
@@ -130,7 +139,6 @@ class ThabAi:
         response = self.session.post(
             "https://chatbot.theb.ai/api/chat-process",
             json={"prompt": prompt, "options": {}},
-            stream=True,
         )
         response.raise_for_status()
         response_lines = response.iter_lines()

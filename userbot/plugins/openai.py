@@ -1,5 +1,6 @@
 # Special Credits: @LucifSD02 <Telegram>
 
+import asyncio
 import os
 
 from userbot import catub
@@ -62,7 +63,7 @@ async def gpt_response_with_prompt(event):
                 "__Reply to message & pass the instruction message along with flag.__",
             )
         await edit_or_reply(event, "`Generating edited text...`")
-        response = generate_edited_response(reply.text, text)
+        response = await asyncio.to_thread(generate_edited_response, reply.text, text)
         return await edit_or_reply(event, response)
 
     elif "-m" in text:
@@ -100,7 +101,7 @@ async def gpt_response_with_prompt(event):
         return await edit_delete(event, "**ಠ∀ಠ Gimmi text**")
 
     catevent = await edit_or_reply(event, "__Generating answer...__")
-    gpt_response = generate_gpt_response(text, chat_id)
+    gpt_response = await asyncio.to_thread(generate_gpt_response, text, chat_id)
     await edit_or_reply(catevent, gpt_response)
 
 

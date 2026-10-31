@@ -12,9 +12,9 @@ import contextlib
 import os
 import re
 import time
-import urllib.request
 
-import requests
+import aiofiles
+import httpx
 import ujson
 from PIL import Image, ImageEnhance, ImageFilter
 from telethon import Button, events
@@ -183,7 +183,8 @@ async def spotify_setup(event):
         "redirect_uri": "https://example.com/callback",
         "code": initial_token,
     }
-    r = requests.post("https://accounts.spotify.com/api/token", data=body)
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        r = await client.post("https://accounts.spotify.com/api/token", data=body)
     save = r.json()
     access_token = save.get("access_token")
     refresh_token = save.get("refresh_token")
@@ -200,8 +201,8 @@ async def spotify_setup(event):
         "telegram_spam": False,
         "spotify_spam": False,
     }
-    with open(PATH, "w") as outfile:
-        ujson.dump(to_create, outfile, indent=4)
+    async with aiofiles.open(PATH, "w") as outfile:
+        await outfile.write(ujson.dumps(to_create, indent=4))
     await edit_delete(msg, "Done! Setup Successfull", 5)
     glob_db.add_collection(
         "SP_DATA",
@@ -242,7 +243,8 @@ if SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET:
             skip = False
             to_insert = {}
             oauth = {"Authorization": f"Bearer {SP_DATABASE.return_token()}"}
-            r = requests.get("https://api.spotify.com/v1/me/player/currently-playing", headers=oauth)
+            async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+                r = await client.get("https://api.spotify.com/v1/me/player/currently-playing", headers=oauth)
             # 200 means user plays smth
             if r.status_code == 200:
                 received = r.json()
@@ -281,7 +283,8 @@ if SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET:
                     "grant_type": "refresh_token",
                     "refresh_token": SP_DATABASE.return_refresh(),
                 }
-                r = requests.post("https://accounts.spotify.com/api/token", data=data)
+                async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+                    r = await client.post("https://accounts.spotify.com/api/token", data=data)
                 received = r.json()
                 # if a new refresh is token as well, we save it here
                 with contextlib.suppress(KeyError):
@@ -464,7 +467,7 @@ async def telegraph_lyrics(tittle, artist):
         result = "<h1>Set GENIUS_API_TOKEN in heroku vars for functioning of this command.<br>‌‌‎ <br>Check out this <a href = https://graph.org/How-to-get-Genius-API-Token-04-26>Tutorial</a></h1>"
     else:
         try:
-            album, content = LyricsGen.lyrics(tittle, artist)
+            album, content = await asyncio.to_thread(LyricsGen.lyrics, tittle, artist)
             content = content.replace("\n", "<br>").replace("<br><br>", "<br>‌‌‎ <br>").replace("[", "<b>[").replace("]", "]</b>")
             result = f"<img src='{album}'/><h4>{tittle}</h4><br><b>by {artist}</b><br>‌‌‎ <br>{content}"
             symbol = "ıllılı."
@@ -479,47 +482,59 @@ async def telegraph_lyrics(tittle, artist):
     return response, symbol
 
 
-def file_check():
+async def _download(client, url, path):
+    resp = await client.get(url)
+    async with aiofiles.open(path, "wb") as file:
+        await file.write(resp.content)
+
+
+async def file_check():
     logo = "temp/cat_music.png"
     font_bold = "temp/ArialUnicodeMS.ttf"
     font_mid = "temp/GoogleSans-Medium.ttf"
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
-    if not os.path.exists(logo):
-        urllib.request.urlretrieve(
-            "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Spotify/cat.png",
-            logo,
-        )
-    if not os.path.exists(font_mid):
-        urllib.request.urlretrieve(
-            "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Spotify/GoogleSans-Medium.ttf?raw=true",
-            font_mid,
-        )
-    if not os.path.exists(font_bold):
-        urllib.request.urlretrieve(
-            "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Spotify/ArialUnicodeMS.ttf?raw=true",
-            font_bold,
-        )
+    async with httpx.AsyncClient(follow_redirects=True, timeout=60) as client:
+        if not os.path.exists(logo):
+            await _download(
+                client,
+                "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Spotify/cat.png",
+                logo,
+            )
+        if not os.path.exists(font_mid):
+            await _download(
+                client,
+                "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Spotify/GoogleSans-Medium.ttf?raw=true",
+                font_mid,
+            )
+        if not os.path.exists(font_bold):
+            await _download(
+                client,
+                "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Spotify/ArialUnicodeMS.ttf?raw=true",
+                font_bold,
+            )
     return logo, font_bold, font_mid
 
 
-def sp_data(API):
+async def sp_data(API):
     oauth = {"Authorization": f"Bearer {SP_DATABASE.return_token()}"}
-    spdata = requests.get(API, headers=oauth)
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        spdata = await client.get(API, headers=oauth)
     if spdata.status_code == 401:
         # if token expire, generate again
-        spdata = refreshed_data(API)
+        spdata = await refreshed_data(API)
     return spdata
 
 
-def refreshed_data(API):
+async def refreshed_data(API):
     data = {
         "client_id": SPOTIFY_CLIENT_ID,
         "client_secret": SPOTIFY_CLIENT_SECRET,
         "grant_type": "refresh_token",
         "refresh_token": SP_DATABASE.return_refresh(),
     }
-    r = requests.post("https://accounts.spotify.com/api/token", data=data)
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        r = await client.post("https://accounts.spotify.com/api/token", data=data)
     received = r.json()
     # if a new refresh is token as well, we save it here
     with contextlib.suppress(KeyError):
@@ -535,19 +550,21 @@ def refreshed_data(API):
         },
     )
     oauth2 = {"Authorization": f"Bearer {SP_DATABASE.return_token()}"}
-    return requests.get(API, headers=oauth2)
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        return await client.get(API, headers=oauth2)
 
 
 async def make_thumb(url, client, song, artist, now, full):
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     pic_name = "./temp/cat.png"
-    urllib.request.urlretrieve(url, pic_name)
+    async with httpx.AsyncClient(follow_redirects=True, timeout=60) as client:
+        await _download(client, url, pic_name)
     background = Image.open(pic_name).resize((1024, 1024))
     background = background.filter(ImageFilter.GaussianBlur(5))
     enhancer = ImageEnhance.Brightness(background)
     background = enhancer.enhance(0.5)
-    logo, bfont, mfont = file_check()
+    logo, bfont, mfont = await file_check()
     cat = Image.open(logo, "r").resize((1024 // 5, 1024 // 5))
     thumbmask = Image.new("RGBA", (1024, 1024), 0)
     thumbmask.paste(background, (0, 0))
@@ -560,7 +577,9 @@ async def make_thumb(url, client, song, artist, now, full):
         photos = await client.get_profile_photos(client.uid)
         myphoto = await client.download_media(photos[0])
     except IndexError:
-        myphoto = urllib.request.urlretrieve("https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Spotify/SwagCat.jpg")
+        myphoto = "temp/swagcat.jpg"
+        async with httpx.AsyncClient(follow_redirects=True, timeout=60) as client:
+            await _download(client, "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Spotify/SwagCat.jpg", myphoto)
     user_lay = ellipse_layout_create(myphoto, 6, 30)
     thumbmask.paste(user_lay, (700, 450), user_lay)
     user, x = ellipse_create(myphoto, 7.5, 0)
@@ -614,7 +633,7 @@ async def spotify_inline_article():
             )
         ]
     else:
-        response = sp_data("https://api.spotify.com/v1/me/player/currently-playing")
+        response = await sp_data("https://api.spotify.com/v1/me/player/currently-playing")
         if response.status_code == 204:
             query = "__Currently not listening to any music on spotify...__"
             buttons = [Button.url("Open Spotify", "https://open.spotify.com/")]
@@ -646,7 +665,7 @@ async def spotify_player(event):
         return
     msg_id = await reply_id(event)
     catevent = await edit_or_reply(event, "🎶 `Fetching...`")
-    r = sp_data("https://api.spotify.com/v1/me/player/currently-playing")
+    r = await sp_data("https://api.spotify.com/v1/me/player/currently-playing")
     if r.status_code == 204:
         return await edit_delete(catevent, "\n**I'm not listening anything right now  ;)**")
     if SP_DATABASE.SPOTIFY_MODE:
@@ -671,8 +690,8 @@ async def spotify_info(event):
     if not await sp_var_check(event):
         return
     dic = {}
-    x = sp_data("https://api.spotify.com/v1/me")
-    y = sp_data("https://api.spotify.com/v1/me/player/devices")
+    x = await sp_data("https://api.spotify.com/v1/me")
+    y = await sp_data("https://api.spotify.com/v1/me/player/devices")
     uinfo = x.json()
     device = y.json()
     if x.status_code == 200:
@@ -706,7 +725,7 @@ async def spotify_recent(event):
     "Spotify recently played songs"
     if not await sp_var_check(event):
         return
-    x = sp_data("https://api.spotify.com/v1/me/player/recently-played?limit=15")
+    x = await sp_data("https://api.spotify.com/v1/me/player/recently-played?limit=15")
     if x.status_code == 200:
         song = "__**Spotify last played songs :-**__\n\n"
         songs = x.json()
@@ -743,7 +762,7 @@ async def spotify_now(event):
     if not link:
         if not await sp_var_check(event):
             return
-        r = sp_data("https://api.spotify.com/v1/me/player/currently-playing")
+        r = await sp_data("https://api.spotify.com/v1/me/player/currently-playing")
         if r.status_code == 204:
             return await edit_delete(catevent, "**I'm not listening anything right now  ;)**")
         received = r.json()

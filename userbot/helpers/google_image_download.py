@@ -2,7 +2,7 @@ import os
 import random
 import time
 
-import requests
+import httpx
 from googleapiclient.discovery import build
 from icrawler.builtin import GoogleImageCrawler
 
@@ -66,7 +66,7 @@ def search_and_download_images(query, api_key, cse_id, num_images=3):
             image_url = item["link"]
 
             # Download the image
-            response = requests.get(image_url)
+            response = httpx.get(image_url, follow_redirects=True, timeout=60)
 
             # Check if the request was successful
             if response.status_code == 200:

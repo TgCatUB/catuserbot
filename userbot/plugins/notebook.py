@@ -1,6 +1,7 @@
 import os
-import urllib
 
+import aiofiles
+import httpx
 from telethon.tl.functions.users import GetFullUserRequest
 
 from ..Config import Config
@@ -11,6 +12,14 @@ from ..sql_helper.globals import addgvar, gvarstatus
 from . import BOTLOG, BOTLOG_CHATID, catub, reply_id
 
 plugin_category = "tools"
+
+
+async def _download(url, path):
+    async with httpx.AsyncClient(follow_redirects=True, timeout=60) as client:
+        resp = await client.get(url)
+    async with aiofiles.open(path, "wb") as file:
+        await file.write(resp.content)
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Pages = {
@@ -231,8 +240,8 @@ async def write_page(event):  # sourcery skip: low-code-quality
                 return await edit_delete(event, "**ಠ∀ಠ Reply to any kinda Text file**")
             if await media_type(rtext) == "Document":
                 file_name = await rtext.download_media(Config.TEMP_DIR)
-                with open(file_name, "r") as f:
-                    text = f.read()
+                async with aiofiles.open(file_name, "r") as f:
+                    text = await f.read()
                 if os.path.exists(file_name):
                     os.remove(file_name)
         if not text and rtext:
@@ -251,12 +260,12 @@ async def write_page(event):  # sourcery skip: low-code-quality
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     if not os.path.exists(temp_name):
-        urllib.request.urlretrieve(
+        await _download(
             f"https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Notebook/Images/{page}.jpg",
             temp_name,
         )
     if not os.path.exists(font_name):
-        urllib.request.urlretrieve(
+        await _download(
             f"https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Notebook/Fonts/{font}.ttf?raw=true",
             font_name,
         )
@@ -375,7 +384,7 @@ async def notebook_conf(event):  # sourcery skip: low-code-quality
         return await edit_delete(event, cap)
     await event.delete()
     file = f"{temp_page}.jpg"
-    urllib.request.urlretrieve(
+    await _download(
         f"https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/Notebook/Images/{temp_page}.jpg",
         file,
     )

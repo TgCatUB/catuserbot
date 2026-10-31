@@ -17,6 +17,7 @@ gtts
 hachoir
 heroku3
 html-telegraph-poster
+aiofiles
 httpx[http2]
 humanize
 icrawler

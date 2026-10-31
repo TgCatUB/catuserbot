@@ -10,10 +10,10 @@
 import os
 import random
 import textwrap
-import urllib
 from io import BytesIO
 
-import requests
+import aiofiles
+import httpx
 from PIL import Image, ImageDraw, ImageFont
 
 from userbot import Convert, catub
@@ -25,17 +25,25 @@ from ..helpers.utils import reply_id
 plugin_category = "fun"
 
 
-def file_checker(template):
+async def _download(client, url, path):
+    resp = await client.get(url)
+    async with aiofiles.open(path, "wb") as file:
+        await file.write(resp.content)
+
+
+async def file_checker(template):
     if not os.path.isdir("./temp"):
         os.mkdir("./temp")
     tempname = "./temp/cat_temp.png"
     fontname = "./temp/ArialUnicodeMS.ttf"
-    urllib.request.urlretrieve(template, tempname)
-    if not os.path.exists(fontname):
-        urllib.request.urlretrieve(
-            "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Spotify/ArialUnicodeMS.ttf?raw=true",
-            fontname,
-        )
+    async with httpx.AsyncClient(follow_redirects=True, timeout=60) as client:
+        await _download(client, template, tempname)
+        if not os.path.exists(fontname):
+            await _download(
+                client,
+                "https://github.com/TgCatUB/CatUserbot-Resources/blob/master/Resources/Spotify/ArialUnicodeMS.ttf?raw=true",
+                fontname,
+            )
     return tempname, fontname
 
 
@@ -88,8 +96,9 @@ async def sticklet(event):
     image = Image.new("RGBA", (512, 512), (255, 255, 255, 0))
     draw = ImageDraw.Draw(image)
     fontsize = 230
-    json = requests.get("https://raw.githubusercontent.com/TgCatUB/CatUserbot-Resources/master/Resources/StickerFun/resources.txt").json()
-    FONT_FILE = requests.get(random.choice(json["fonts"]))
+    async with httpx.AsyncClient(follow_redirects=True, timeout=60) as client:
+        json = (await client.get("https://raw.githubusercontent.com/TgCatUB/CatUserbot-Resources/master/Resources/StickerFun/resources.txt")).json()
+        FONT_FILE = await client.get(random.choice(json["fonts"]))
     font = ImageFont.truetype(BytesIO(FONT_FILE.content), size=fontsize)
     while draw.multiline_textsize(sticktext, font=font) > (512, 512):
         fontsize -= 3
@@ -220,7 +229,7 @@ async def quby(event):
     if not text:
         return await edit_delete(event, "__What is quby supposed to say? Give some text.__")
     await edit_delete(event, "`Wait, processing.....`")
-    temp_name, fontname = file_checker("https://graph.org/file/09f4df5a129758a2e1c9c.jpg")
+    temp_name, fontname = await file_checker("https://graph.org/file/09f4df5a129758a2e1c9c.jpg")
     lines = 3
     text = soft_deEmojify(text)
     if len(text) < 80:
@@ -300,7 +309,7 @@ async def knife(event):
     if not text:
         return await edit_delete(event, "__What is blob supposed to say? Give some text.__")
     await edit_delete(event, "`Wait, processing.....`")
-    temp_name, fontname = file_checker("https://graph.org/file/2188367c8c5f43c36aa59.jpg")
+    temp_name, fontname = await file_checker("https://graph.org/file/2188367c8c5f43c36aa59.jpg")
     text = soft_deEmojify(text)
     if len(text) < 50:
         font = 90
@@ -351,7 +360,7 @@ async def doge(event):
         return await edit_delete(event, "__What is doge supposed to say? Give some text.__")
     await edit_delete(event, "`Wait, processing.....`")
     text = soft_deEmojify(text)
-    temp_name, fontname = file_checker("https://graph.org/file/6f621b9782d9c925bd6c4.jpg")
+    temp_name, fontname = await file_checker("https://graph.org/file/6f621b9782d9c925bd6c4.jpg")
     font, wrap, lines, ls = (90, 1.9, 5, "-75") if len(text) < 140 else (70, 1.3, 6, "-55")
     file, txt = higlighted_text(
         temp_name,
@@ -428,7 +437,7 @@ async def penguin(event):
     if not text:
         return await edit_delete(event, "What is penguin supposed to say? Give some text.")
     await edit_delete(event, "Wait, processing.....")
-    temp_name, fontname = file_checker("https://graph.org/file/ee1fc91bbaef2cc808c7c.png")
+    temp_name, fontname = await file_checker("https://graph.org/file/ee1fc91bbaef2cc808c7c.png")
     text = soft_deEmojify(text)
     font, wrap, lines = (90, 4, 5) if len(text) < 50 else (70, 4.5, 7)
     bg, fg, alpha, ls, lines = ("black", "white", 255, "-30", lines - 2) if cmd == "h" else ("white", "black", 0, "-60", lines)
@@ -486,7 +495,7 @@ async def gandhi(event):
     if not text:
         return await edit_delete(event, "What is gandhi supposed to write? Give some text.")
     await edit_delete(event, "Wait, processing.....")
-    temp_name, fontname = file_checker("https://graph.org/file/3bebc56ee82cce4f300ce.jpg")
+    temp_name, fontname = await file_checker("https://graph.org/file/3bebc56ee82cce4f300ce.jpg")
     text = soft_deEmojify(text)
     font, wrap, lines = (90, 3, 5) if len(text) < 75 else (70, 2.8, 7)
     bg, fg, alpha, ls, lines = ("white", "black", 255, "-30", lines - 1) if cmd == "h" else ("black", "white", 0, "-60", lines)

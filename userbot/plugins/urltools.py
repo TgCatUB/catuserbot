@@ -1,4 +1,4 @@
-import requests
+import httpx
 from validators.url import url
 
 from userbot import catub
@@ -32,7 +32,9 @@ async def _(event):
     if not check:
         return await edit_delete(event, "`the given link is not supported`", 5)
     sample_url = f"https://da.gd/dns/{input_str}"
-    if response_api := requests.get(sample_url).text:
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        response_api = (await client.get(sample_url)).text
+    if response_api:
         await edit_or_reply(event, f"DNS records of {input_str} are \n{response_api}")
     else:
         await edit_or_reply(event, f"__I can't seem to find `{input_str}` on the internet__")
@@ -64,7 +66,9 @@ async def _(event):
     if not input_str.startswith("http"):
         input_str = f"http://{input_str}"
     sample_url = f"https://da.gd/s?url={input_str}"
-    if response_api := requests.get(sample_url).text:
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        response_api = (await client.get(sample_url)).text
+    if response_api:
         await edit_or_reply(event, f"Generated {response_api} for {input_str}.", link_preview=False)
     else:
         await edit_or_reply(event, "`Something is wrong, please try again later.`")
@@ -95,7 +99,8 @@ async def _(event):
         return await edit_delete(event, "`the given link is not supported`", 5)
     if not input_str.startswith("http"):
         input_str = f"http://{input_str}"
-    r = requests.get(input_str, allow_redirects=False)
+    async with httpx.AsyncClient(follow_redirects=False, timeout=30) as client:
+        r = await client.get(input_str)
     if str(r.status_code).startswith("3"):
         await edit_or_reply(
             event,

@@ -2,7 +2,8 @@
 
 import os
 
-import requests
+import aiofiles
+import httpx
 
 from userbot import catub
 
@@ -33,13 +34,14 @@ async def detect(event):
     if not media.endswith(("png", "jpg", "webp")):
         return await edit_delete(event, "`Reply to any image or non animated sticker !`", 5)
     catevent = await edit_or_reply(event, "`Detecting NSFW limit...`")
-    r = requests.post(
-        "https://api.deepai.org/api/nsfw-detector",
-        files={
-            "image": open(media, "rb"),
-        },
-        headers={"api-key": Config.DEEP_AI},
-    )
+    async with aiofiles.open(media, "rb") as image_file:
+        image = await image_file.read()
+    async with httpx.AsyncClient(follow_redirects=True, timeout=60) as client:
+        r = await client.post(
+            "https://api.deepai.org/api/nsfw-detector",
+            files={"image": image},
+            headers={"api-key": Config.DEEP_AI},
+        )
     os.remove(media)
     if "status" in r.json():
         return await edit_delete(catevent, r.json()["status"])

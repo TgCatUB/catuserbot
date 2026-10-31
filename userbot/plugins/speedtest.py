@@ -1,5 +1,6 @@
 # Powered by speedtest.net
 
+from asyncio import to_thread
 from time import time
 
 import speedtest
@@ -48,10 +49,10 @@ async def _(event):
         as_text = True
     catevent = await edit_or_reply(event, "`Calculating my internet speed. Please wait!`")
     start = time()
-    s = speedtest.Speedtest()
-    s.get_best_server()
-    s.download()
-    s.upload()
+    s = await to_thread(speedtest.Speedtest)
+    await to_thread(s.get_best_server)
+    await to_thread(s.download)
+    await to_thread(s.upload)
     end = time()
     ms = round(end - start, 2)
     response = s.results.dict()
@@ -63,7 +64,7 @@ async def _(event):
     i_s_p_rating = client_infos.get("isprating")
     reply_msg_id = await reply_id(event)
     try:
-        response = s.results.share()
+        response = await to_thread(s.results.share)
         speedtest_image = response
         if as_text:
             await catevent.edit(

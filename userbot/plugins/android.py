@@ -1,7 +1,7 @@
 import json
 
+import httpx
 from bs4 import BeautifulSoup
-from requests import get
 
 from userbot import catub
 
@@ -28,8 +28,10 @@ async def kakashi(event):
     }
 
     releases = "**Latest Magisk Releases**\n\n"
-    for name, release_url in magisk_dict.items():
-        data = get(release_url).json()
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        responses = {name: await client.get(release_url) for name, release_url in magisk_dict.items()}
+    for name, response in responses.items():
+        data = response.json()
         releases += f"{name}: [APK v{data['magisk']['version']}]({data['magisk']['link']}) | [Changelog]({data['magisk']['note']})\n"
     await edit_or_reply(event, releases)
 
@@ -52,7 +54,9 @@ async def device_info(event):
             codename = textx.text
         else:
             return await edit_delete(event, "`Usage: .device <codename> / <model>`")
-    data = json.loads(get("https://raw.githubusercontent.com/androidtrackers/certified-android-devices/master/by_device.json").text)
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        response = await client.get("https://raw.githubusercontent.com/androidtrackers/certified-android-devices/master/by_device.json")
+    data = json.loads(response.text)
     if results := data.get(codename.lower()):
         reply = f"**Search results for `{codename.lower()}` :**\n\n"
         for item in results:
@@ -84,7 +88,9 @@ async def codename_info(event):
     else:
         return await edit_delete(event, "`Usage: .codename <brand> <device>`")
 
-    data = json.loads(get("https://raw.githubusercontent.com/androidtrackers/certified-android-devices/master/by_brand.json").text)
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        response = await client.get("https://raw.githubusercontent.com/androidtrackers/certified-android-devices/master/by_brand.json")
+    data = json.loads(response.text)
     devices_lower = {k.lower(): v for k, v in data.items()}
     devices = devices_lower.get(brand)
     if not devices:
@@ -119,7 +125,8 @@ async def twrp(event):
         device = textx.text.split(" ")[0]
     else:
         return await edit_delete(event, "`Usage: .twrp <codename>`")
-    url = get(f"https://dl.twrp.me/{device}/")
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        url = await client.get(f"https://dl.twrp.me/{device}/")
     if url.status_code == 404:
         reply = f"`Couldn't find twrp downloads for {device}!`\n"
         return await edit_delete(event, reply)

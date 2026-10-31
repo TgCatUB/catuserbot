@@ -1,5 +1,6 @@
 # Special credits: @spechide (ported from uniborg)
 
+import aiofiles
 import asyncio
 import contextlib
 import io
@@ -30,7 +31,7 @@ async def convert_video(video_file, output_directory, crf, total_time, bot, mess
     # https://stackoverflow.com/a/13891070/4723940
     out_put_file_name = f"{output_directory}/{str(round(time.time()))}.mp4"
     progress = f"{output_directory}/progress.txt"
-    with open(progress, "w") as file:
+    async with aiofiles.open(progress, "w"):
         pass
     COMPRESSION_START_TIME = time.time()
     process = await asyncio.create_subprocess_shell(
@@ -41,8 +42,8 @@ async def convert_video(video_file, output_directory, crf, total_time, bot, mess
     LOGGER.info(f"ffmpeg_process: {str(process.pid)}")
     while process.returncode != 0:
         await asyncio.sleep(3)
-        with open("./temp/progress.txt", "r+") as file:
-            text = file.read()
+        async with aiofiles.open("./temp/progress.txt", "r+") as file:
+            text = await file.read()
             frame = re.findall(r"frame=(\d+)", text)
             time_in_us = re.findall(r"out_time_ms=(\d+)", text)
             progress = re.findall(r"progress=(\w+)", text)

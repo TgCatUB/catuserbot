@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 
 import lyricsgenius
-import requests
+import httpx
 from bs4 import BeautifulSoup
 
 from ...Config import Config
@@ -65,7 +65,7 @@ class LyricGenius:
             if not lyrics:
                 base_url = "https://api.musixmatch.com/ws/1.1/"
                 endpoint = base_url + f"matcher.lyrics.get?format=json&q_track={title}&q_artist={artist}&apikey=bf9bfaeccae52f5a4366bcdb2a6b0c4e"
-                response = requests.get(endpoint)
+                response = httpx.get(endpoint, follow_redirects=True, timeout=30)
                 data = response.json()
                 lyrics = data["message"]["body"]["lyrics"]["lyrics_body"]
         return link, lyrics

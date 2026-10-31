@@ -1,8 +1,10 @@
+import asyncio
 import base64
 import contextlib
 import io
 import os
 
+import aiofiles
 from ShazamAPI import Shazam
 from telethon import types
 from telethon.errors.rpcerrorlist import YouBlockedUserError
@@ -154,10 +156,11 @@ async def shazamcmd(event):
             out=dl,
         )
         dl.close()
-        mp3_fileto_recognize = open(name, "rb").read()
+        async with aiofiles.open(name, "rb") as audio:
+            mp3_fileto_recognize = await audio.read()
         shazam = Shazam(mp3_fileto_recognize)
         recognize_generator = shazam.recognizeSong()
-        track = next(recognize_generator)[1]["track"]
+        track = (await asyncio.to_thread(next, recognize_generator))[1]["track"]
     except Exception as e:
         LOGS.error(e)
         return await edit_delete(catevent, f"**Error while reverse searching song:**\n__{e}__")

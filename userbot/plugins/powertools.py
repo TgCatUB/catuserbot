@@ -1,6 +1,6 @@
+import asyncio
 import os
 from asyncio.exceptions import CancelledError
-from time import sleep
 
 from userbot import catub
 
@@ -65,7 +65,7 @@ async def _(event):
         await event.client.send_message(BOTLOG_CHATID, "#SHUTDOWN \nBot shut down")
     await edit_or_reply(event, "`Turning off bot now ...Manually turn me on later`")
     if HEROKU_APP is not None:
-        HEROKU_APP.process_formation()["worker"].scale(0)
+        await asyncio.to_thread(lambda: HEROKU_APP.process_formation()["worker"].scale(0))
     else:
         os._exit(143)
 
@@ -88,7 +88,7 @@ async def _(event):
         await event.client.send_message(BOTLOG_CHATID, f"You put the bot to sleep for {counter} seconds")
 
     event = await edit_or_reply(event, f"`ok, let me sleep for {counter} seconds`")
-    sleep(counter)
+    await asyncio.sleep(counter)
     await event.edit("`OK, I'm awake now.`")
 
 

@@ -2,7 +2,6 @@ import asyncio
 import io
 import os
 import pathlib
-import subprocess
 import time
 from datetime import datetime
 from pathlib import Path
@@ -44,7 +43,7 @@ async def catlst_of_files(path):
     return files
 
 
-def get_video_thumb(file, output=None, width=320):
+async def get_video_thumb(file, output=None, width=320):
     output = f"{file}.jpg"
     metadata = extractMetadata(createParser(file))
     cmd = [
@@ -58,12 +57,12 @@ def get_video_thumb(file, output=None, width=320):
         "1",
         output,
     ]
-    p = subprocess.Popen(
-        cmd,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.DEVNULL,
+    p = await asyncio.create_subprocess_exec(
+        *cmd,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.DEVNULL,
     )
-    p.communicate()
+    await p.communicate()
     if not p.returncode and os.path.lexists(file):
         return output
 

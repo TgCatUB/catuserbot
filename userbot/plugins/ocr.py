@@ -1,6 +1,7 @@
 import os
 
-import requests
+import aiofiles
+import httpx
 from googletrans import LANGUAGES
 
 from ..Config import Config
@@ -31,10 +32,12 @@ async def ocr_space_file(filename, overlay=False, api_key=Config.OCR_SPACE_API_K
         "apikey": api_key,
         "language": language,
     }
-    with open(filename, "rb") as f:
-        r = requests.post(
+    async with aiofiles.open(filename, "rb") as f:
+        content = await f.read()
+    async with httpx.AsyncClient(follow_redirects=True, timeout=60) as client:
+        r = await client.post(
             "https://api.ocr.space/parse/image",
-            files={filename: f},
+            files={filename: content},
             data=payload,
         )
     return r.json()

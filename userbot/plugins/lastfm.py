@@ -2,7 +2,7 @@
 #
 # Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.from asyncio import sleep
-from asyncio import sleep
+from asyncio import sleep, to_thread
 from os import environ
 from re import sub
 from sys import setrecursionlimit
@@ -68,15 +68,15 @@ LASTFM_ = LASTFM()
 
 async def gettags(track=None, isNowPlaying=None, playing=None):
     if isNowPlaying:
-        tags = playing.get_top_tags()
+        tags = await to_thread(playing.get_top_tags)
         arg = playing
         if not tags:
-            tags = playing.artist.get_top_tags()
+            tags = await to_thread(playing.artist.get_top_tags)
     else:
-        tags = track.track.get_top_tags()
+        tags = await to_thread(track.track.get_top_tags)
         arg = track.track
     if not tags:
-        tags = arg.artist.get_top_tags()
+        tags = await to_thread(arg.artist.get_top_tags)
     tags = "".join(f" #{t.item.__str__()}" for t in tags[:5])
     tags = sub("^ ", "", tags)
     tags = sub(" ", "_", tags)
@@ -98,7 +98,7 @@ async def get_curr_track(lfmbio):  # sourcery no-metrics
                 LASTFM_.USER_ID = (await lfmbio.client.get_me()).id
             user_info = (await catub(GetFullUserRequest(LASTFM_.USER_ID))).full_user
             LASTFM_.RUNNING = True
-            playing = User(LASTFM_USERNAME, lastfm).get_now_playing()
+            playing = await to_thread(User(LASTFM_USERNAME, lastfm).get_now_playing)
             LASTFM_.SONG = playing.get_title()
             LASTFM_.ARTIST = playing.get_artist()
             oldsong = environ.get("oldsong", None)
@@ -157,11 +157,11 @@ async def last_fm(lastFM):
     ".lastfm command, fetch scrobble data from last.fm."
     catevent = await edit_or_reply(lastFM, "Processing...")
     preview = None
-    playing = User(LASTFM_USERNAME, lastfm).get_now_playing()
+    playing = await to_thread(User(LASTFM_USERNAME, lastfm).get_now_playing)
     username = f"https://www.last.fm/user/{LASTFM_USERNAME}"
     if playing is not None:
         try:
-            image = User(LASTFM_USERNAME, lastfm).get_now_playing().get_cover_image()
+            image = await to_thread(playing.get_cover_image)
         except IndexError:
             image = None
         tags = await gettags(isNowPlaying=True, playing=playing)
@@ -173,8 +173,8 @@ async def last_fm(lastFM):
         else:
             output = f"[{LASTFM_USERNAME}]({username}) __is now listening to:__\n\n• [{playing}]({rectrack})\n"
     else:
-        recent = User(LASTFM_USERNAME, lastfm).get_recent_tracks(limit=3)
-        playing = User(LASTFM_USERNAME, lastfm).get_now_playing()
+        recent = await to_thread(User(LASTFM_USERNAME, lastfm).get_recent_tracks, limit=3)
+        playing = await to_thread(User(LASTFM_USERNAME, lastfm).get_now_playing)
         output = f"[{LASTFM_USERNAME}]({username}) __was last listening to:__\n\n"
         for i, track in enumerate(recent):
             LOGS.info(i)

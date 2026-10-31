@@ -1,11 +1,16 @@
 import json
 
-import requests
+import httpx
 
 from ...Config import Config
 from ...core.logger import logging
 
 LOGS = logging.getLogger("CatUserbot")
+
+
+async def _post(siteurl, **kwargs):
+    async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
+        return await client.post(siteurl, **kwargs)
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36",
@@ -20,10 +25,10 @@ async def p_paste(message, extension=None):
     siteurl = "https://pasty.lus.pm/api/v1/pastes"
     data = {"content": message}
     try:
-        response = requests.post(url=siteurl, data=json.dumps(data), headers=headers)
+        response = await _post(siteurl, content=json.dumps(data), headers=headers)
     except Exception as e:
         return {"error": str(e)}
-    if response.ok:
+    if response.is_success:
         response = response.json()
         purl = f"https://pasty.lus.pm/{response['id']}.{extension}" if extension else f"https://pasty.lus.pm/{response['id']}.txt"
         try:
@@ -49,10 +54,10 @@ async def s_paste(message, extension="txt"):
     """
     siteurl = "https://spaceb.in/api/"
     try:
-        response = requests.post(siteurl, json={"content": message, "extension": extension})
+        response = await _post(siteurl, json={"content": message, "extension": extension})
     except Exception as e:
         return {"error": str(e)}
-    if response.ok:
+    if response.is_success:
         response = response.json()
         if response["error"] != "" and response["status"] < 400:
             return {"error": response["error"]}
@@ -64,16 +69,16 @@ async def s_paste(message, extension="txt"):
     return {"error": "Unable to reach spacebin."}
 
 
-def spaste(message, extension="txt"):
+async def spaste(message, extension="txt"):
     """
     To Paste the given message/text/code to spaceb.in
     """
     siteurl = "https://spaceb.in/api/"
     try:
-        response = requests.post(siteurl, data={"content": message, "extension": extension})
+        response = await _post(siteurl, data={"content": message, "extension": extension})
     except Exception as e:
         return {"error": str(e)}
-    if response.ok:
+    if response.is_success:
         response = response.json()
         if response["error"] != "" and response["status"] < 400:
             return {"error": response["error"]}
@@ -92,10 +97,10 @@ async def n_paste(message, extension=None):
     siteurl = "https://nekobin.com/api/documents"
     data = {"content": message}
     try:
-        response = requests.post(url=siteurl, data=json.dumps(data), headers=headers)
+        response = await _post(siteurl, content=json.dumps(data), headers=headers)
     except Exception as e:
         return {"error": str(e)}
-    if response.ok:
+    if response.is_success:
         response = response.json()
         purl = f"nekobin.com/{response['result']['key']}.{extension}" if extension else f"nekobin.com/{response['result']['key']}"
         return {
@@ -113,10 +118,10 @@ async def d_paste(message, extension=None):
     siteurl = "http://catbin.up.railway.app/documents"
     data = {"content": message}
     try:
-        response = requests.post(url=siteurl, data=json.dumps(data), headers=headers)
+        response = await _post(siteurl, content=json.dumps(data), headers=headers)
     except Exception as e:
         return {"error": str(e)}
-    if response.ok:
+    if response.is_success:
         response = response.json()
         purl = f"http://catbin.up.railway.app/{response['key']}.{extension}" if extension else f"http://catbin.up.railway.app/{response['key']}"
         return {

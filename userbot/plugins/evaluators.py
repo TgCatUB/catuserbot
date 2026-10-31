@@ -8,6 +8,8 @@ import os
 import sys
 import traceback
 
+import aiofiles
+
 from ..helpers.utils import _format
 from . import *
 
@@ -102,9 +104,10 @@ async def aexec(code, smessatatus):
     message = event = smessatatus
     p = lambda _x: print(_format.yaml_format(_x))  # noqa E731
     reply = await event.get_reply_message()
-    exec(("async def __aexec(message, event , reply, client, p, chat): " + "".join(f"\n {line}" for line in code.split("\n"))))
+    namespace = {}
+    exec(("async def __aexec(message, event , reply, client, p, chat): " + "".join(f"\n {line}" for line in code.split("\n"))), globals(), namespace)
 
-    return await locals()["__aexec"](message, event, reply, message.client, p, message.chat_id)
+    return await namespace["__aexec"](message, event, reply, message.client, p, message.chat_id)
 
 
 @catub.cat_cmd(
@@ -167,9 +170,9 @@ async def search_func(event):
 
     filepath = inspect.getfile(source)
     caption = f"**Source:**  `{filepath}`"
-    with open(filename, "w") as f:
+    async with aiofiles.open(filename, "w") as f:
         text = inspect.getsource(source)
-        f.write(text)
+        await f.write(text)
 
     await catevent.delete()
     await catub.send_file(
