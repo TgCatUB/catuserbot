@@ -1,10 +1,16 @@
+import io
 import json
 import math
 import os
 import random
+import requests
 import re
 import time
+import urllib.parse
+import textwrap
 from pathlib import Path
+
+from PIL import Image, ImageDraw, ImageFont
 
 from telethon import Button, types
 from telethon.events import CallbackQuery, InlineQuery
@@ -456,6 +462,9 @@ async def inline_handler(event):
     elif str_y[0].lower() == "ytdl" and len(str_y) == 2:
         result = await youtube_data_article(event, str_y)
         await event.answer([result] if result else None)
+    elif str_y[0].lower() == "google" and len(str_y) >= 2:
+        result = await google_search_article(event, str_y[1].strip())
+        await event.answer([result] if result else None)
     elif string == "age_verification_alert":
         result = await age_verification_article(event)
         await event.answer([result] if result else None)
@@ -517,6 +526,65 @@ async def youtube_data_article(event, str_y):
             description="INVALID",
         )
     return result
+
+async def google_search_article(event, input_str):
+    font_url = "https://github.com/TgCatUB/CatUserbot-Resources/raw/master/Resources/fonts/roboto_regular.ttf"
+    image_url = "https://raw.githubusercontent.com/TgCatUB/CatUserbot-Resources/refs/heads/master/Resources/Inline/google.webp"
+    font_res = requests.get(font_url)
+    font_res.raise_for_status()
+    font_data = io.BytesIO(font_res.content)
+
+    img_res = requests.get(image_url)
+    img_res.raise_for_status()
+    img = Image.open(io.BytesIO(img_res.content)).convert("RGBA")
+    
+    draw = ImageDraw.Draw(img)
+
+    box_x1, box_y1, box_x2, box_y2 = 40, 240, 472, 370
+    box_width = box_x2 - box_x1
+    box_height = box_y2 - box_y1
+
+    font_size = 40
+    if len(input_str) > 35:
+        font_size = 32
+    if len(input_str) > 80:
+        font_size = 24
+    
+    font = ImageFont.truetype(font_data, font_size)
+
+    avg_char_width = font.getlength("a") if hasattr(font, "getlength") else font.getsize("a")[0]
+    chars_per_line = max(1, int(box_width / (avg_char_width * 1.05)))
+    
+    lines = textwrap.wrap(input_str, width=chars_per_line)
+    wrapped_text = "\n".join(lines)
+
+    if hasattr(draw, "multiline_textbbox"):
+        left, top, right, bottom = draw.multiline_textbbox((0, 0), wrapped_text, font=font)
+    else:
+        w, h = draw.multiline_textsize(wrapped_text, font=font)
+        left, top, right, bottom = 0, 0, w, h
+        
+    text_w = right - left
+    text_h = bottom - top
+
+    x = box_x1 + (box_width - text_w) / 2
+    y = box_y1 + (box_height - text_h) / 2
+
+    draw.multiline_text((x, y), wrapped_text, font=font, fill="#3c4043", align="center")
+    out_buffer = io.BytesIO()
+    out_buffer.name = "google_search.png"
+    img.save(out_buffer, "PNG")
+    out_buffer.seek(0)
+
+    search_query_url = f"https://www.google.com/search?q={urllib.parse.quote_plus(input_str)}"
+    buttons = [Button.url("Google Search", search_query_url)]
+    
+    uploaded_file = await catub.tgbot.upload_file(out_buffer)
+    return event.builder.photo(
+        file=uploaded_file,
+        text="", # Ensuring only the image and button are sent
+        buttons=buttons
+    )
 
 
 async def hide_troll_secret(event, query, match, match3):
