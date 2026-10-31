@@ -1,3 +1,4 @@
+import asyncio
 import json
 import math
 import os
@@ -6,6 +7,7 @@ import re
 import time
 from pathlib import Path
 
+import aiofiles
 from telethon import Button, types
 from telethon.events import CallbackQuery, InlineQuery
 from youtubesearchpython import VideosSearch
@@ -438,9 +440,11 @@ async def inline_handler(event):
         await event.answer([result] if result else None)
         if jsondata:
             jsondata.update(new_msg)
-            json.dump(jsondata, open(old_msg, "w"))
+            async with aiofiles.open(old_msg, "w") as f:
+                await f.write(json.dumps(jsondata))
         else:
-            json.dump(new_msg, open(old_msg, "w"))
+            async with aiofiles.open(old_msg, "w") as f:
+                await f.write(json.dumps(new_msg))
     elif string == "help":
         result = await help_article(event)
         await event.answer([result] if result else None)
@@ -471,8 +475,8 @@ async def youtube_data_article(event, str_y):
     link = get_yt_video_id(str_y[1].strip())
     found_ = True
     if link is None:
-        search = VideosSearch(str_y[1].strip(), limit=15)
-        resp = (search.result()).get("result")
+        search = await asyncio.to_thread(VideosSearch, str_y[1].strip(), limit=15)
+        resp = (await asyncio.to_thread(search.result)).get("result")
         if len(resp) == 0:
             found_ = False
         else:
@@ -554,7 +558,8 @@ async def hide_troll_secret(event, query, match, match3):
         sandy = sandy[:-1]
     old_msg = os.path.join("./userbot", f"{info_type[0]}.txt")
     try:
-        jsondata = json.load(open(old_msg))
+        async with aiofiles.open(old_msg) as f:
+            jsondata = json.loads(await f.read())
     except Exception:
         jsondata = False
     timestamp = int(time.time() * 2)
