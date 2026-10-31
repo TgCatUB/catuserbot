@@ -2,6 +2,7 @@ import json
 import os
 import re
 
+import aiofiles
 from telethon.events import CallbackQuery
 
 from userbot import catub
@@ -11,7 +12,8 @@ from userbot import catub
 async def on_plug_in_callback_query_handler(event):
     timestamp = int(event.pattern_match.group(1).decode("UTF-8"))
     if os.path.exists("./userbot/secret.txt"):
-        jsondata = json.load(open("./userbot/secret.txt"))
+        async with aiofiles.open("./userbot/secret.txt") as f:
+            jsondata = json.loads(await f.read())
         try:
             message = jsondata[f"{timestamp}"]
             userid = message["userid"]
