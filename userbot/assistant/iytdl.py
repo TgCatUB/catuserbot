@@ -13,6 +13,7 @@ import re
 from pathlib import Path
 from time import time
 
+import aiofiles
 import ujson
 from telethon import Button, types
 from telethon.errors import BotResponseTimeoutError
@@ -168,8 +169,8 @@ async def ytdl_callback(c_q: CallbackQuery):
             "Search data doesn't exists anymore, please perform search again ...",
             alert=True,
         )
-    with open(PATH) as f:
-        view_data = ujson.load(f)
+    async with aiofiles.open(PATH) as f:
+        view_data = ujson.loads(await f.read())
     search_data = view_data.get(data_key)
     total = len(search_data) if search_data is not None else 0
     if total == 0:
