@@ -21,6 +21,7 @@ import re
 import time
 from typing import Dict, Tuple
 
+import aiofiles
 from telethon.errors.rpcerrorlist import MessageNotModifiedError
 
 from ..Config import Config
@@ -33,8 +34,8 @@ _TASKS: Dict[str, Tuple[int, int]] = {}
 
 async def md5(fname: str) -> str:
     hash_md5 = hashlib.md5()
-    with open(fname, "rb") as f:
-        for chunk in iter(lambda: f.read(4096), b""):
+    async with aiofiles.open(fname, "rb") as f:
+        while chunk := await f.read(4096):
             hash_md5.update(chunk)
     return hash_md5.hexdigest()
 
@@ -151,12 +152,12 @@ async def progress(
             round(percentage, 2),
         )
 
-        tmp = f"{progress_str}\n" f"`{humanbytes(current)} of {humanbytes(total)}" f" @ {humanbytes(speed)}`\n" f"**ETA :**` {time_formatter(eta)}`\n" f"**Duration :** `{time_formatter(elapsed_time)}`"
+        tmp = f"{progress_str}\n`{humanbytes(current)} of {humanbytes(total)} @ {humanbytes(speed)}`\n**ETA :**` {time_formatter(eta)}`\n**Duration :** `{time_formatter(elapsed_time)}`"
         if tmp != oldtmp:
             if file_name:
-                await gdrive.edit(f"**{prog_type}**\n\n" f"**File Name : **`{file_name}`**\nStatus**\n{tmp}")
+                await gdrive.edit(f"**{prog_type}**\n\n**File Name : **`{file_name}`**\nStatus**\n{tmp}")
             else:
-                await gdrive.edit(f"**{prog_type}**\n\n" f"**Status**\n{tmp}")
+                await gdrive.edit(f"**{prog_type}**\n\n**Status**\n{tmp}")
             oldtmp = tmp
 
 
