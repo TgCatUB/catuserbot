@@ -33,7 +33,7 @@ Pillow==13.0.0; python_version >= "3.11"
 pre-commit
 prettytable
 psutil
-psycopg2
+psycopg2-binary
 pyfiglet
 PyGithub
 pygments

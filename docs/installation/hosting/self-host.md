@@ -22,17 +22,17 @@ sudo apt-get update && sudo apt-get install nodejs -y
 
 {% code title="Change dir to catuserbot & make config.py to save config values" overflow="wrap" %}
 ```batch
-git clone https://github.com/TgCatUB/catuserbot && cd catuserbot && mv exampleconfig.py config.py
+git clone https://github.com/TgCatUB/catuserbot && cd catuserbot && mv .env.sample .env
 ```
 {% endcode %}
 
 ### 〣 _**Setup Chromium & its driver**_ <a href="#setup-chromium" id="setup-chromium"></a>
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th data-type="select" data-multiple></th><th data-hidden data-card-cover data-type="files"></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><em><mark style="color:blue;"><strong>Install Chromium or Google-Chrome</strong></mark></em></td><td></td><td><a href="../../.gitbook/assets/chromium_pokemon.jpg">chromium_pokemon.jpg</a></td><td><a href="../guide/chromium-or-chrome-setup.md#chromium">#chromium</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-cover data-type="files"></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><em><mark style="color:blue;"><strong>Install Chromium or Google-Chrome</strong></mark></em></td><td></td><td><a href="../../.gitbook/assets/chromium_pokemon.jpg">chromium_pokemon.jpg</a></td><td><a href="../guide/chromium-or-chrome-setup.md#chromium">#chromium</a></td></tr></tbody></table>
 
-### 〣 _**Edit the config.py with your config values**_ <a href="#edit-config" id="edit-config"></a>
+### 〣 _**Edit the .env with your config values**_ <a href="#edit-config" id="edit-config"></a>
 
-* Modify the <mark style="color:green;">config.py</mark> with any text editor, like `nano config.py`
+* Modify the <mark style="color:green;">.env</mark> with any text editor, like `nano config.py`
 * **Check :** [<mark style="color:blue;">**Config Values**</mark>](../variables/config-vars.md#mandatory-vars)
 
 ### 〣 _**Create a Virtual**_ environment _**& install requirements**_ <a href="#create-venv" id="create-venv"></a>
