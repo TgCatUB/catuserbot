@@ -334,9 +334,9 @@ A string value that represents the API key for the OpenAI API. This value is use
 
 A string value that represents the APPID for the OpenWeatherMap API. This API can be used to retrieve weather information for a location. The APPID can be obtained for free from the OpenWeatherMap website. Get your api from [openweathermap](https://home.openweathermap.org/api_keys)
 
-### 〣 `REM_BG_API_KEY`
+### 〣 `LEONARDO_API_KEY`
 
-A string value that represents the API key for the Remove.bg API. This API can be used to remove the background from an image. The API key can be obtained for free from the [Remove.bg](https://www.remove.bg/api) website.
+A string value that represents the API key for the Leonardo.Ai API, used by the `rmbg` plugin to remove the background from an image. Starting December 1, 2026 the remove.bg API moves to Leonardo.Ai ([migration guide](https://docs.leonardo.ai/docs/migrate-from-the-removebg-api-to-leonardoai)), so this replaces the old `REM_BG_API_KEY` and remove.bg keys won't work here. Create a key from the API Access page at [Leonardo.Ai](https://app.leonardo.ai/api-access).
 
 ### 〣 `SCREEN_SHOT_LAYER_ACCESS_KEY`
 

@@ -1,5 +1,6 @@
 # Special credits: @spechide (ported from uniborg)
 
+import base64
 import os
 
 import aiofiles
@@ -14,35 +15,51 @@ from ..helpers.utils import reply_id
 plugin_category = "utils"
 
 
+# remove.bg's API moved to Leonardo.Ai on December 1, 2026.
+# https://docs.leonardo.ai/docs/migrate-from-the-removebg-api-to-leonardoai
+async def remove_bg(image):
+    headers = {
+        "Authorization": f"Bearer {Config.LEONARDO_API_KEY}",
+    }
+    payload = {
+        "model": "remove-bg",
+        "ephemeral": True,
+        "parameters": {
+            "format": "png",
+            "guidances": {"image_reference": [{"image": image}]},
+        },
+    }
+    async with httpx.AsyncClient(follow_redirects=True, timeout=60) as client:
+        response = await client.post(
+            "https://cloud.leonardo.ai/api/rest/v2/generationssync",
+            headers=headers,
+            json=payload,
+        )
+        try:
+            data = response.json()
+        except ValueError:
+            data = None
+        results = data.get("results") if isinstance(data, dict) else None
+        if not results or not results[0].get("url"):
+            # Errors are JSON (often with HTTP 200), the caller shows the body.
+            return response
+        result = await client.get(results[0]["url"])
+        if result.status_code != 200:
+            return result
+        content_type = results[0].get("contentType") or "image/png"
+        return httpx.Response(200, headers={"content-type": content_type}, content=result.content)
+
+
 # this method will call the API, and return in the appropriate format
 # with the name provided.
 async def ReTrieveFile(input_file_name):
-    headers = {
-        "X-API-Key": Config.REM_BG_API_KEY,
-    }
     async with aiofiles.open(input_file_name, "rb") as image:
-        files = {
-            "image_file": (input_file_name, await image.read()),
-        }
-    async with httpx.AsyncClient(follow_redirects=True, timeout=60) as client:
-        return await client.post(
-            "https://api.remove.bg/v1.0/removebg",
-            headers=headers,
-            files=files,
-        )
+        data = base64.b64encode(await image.read()).decode()
+    return await remove_bg({"type": "BASE64", "data": data})
 
 
 async def ReTrieveURL(input_url):
-    headers = {
-        "X-API-Key": Config.REM_BG_API_KEY,
-    }
-    data = {"image_url": input_url}
-    async with httpx.AsyncClient(follow_redirects=True, timeout=60) as client:
-        return await client.post(
-            "https://api.remove.bg/v1.0/removebg",
-            headers=headers,
-            data=data,
-        )
+    return await remove_bg({"type": "URL", "url": input_url})
 
 
 @catub.cat_cmd(
@@ -64,10 +81,10 @@ async def ReTrieveURL(input_url):
 )
 async def remove_background(event):
     "To remove background of a image."
-    if Config.REM_BG_API_KEY is None:
+    if Config.LEONARDO_API_KEY is None:
         return await edit_delete(
             event,
-            "`You have to set REM_BG_API_KEY in Config vars with API token from remove.bg to use this plugin .`",
+            "`You have to set LEONARDO_API_KEY in Config vars with an API key from Leonardo.Ai to use this plugin. remove.bg moved its API there, so old REM_BG_API_KEY keys won't work.`",
             10,
         )
     cmd = event.pattern_match.group(1)
