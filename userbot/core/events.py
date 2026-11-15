@@ -97,7 +97,7 @@ async def safe_check_text(msg):  # sourcery no-metrics
             or (Config.OCR_SPACE_API_KEY and Config.OCR_SPACE_API_KEY in msg)
             or (Config.OPENAI_API_KEY and Config.OPENAI_API_KEY in msg)
             or (Config.GENIUS_API_TOKEN and Config.GENIUS_API_TOKEN in msg)
-            or (Config.REM_BG_API_KEY and Config.REM_BG_API_KEY in msg)
+            or (Config.LEONARDO_API_KEY and Config.LEONARDO_API_KEY in msg)
             or (Config.CURRENCY_API and Config.CURRENCY_API in msg)
             or (Config.G_DRIVE_CLIENT_ID and Config.G_DRIVE_CLIENT_ID in msg)
             or (Config.G_DRIVE_CLIENT_SECRET and Config.G_DRIVE_CLIENT_SECRET in msg)
