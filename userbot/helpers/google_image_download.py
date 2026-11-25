@@ -4,7 +4,7 @@ import time
 
 import httpx
 from googleapiclient.discovery import build
-from icrawler.builtin import GoogleImageCrawler
+from icrawler.builtin import BingImageCrawler, GoogleImageCrawler
 
 
 def create_directories(main_directory, dir_name):
@@ -30,9 +30,9 @@ def google_crawl_images(query, num_images=3):
 
     sub_directory = create_directories("downloads", sub_dir)
 
-    google_crawler = GoogleImageCrawler(storage={"root_dir": sub_directory})
+    crawler = BingImageCrawler(storage={"root_dir": sub_directory}, log_level=40)
 
-    google_crawler.crawl(keyword=query, max_num=num_images)
+    crawler.crawl(keyword=query, max_num=num_images)
 
     files = os.listdir(sub_directory)
 
