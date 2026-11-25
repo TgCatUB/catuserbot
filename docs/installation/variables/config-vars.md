@@ -94,7 +94,7 @@ postgresql://postgres:your_password@localhost:5432/catuserbot
 {% endtab %}
 
 {% tab title="CockroachDB" %}
-* Create a free Serverless cluster at [**Cockroach Labs**](https://www.cockroachlabs.com/). 
+* Create a free Serverless cluster at [**Cockroach Labs**](https://www.cockroachlabs.com/).
 
 * Click **Connect** on your dashboard and copy the provided **Connection String**.
 
@@ -336,7 +336,9 @@ A string value that represents the APPID for the OpenWeatherMap API. This API ca
 
 ### 〣 `LEONARDO_API_KEY`
 
-A string value that represents the API key for the Leonardo.Ai API, used by the `rmbg` plugin to remove the background from an image. Starting December 1, 2026 the remove.bg API moves to Leonardo.Ai ([migration guide](https://docs.leonardo.ai/docs/migrate-from-the-removebg-api-to-leonardoai)), so this replaces the old `REM_BG_API_KEY` and remove.bg keys won't work here. Create a key from the API Access page at [Leonardo.Ai](https://app.leonardo.ai/api-access).
+A string value that represents the Leonardo API key used by `rmbg` and `srmbg` to remove image backgrounds. The remove.bg self-service API stops accepting requests on December 1, 2026 ([shutdown FAQ](https://www.remove.bg/faq/), [migration guide](https://docs.leonardo.ai/docs/migrate-from-the-removebg-api-to-leonardoai)). Create a new key from the [Leonardo API Access page](https://app.leonardo.ai/api-access), enable API access and ensure your account has credits, then set `LEONARDO_API_KEY` and restart. Existing remove.bg keys and credits do not carry over. `REM_BG_API_KEY` is retained only for secret leak protection, never as a fallback credential; you can delete it after migrating.
+
+Reply to an image or sticker with `.rmbg` for a transparent PNG or `.srmbg` for a sticker, or supply an HTTPS image URL. HTTP URLs are not supported by the replacement API. Images are sent with `ephemeral: true`, so no lasting input or output assets are added to your Leonardo library. Background removal is metered; check [current API pricing](https://app.leonardo.ai/api-access/pricing-calculator) before use.
 
 ### 〣 `SCREEN_SHOT_LAYER_ACCESS_KEY`
 

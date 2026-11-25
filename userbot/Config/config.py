@@ -102,8 +102,10 @@ class Config(object):
     OCR_SPACE_API_KEY = os.environ.get("OCR_SPACE_API_KEY", None)
     # Genius lyrics get this value from https://genius.com/developers both has
     GENIUS_API_TOKEN = os.environ.get("GENIUS_API_TOKEN", None)
-    # remove.bg's API moved to Leonardo.Ai, get your API key from https://app.leonardo.ai/api-access
+    # Get a Leonardo API key from https://app.leonardo.ai/api-access
     LEONARDO_API_KEY = os.environ.get("LEONARDO_API_KEY", None)
+    # Retained only to protect existing remove.bg keys from being sent in public.
+    REM_BG_API_KEY = os.environ.get("REM_BG_API_KEY", None)
     # Get this value from https://free.currencyconverterapi.com/
     CURRENCY_API = os.environ.get("CURRENCY_API", None)
     # Google Drive plugin https://graph.org/G-Drive-guide-for-catuserbot-01-01
