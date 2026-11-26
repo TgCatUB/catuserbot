@@ -9,6 +9,7 @@
   * [📕 Self Host](installation/hosting/self-host.md)
   * [📕 Heroku](installation/hosting/heroku.md)
   * [📕 Railway](installation/hosting/railway.md)
+  * [📕 Service/Daemon](installation/hosting/service-daemon.md)
 * [📚 Variables](installation/variables/README.md)
   * [📕 Config Vars](installation/variables/config-vars.md)
   * [📕 Database Vars](installation/variables/database-vars.md)
