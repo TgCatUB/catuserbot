@@ -56,7 +56,7 @@ async def currency(event):
     except ValueError:
         return await edit_delete(event, "__Please provide a valid numeric value.__", time=10)
 
-    # 1. Primary: Fast zero-key exchange rate API (open.er-api.com)
+    # 1. Primary: Fast zero-key exchange rate API (open.er-api.com) for fiat currencies
     try:
         aresponse = await AioHttp().get_json(f"https://open.er-api.com/v6/latest/{fromcurrency}")
         if aresponse and aresponse.get("result") == "success":
@@ -68,11 +68,27 @@ async def currency(event):
                     event,
                     f"💱 **Currency Conversion:**\n`{value}` **{fromcurrency}** = `{output}` **{tocurrency}**\n*(Rate: 1 {fromcurrency} = {rate} {tocurrency})*",
                 )
-            return await edit_delete(event, f"__Invalid target currency code: `{tocurrency}`.__", time=10)
     except Exception as e:
-        LOGS.warning(f"open.er-api.com failed ({e}), checking legacy CURRENCY_API fallback...")
+        LOGS.warning(f"open.er-api.com failed ({e}), checking crypto/fiat fallback...")
 
-    # 2. Legacy fallback if CURRENCY_API is provided
+    # 2. Crypto & Cross-Currency: Coinbase public exchange rates API (covers BTC, ETH, SOL and 150+ currencies)
+    try:
+        async with httpx.AsyncClient(timeout=10) as client:
+            c_resp = await client.get(f"https://api.coinbase.com/v2/exchange-rates?currency={fromcurrency}")
+            if c_resp.status_code == 200:
+                c_data = c_resp.json()
+                c_rates = c_data.get("data", {}).get("rates", {})
+                if tocurrency in c_rates:
+                    rate = float(c_rates[tocurrency])
+                    output = round(value * rate, 6 if rate < 1 else 4)
+                    return await edit_or_reply(
+                        event,
+                        f"💱 **Currency Conversion:**\n`{value}` **{fromcurrency}** = `{output}` **{tocurrency}**\n*(Rate: 1 {fromcurrency} = {rate} {tocurrency})*",
+                    )
+    except Exception as e:
+        LOGS.warning(f"Coinbase exchange rates failed ({e}), checking legacy fallback...")
+
+    # 3. Legacy fallback if CURRENCY_API is provided
     if Config.CURRENCY_API:
         try:
             aresponse = await AioHttp().get_json(
