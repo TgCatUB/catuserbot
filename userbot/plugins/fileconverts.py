@@ -325,29 +325,57 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern=r"ttf ([\s\S]*)",
+    pattern=r"ttf(?: |$)([\s\S]*)",
     command=("ttf", plugin_category),
     info={
         "header": "Text to file.",
-        "description": "Reply this command to a text message to convert it into file with given name.",
-        "usage": "{tr}ttf <file name>",
+        "description": "Reply this command to a text message to convert it into a file. If no filename is given, defaults to file.txt.",
+        "usage": [
+            "{tr}ttf <file name>",
+            "{tr}ttf",
+        ],
+        "examples": [
+            "{tr}ttf notes.txt",
+            "{tr}ttf",
+        ],
     },
 )
 async def text_to_file(event):
     "text to file conversion"
-    name = event.pattern_match.group(1).strip()
-    if not name:
-        return await edit_or_reply(event, "`Reply to text message as .ttf <file name>`")
-    m = await event.get_reply_message()
-    if m and m.text:
-        async with aiofiles.open(name, "w") as f:
-            await f.write(m.message)
-        await event.delete()
-        await event.client.send_file(event.chat_id, name, force_document=True)
-        if os.path.exists(name):
-            os.remove(name)
-    else:
-        await edit_or_reply(event, "`Reply to text message as .ttf <file name>`")
+    reply = await event.get_reply_message()
+    if not reply:
+        return await edit_or_reply(event, "`Reply to a text message to convert it to a file!`")
+
+    text_to_save = reply.raw_text or reply.message or reply.text
+    if not text_to_save:
+        return await edit_or_reply(event, "`Replied message does not contain any text!`")
+
+    input_str = event.pattern_match.group(1).strip()
+    filename = input_str if input_str else "file.txt"
+
+    temp_dir = "./temp"
+    os.makedirs(temp_dir, exist_ok=True)
+    file_path = os.path.join(temp_dir, filename)
+
+    catevent = await edit_or_reply(event, f"`Converting text to {filename}...`")
+    try:
+        async with aiofiles.open(file_path, "w", encoding="utf-8") as f:
+            await f.write(text_to_save)
+
+        reply_to_id = await reply_id(event)
+        await event.client.send_file(
+            event.chat_id,
+            file_path,
+            force_document=True,
+            reply_to=reply_to_id,
+            caption=f"📄 `{filename}`",
+        )
+        await catevent.delete()
+    except Exception as e:
+        await catevent.edit(f"**Error converting text to file:**\n`{e}`")
+    finally:
+        if os.path.exists(file_path):
+            os.remove(file_path)
 
 
 @catub.cat_cmd(
