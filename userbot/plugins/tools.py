@@ -35,21 +35,14 @@ LOGS = logging.getLogger(__name__)
     command=("cur", plugin_category),
     info={
         "header": "To convert one currency value to other.",
-        "description": "To find exchange rates of currencies.",
+        "description": "To find exchange rates of currencies without requiring any API key.",
         "usage": "{tr}cur <value> <from currencyid> <to currencyid>",
         "examples": "{tr}cur 10 USD INR",
-        "note": "List of currency ids are [Country & Currency](https://da.gd/j588M) or [Only Currency data](https://da.gd/obZIdk)",
+        "note": "List of currency ids are standard 3-letter ISO codes (e.g., USD, EUR, INR, GBP, JPY).",
     },
 )
 async def currency(event):
     """To convert one currency value to other."""
-    if Config.CURRENCY_API is None:
-        return await edit_delete(
-            event,
-            "__You haven't set the api value. Set Api var __`CURRENCY_API` __in heroku get value from https://free.currencyconverterapi.com__.",
-            link_preview=False,
-            time=10,
-        )
     input_str = event.pattern_match.group(1)
     values = input_str.split(" ")
     if len(values) == 3:
@@ -60,29 +53,45 @@ async def currency(event):
     tocurrency = tocurrency.upper()
     try:
         value = float(value)
-        aresponse = await AioHttp().get_json(f"https://free.currconv.com/api/v7/convert?q={fromcurrency}_{tocurrency}&compact=ultra&apiKey={Config.CURRENCY_API}")
-        symbols = await AioHttp().get_raw("https://raw.githubusercontent.com/TgCatUB/CatUserbot-Resources/master/Resources/Data/currency.py")
+    except ValueError:
+        return await edit_delete(event, "__Please provide a valid numeric value.__", time=10)
 
-        symbols = json.loads(re.sub(", *\n *}", "}", symbols.decode("utf-8")))
+    # 1. Primary: Fast zero-key exchange rate API (open.er-api.com)
+    try:
+        aresponse = await AioHttp().get_json(f"https://open.er-api.com/v6/latest/{fromcurrency}")
+        if aresponse and aresponse.get("result") == "success":
+            rates = aresponse.get("rates", {})
+            if tocurrency in rates:
+                rate = rates[tocurrency]
+                output = round(value * float(rate), 4)
+                return await edit_or_reply(
+                    event,
+                    f"💱 **Currency Conversion:**\n`{value}` **{fromcurrency}** = `{output}` **{tocurrency}**\n*(Rate: 1 {fromcurrency} = {rate} {tocurrency})*",
+                )
+            return await edit_delete(event, f"__Invalid target currency code: `{tocurrency}`.__", time=10)
+    except Exception as e:
+        LOGS.warning(f"open.er-api.com failed ({e}), checking legacy CURRENCY_API fallback...")
+
+    # 2. Legacy fallback if CURRENCY_API is provided
+    if Config.CURRENCY_API:
         try:
-            result = aresponse[f"{fromcurrency}_{tocurrency}"]
-        except KeyError:
-            return await edit_delete(
-                event,
-                "__You have used wrong currency codes or Api can't fetch details or try by restarting bot it will work if everything is fine.__",
-                time=10,
+            aresponse = await AioHttp().get_json(
+                f"https://free.currconv.com/api/v7/convert?q={fromcurrency}_{tocurrency}&compact=ultra&apiKey={Config.CURRENCY_API}"
             )
-        output = value * float(result)
-        output = round(output, 4)
-        await edit_or_reply(
-            event,
-            f"The Currency value of **{symbols[fromcurrency]}{value} {fromcurrency}** in **{tocurrency}** is **{symbols[tocurrency]}{output}**",
-        )
-    except Exception:
-        await edit_or_reply(
-            event,
-            "__It seems you are using different currency value. which doesn't exist on earth.__",
-        )
+            if aresponse and f"{fromcurrency}_{tocurrency}" in aresponse:
+                rate = float(aresponse[f"{fromcurrency}_{tocurrency}"])
+                output = round(value * rate, 4)
+                return await edit_or_reply(
+                    event,
+                    f"💱 **Currency Conversion:**\n`{value}` **{fromcurrency}** = `{output}` **{tocurrency}**\n*(Rate: 1 {fromcurrency} = {rate} {tocurrency})*",
+                )
+        except Exception as e:
+            LOGS.warning(f"free.currconv.com failed: {e}")
+
+    await edit_or_reply(
+        event,
+        f"__Unable to convert `{value} {fromcurrency}` to `{tocurrency}`. Please check currency codes.__",
+    )
 
 
 @catub.cat_cmd(
