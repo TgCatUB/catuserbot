@@ -46,8 +46,33 @@ def sun(unix, ctimezone):
     return datetime.fromtimestamp(unix, tz=ctimezone).strftime("%I:%M %p")
 
 
+async def _resolve_city(city):
+    if not city:
+        return city, city
+    if "," in city:
+        primary = city.split(",")[0].strip().title()
+        return city, primary
+    primary = city.strip().title()
+    try:
+        url = f"https://geocoding-api.open-meteo.com/v1/search?name={urllib.parse.quote(city.strip())}&count=5&language=en&format=json"
+        async with httpx.AsyncClient(timeout=4) as client:
+            resp = await client.get(url, headers={"User-Agent": "CatUserbot/1.0"})
+            if resp.status_code == 200:
+                results = resp.json().get("results", [])
+                if results:
+                    top = results[0]
+                    name = top.get("name")
+                    country = top.get("country")
+                    if name and country:
+                        return f"{name}, {country}", name
+    except Exception as e:
+        LOGS.debug(f"Geocoding lookup failed: {e}")
+    return city, primary
+
+
 async def _get_wttr_climate(city):
-    encoded_city = urllib.parse.quote_plus(city)
+    resolved_query, primary_city = await _resolve_city(city)
+    encoded_city = urllib.parse.quote_plus(resolved_query)
     url = f"https://wttr.in/{encoded_city}?format=j1"
     try:
         async with httpx.AsyncClient(follow_redirects=True, timeout=20) as client:
@@ -64,7 +89,7 @@ async def _get_wttr_climate(city):
     weather = data.get("weather", [{}])[0]
     astronomy = weather.get("astronomy", [{}])[0]
 
-    cityname = nearest.get("areaName", [{}])[0].get("value") or city
+    cityname = primary_city or nearest.get("areaName", [{}])[0].get("value") or city
     country = nearest.get("country", [{}])[0].get("value") or ""
     region = nearest.get("region", [{}])[0].get("value") or ""
 
@@ -89,7 +114,7 @@ async def _get_wttr_climate(city):
 
     desc = current.get("weatherDesc", [{}])[0].get("value", "Clear")
     local_time = datetime.now().strftime("%A, %I:%M %p")
-    loc = f"{cityname}, {region}, {country}" if region and region != cityname else f"{cityname}, {country}"
+    loc = f"{cityname}, {region}, {country}" if region and region.lower() != cityname.lower() else f"{cityname}, {country}"
 
     return (
         f"🌡**Temperature:** `{temp_c}°C | {temp_f}°F`\n"
@@ -243,17 +268,19 @@ async def set_default_city(event):
             LOGS.warning(f"OpenWeatherMap validation failed: {e}")
 
     # Zero-key fallback: validate via wttr.in
+    resolved_query, primary_city = await _resolve_city(input_str)
     try:
-        url = f"https://wttr.in/{urllib.parse.quote_plus(input_str)}?format=j1"
+        url = f"https://wttr.in/{urllib.parse.quote_plus(resolved_query)}?format=j1"
         async with httpx.AsyncClient(follow_redirects=True, timeout=15) as client:
             resp = await client.get(url)
             if resp.status_code == 200:
                 data = resp.json()
                 nearest = data.get("nearest_area", [{}])[0]
-                cityname = nearest.get("areaName", [{}])[0].get("value") or input_str
+                cityname = primary_city or nearest.get("areaName", [{}])[0].get("value") or resolved_query
                 country = nearest.get("country", [{}])[0].get("value") or ""
+                region = nearest.get("region", [{}])[0].get("value") or ""
                 addgvar("DEFCITY", cityname)
-                loc = f"{cityname}, {country}" if country else cityname
+                loc = f"{cityname}, {region}, {country}" if region and region.lower() != cityname.lower() else f"{cityname}, {country}"
                 return await edit_or_reply(event, f"`Set default city as {loc}.`")
     except Exception as e:
         LOGS.warning(f"wttr.in city validation failed: {e}")
