@@ -220,17 +220,65 @@ async def unzip(downloaded_file_name):
     return f"{downloaded_file_name}.gif"
 
 
-# https://github.com/ssut/py-googletrans/issues/234#issuecomment-722379788
+class TranslationResult:
+    def __init__(self, text, src="en", dest="en"):
+        self.text = text
+        self.src = src.lower() if src else "en"
+        self.dest = dest.lower() if dest else "en"
+
+
+# Resilient multi-tier translation to resolve datacenter IP 429 blocks
 async def getTranslate(text, **kwargs):
-    translator = Translator()
-    result = None
-    for _ in range(10):
-        try:
-            result = translator.translate(text, **kwargs)
-        except Exception:
-            translator = Translator()
-            await asyncio.sleep(0.1)
-    return result
+    dest = kwargs.get("dest", "en").lower()
+    src = kwargs.get("src", "auto").lower()
+
+    # 1. Primary: Try googletrans Translator with short retries
+    try:
+        translator = Translator()
+        res = await asyncio.to_thread(translator.translate, text, **kwargs)
+        if res and hasattr(res, "text") and res.text:
+            return res
+    except Exception as e:
+        LOGS.warning(f"googletrans library failed ({e}), trying mobile RPC fallback...")
+
+    # 2. Secondary: Google Translate mobile web RPC endpoint (resilient to datacenter 429 blocks)
+    try:
+        url = "https://translate.google.com/translate_a/t"
+        params = {"client": "at", "sl": src, "tl": dest, "q": text}
+        headers = {
+            "User-Agent": "GoogleTranslate/6.28.0.05.357827825 (Linux; U; Android 10; Pixel 4)",
+        }
+        async with httpx.AsyncClient(timeout=10) as client:
+            resp = await client.get(url, params=params, headers=headers)
+            if resp.status_code == 200:
+                data = resp.json()
+                if isinstance(data, list) and len(data) > 0:
+                    first = data[0]
+                    if isinstance(first, list) and len(first) >= 2:
+                        res_text = first[0]
+                        detected_src = first[1]
+                        return TranslationResult(res_text, src=detected_src, dest=dest)
+                    elif isinstance(first, str):
+                        return TranslationResult(first, src="en" if src == "auto" else src, dest=dest)
+    except Exception as e:
+        LOGS.warning(f"Google mobile translate failed ({e}), trying MyMemory fallback...")
+
+    # 3. Tertiary: Public MyMemory translation API
+    try:
+        langpair = f"{src}|{dest}" if src != "auto" else f"en|{dest}"
+        url = "https://api.mymemory.translated.net/get"
+        params = {"q": text, "langpair": langpair}
+        async with httpx.AsyncClient(timeout=10) as client:
+            resp = await client.get(url, params=params)
+            if resp.status_code == 200:
+                data = resp.json()
+                res_text = data.get("responseData", {}).get("translatedText")
+                if res_text:
+                    return TranslationResult(res_text, src="en" if src == "auto" else src, dest=dest)
+    except Exception as e:
+        LOGS.warning(f"MyMemory translate failed: {e}")
+
+    raise Exception("Translation services currently unavailable. Please try again later.")
 
 
 def reddit_thumb_link(preview, thumb=None):
