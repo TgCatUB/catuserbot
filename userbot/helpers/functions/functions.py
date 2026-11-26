@@ -89,15 +89,34 @@ async def post_to_telegraph(
     auth_name="CatUserbot",
     auth_url="https://t.me/catuserbot17",
 ):
-    post_client = TelegraphPoster(use_api=True)
-    post_client.create_api_token(auth_name)
-    post_page = post_client.post(
-        title=page_title,
-        author=auth_name,
-        author_url=auth_url,
-        text=html_format_content,
-    )
-    return f"https://graph.org/{post_page['path']}"
+    try:
+        post_client = TelegraphPoster(use_api=True)
+        post_client.create_api_token(auth_name)
+        post_page = post_client.post(
+            title=page_title,
+            author=auth_name,
+            author_url=auth_url,
+            text=html_format_content,
+        )
+        return f"https://graph.org/{post_page['path']}"
+    except Exception as e:
+        LOGS.warning(f"Standard telegraph post failed ({e}), attempting graph.org fallback...")
+        async with httpx.AsyncClient(timeout=20) as client:
+            token_resp = (await client.get("https://api.graph.org/createAccount", params={"short_name": auth_name})).json()
+            token = token_resp["result"]["access_token"]
+            post_client = TelegraphPoster(
+                use_api=True,
+                access_token=token,
+                telegraph_api_url="https://api.graph.org",
+                telegraph_base_url="https://graph.org",
+            )
+            post_page = post_client.post(
+                title=page_title,
+                author=auth_name,
+                author_url=auth_url,
+                text=html_format_content,
+            )
+            return f"https://graph.org/{post_page['path']}"
 
 
 # --------------------------------------------------------------------------------------------------------------------#
