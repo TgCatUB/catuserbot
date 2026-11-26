@@ -1,5 +1,4 @@
-
-FROM catub/core:bullseye
+FROM catub/core:bookworm-3.11
 
 # Working directory
 WORKDIR /userbot

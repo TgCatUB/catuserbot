@@ -15,7 +15,7 @@ services:
       - db
 
  db:
-    image: postgres
+    image: postgres:16-bookworm
     restart: always
     environment:
       - POSTGRES_USER=postgres
