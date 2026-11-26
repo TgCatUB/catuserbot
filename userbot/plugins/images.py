@@ -55,6 +55,9 @@ async def img_func(event):
     except Exception as e:
         return await cat.edit(f"Error: \n`{e}`")
 
+    if not downloaded_data:
+        return await cat.edit(f"__No images found for:__ `{query}`")
+
     try:
         await event.client.send_file(event.chat_id, downloaded_data, reply_to=reply_to_id)
     except (MediaEmptyError, ImageProcessFailedError):
@@ -64,7 +67,10 @@ async def img_func(event):
     except TypeError as e:
         return await cat.edit(f"Error: \n`{e}`")
 
-    shutil.rmtree(os.path.dirname(os.path.abspath(downloaded_data[0])))
+    if downloaded_data:
+        folder = os.path.dirname(os.path.abspath(downloaded_data[0]))
+        if os.path.exists(folder):
+            shutil.rmtree(folder, ignore_errors=True)
 
     await cat.delete()
 
@@ -108,6 +114,9 @@ async def img_api_func(event):
     except Exception as e:
         return await cat.edit(f"Error: \n`{e}`")
 
+    if not downloaded_data or not downloaded_data.get("download_path"):
+        return await cat.edit(f"__No images found for:__ `{query}`")
+
     lst = downloaded_data["download_path"]
 
     try:
@@ -117,11 +126,14 @@ async def img_api_func(event):
             with contextlib.suppress(MediaEmptyError, ImageProcessFailedError):
                 await event.client.send_file(event.chat_id, i, reply_to=reply_to_id)
     except TypeError as e:
-        print(lst)
         return await cat.edit(f"Error: \n`{e}`")
 
-    shutil.rmtree(os.path.dirname(os.path.abspath(lst[0])))
-    if len(downloaded_data["errors"]) > 0:
+    if lst:
+        folder = os.path.dirname(os.path.abspath(lst[0]))
+        if os.path.exists(folder):
+            shutil.rmtree(folder, ignore_errors=True)
+
+    if len(downloaded_data.get("errors", [])) > 0:
         LOGS.error(downloaded_data)
         await catub.send_message(
             BOTLOG_CHATID,
