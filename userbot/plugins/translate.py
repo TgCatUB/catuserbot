@@ -40,7 +40,9 @@ async def _(event):
     try:
         translated = await getTranslate(text, dest=lan)
         after_tr_text = translated.text
-        output_str = f"**TRANSLATED from {LANGUAGES[translated.src].title()} to {LANGUAGES[lan].title()}**\
+        source_name = LANGUAGES.get(translated.src.lower(), translated.src).title()
+        dest_name = LANGUAGES.get(lan.lower(), lan).title()
+        output_str = f"**TRANSLATED from {source_name} to {dest_name}**\
                 \n`{after_tr_text}`"
         await edit_or_reply(event, output_str)
     except Exception as exc:
@@ -74,8 +76,8 @@ async def translateme(trans):
         reply_text = await getTranslate(soft_deEmojify(message), dest=TRT_LANG)
     except ValueError:
         return await edit_delete(trans, "`Invalid destination language.`", time=5)
-    source_lan = LANGUAGES[f"{reply_text.src.lower()}"]
-    transl_lan = LANGUAGES[f"{reply_text.dest.lower()}"]
+    source_lan = LANGUAGES.get(f"{reply_text.src.lower()}", reply_text.src)
+    transl_lan = LANGUAGES.get(f"{reply_text.dest.lower()}", reply_text.dest)
     reply_text = f"**From {source_lan.title()}({reply_text.src.lower()}) to {transl_lan.title()}({reply_text.dest.lower()}) :**\n`{reply_text.text}`"
 
     await edit_or_reply(trans, reply_text)
