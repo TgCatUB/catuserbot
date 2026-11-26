@@ -6,7 +6,10 @@ import string
 from datetime import datetime
 
 import aiofiles
+import httpx
 from PIL import Image
+import telegraph.api
+from requests.exceptions import RequestException
 from telegraph import Telegraph, exceptions, upload_file
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.contacts import UnblockRequest as unblock
@@ -19,22 +22,67 @@ from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.functions import delete_conv
 from . import BOTLOG, BOTLOG_CHATID, catub, reply_id
 
+LOGS = logging.getLogger(__name__)
+
+# Transparently failover to graph.org if api.telegra.ph is unreachable / ISP-blocked
+_orig_telegraph_method = telegraph.api.TelegraphApi.method
+
+
+def _safe_telegraph_method(self, method, values=None, path=""):
+    try:
+        return _orig_telegraph_method(self, method, values, path)
+    except RequestException:
+        values = values.copy() if values is not None else {}
+        if "access_token" not in values and self.access_token:
+            values["access_token"] = self.access_token
+        url = f"https://api.graph.org/{method}/{path}".rstrip("/")
+        resp = self.session.post(url, data=values).json()
+        if resp.get("ok"):
+            return resp["result"]
+        error = resp.get("error")
+        if isinstance(error, str) and error.startswith("FLOOD_WAIT_"):
+            retry_after = int(error.rsplit("_", 1)[-1])
+            raise exceptions.RetryAfterError(retry_after)
+        raise exceptions.TelegraphException(error)
+
+
+telegraph.api.TelegraphApi.method = _safe_telegraph_method
+
+
+async def _catbox_upload(file_path):
+    async with httpx.AsyncClient(timeout=30) as client:
+        with open(file_path, "rb") as f:
+            resp = await client.post(
+                "https://catbox.moe/user/api.php",
+                data={"reqtype": "fileupload"},
+                files={"fileToUpload": (os.path.basename(file_path), f)},
+            )
+            if resp.status_code == 200 and resp.text.startswith("http"):
+                return [resp.text.strip()]
+    raise exceptions.TelegraphException("Media upload failed across all providers.")
+
 
 async def safe_upload_file(file):
-    resp = await asyncio.to_thread(upload_file, file)
-    if isinstance(resp, str):
-        resp = json.loads(resp)
-    return resp
+    try:
+        resp = await asyncio.to_thread(upload_file, file)
+        if isinstance(resp, str):
+            resp = json.loads(resp)
+        return resp
+    except Exception as exc:
+        LOGS.warning(f"Native telegraph upload failed ({exc}), falling back to catbox...")
+        return await _catbox_upload(file)
 
-
-LOGS = logging.getLogger(__name__)
 
 plugin_category = "utils"
 
 extractor = URLExtract()
 telegraph = Telegraph()
-r = telegraph.create_account(short_name=Config.TELEGRAPH_SHORT_NAME)
-auth_url = r["auth_url"]
+try:
+    r = telegraph.create_account(short_name=Config.TELEGRAPH_SHORT_NAME)
+    auth_url = r.get("auth_url", "")
+except Exception as e:
+    LOGS.warning(f"Could not initialize Telegraph account: {e}")
+    auth_url = None
 
 
 def resize_image(image):
@@ -64,7 +112,7 @@ def resize_image(image):
 async def _(event):
     "To get telegraph link."
     catevent = await edit_or_reply(event, "`processing........`")
-    if BOTLOG:
+    if BOTLOG and auth_url:
         await event.client.send_message(
             BOTLOG_CHATID,
             f"Created New Telegraph account {auth_url} for the current session. \n**Do not give this url to anyone, even if they say they are from Telegram!**",
@@ -92,8 +140,13 @@ async def _(event):
             end = datetime.now()
             ms = (end - start).seconds
             os.remove(downloaded_file_name)
+            media_url = (
+                media_urls[0]
+                if str(media_urls[0]).startswith("http")
+                else f"https://graph.org{media_urls[0]}"
+            )
             await catevent.edit(
-                f"**link : **[telegraph](https://graph.org{media_urls[0]})\
+                f"**link : **[telegraph]({media_url})\
                     \n**Time Taken : **`{ms} seconds.`",
                 link_preview=True,
             )
