@@ -2,15 +2,21 @@ import json
 
 import httpx
 
-from ...Config import Config
-from ...core.logger import logging
-
-LOGS = logging.getLogger("CatUserbot")
+try:
+    from ...Config import Config
+    from ...core.logger import logging
+    LOGS = logging.getLogger("CatUserbot")
+except Exception:
+    import logging
+    LOGS = logging.getLogger("CatUserbot")
+    class Config:
+        BOTLOG_CHATID = 0
 
 
 async def _post(siteurl, **kwargs):
     async with httpx.AsyncClient(follow_redirects=True, timeout=30) as client:
         return await client.post(siteurl, **kwargs)
+
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36",
@@ -20,7 +26,7 @@ headers = {
 
 async def p_paste(message, extension=None):
     """
-    To Paste the given message/text/code to paste.pelkum.dev
+    To Paste the given message/text/code to pasty.lus.pm
     """
     siteurl = "https://pasty.lus.pm/api/v1/pastes"
     data = {"content": message}
@@ -54,40 +60,62 @@ async def s_paste(message, extension="txt"):
     """
     siteurl = "https://spaceb.in/api/"
     try:
-        response = await _post(siteurl, json={"content": message, "extension": extension})
+        response = await _post(siteurl, json={"content": message, "extension": extension or "txt"})
     except Exception as e:
         return {"error": str(e)}
     if response.is_success:
         response = response.json()
-        if response["error"] != "" and response["status"] < 400:
+        if response.get("error") and response.get("status", 200) < 400:
             return {"error": response["error"]}
-        return {
-            "url": f"https://spaceb.in/{response['payload']['id']}",
-            "raw": f"{siteurl}{response['payload']['id']}/raw",
-            "bin": "Spacebin",
-        }
+        payload = response.get("payload", {})
+        pid = payload.get("id")
+        if pid:
+            return {
+                "url": f"https://spaceb.in/{pid}",
+                "raw": f"{siteurl}{pid}/raw",
+                "bin": "Spacebin",
+            }
     return {"error": "Unable to reach spacebin."}
 
 
 async def spaste(message, extension="txt"):
+    return await s_paste(message, extension)
+
+
+async def dp_paste(message, extension="txt"):
     """
-    To Paste the given message/text/code to spaceb.in
+    To paste text/code to dpaste.org
     """
-    siteurl = "https://spaceb.in/api/"
+    siteurl = "https://dpaste.org/api/"
+    data = {"content": message, "format": "url", "expiry_days": 14}
+    if extension:
+        data["syntax"] = extension
     try:
-        response = await _post(siteurl, data={"content": message, "extension": extension})
+        async with httpx.AsyncClient(timeout=15, follow_redirects=True) as client:
+            resp = await client.post(siteurl, data=data)
+            if resp.status_code == 200 and resp.text.startswith("http"):
+                url = resp.text.strip().strip('"')
+                raw_url = f"{url}/raw"
+                return {"url": url, "raw": raw_url, "bin": "Dpaste"}
     except Exception as e:
         return {"error": str(e)}
-    if response.is_success:
-        response = response.json()
-        if response["error"] != "" and response["status"] < 400:
-            return {"error": response["error"]}
-        return {
-            "url": f"https://spaceb.in/{response['payload']['id']}",
-            "raw": f"{siteurl}{response['payload']['id']}/raw",
-            "bin": "Spacebin",
-        }
-    return {"error": "Unable to reach spacebin."}
+    return {"error": "Unable to reach dpaste.org"}
+
+
+async def prs_paste(message, extension=None):
+    """
+    To paste text/code to paste.rs
+    """
+    siteurl = "https://paste.rs/"
+    try:
+        async with httpx.AsyncClient(timeout=15, follow_redirects=True) as client:
+            resp = await client.post(siteurl, content=message)
+            if resp.status_code == 201 and resp.text.startswith("http"):
+                url = resp.text.strip()
+                return {"url": url, "raw": url, "bin": "Paste.rs"}
+    except Exception as e:
+        return {"error": str(e)}
+    return {"error": "Unable to reach paste.rs"}
 
 
 async def n_paste(message, extension=None):
@@ -102,10 +130,10 @@ async def n_paste(message, extension=None):
         return {"error": str(e)}
     if response.is_success:
         response = response.json()
-        purl = f"nekobin.com/{response['result']['key']}.{extension}" if extension else f"nekobin.com/{response['result']['key']}"
+        purl = f"https://nekobin.com/{response['result']['key']}.{extension}" if extension else f"https://nekobin.com/{response['result']['key']}"
         return {
             "url": purl,
-            "raw": f"nekobin.com/raw/{response['result']['key']}",
+            "raw": f"https://nekobin.com/raw/{response['result']['key']}",
             "bin": "Neko",
         }
     return {"error": "Unable to reach nekobin."}
@@ -135,25 +163,30 @@ async def d_paste(message, extension=None):
 async def pastetext(text_to_print, pastetype=None, extension=None):
     response = {"error": "something went wrong"}
     if pastetype is not None:
-        if pastetype == "p":
+        if pastetype in ("s", "spacebin"):
+            response = await s_paste(text_to_print, extension or "txt")
+        elif pastetype in ("dp", "dpaste"):
+            response = await dp_paste(text_to_print, extension or "txt")
+        elif pastetype in ("rs", "pasters"):
+            response = await prs_paste(text_to_print, extension)
+        elif pastetype in ("p", "pasty"):
             response = await p_paste(text_to_print, extension)
-        elif pastetype == "s" and extension:
-            response = await s_paste(text_to_print, extension)
-        elif pastetype == "s":
-            response = await s_paste(text_to_print)
-        elif pastetype == "d":
-            response = await d_paste(text_to_print, extension)
-        elif pastetype == "n":
+        elif pastetype in ("n", "neko"):
             response = await n_paste(text_to_print, extension)
+        elif pastetype in ("d", "dog"):
+            response = await d_paste(text_to_print, extension)
+
+    # Multi-tier fallback chain for guaranteed delivery
+    if "error" in response:
+        response = await s_paste(text_to_print, extension or "txt")
+    if "error" in response:
+        response = await dp_paste(text_to_print, extension or "txt")
+    if "error" in response:
+        response = await prs_paste(text_to_print, extension)
     if "error" in response:
         response = await p_paste(text_to_print, extension)
     if "error" in response:
         response = await n_paste(text_to_print, extension)
-    if "error" in response:
-        if extension:
-            response = await s_paste(text_to_print, extension)
-        else:
-            response = await s_paste(text_to_print)
     if "error" in response:
         response = await d_paste(text_to_print, extension)
     return response

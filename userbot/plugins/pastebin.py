@@ -345,7 +345,7 @@ async def get_dogbin_content(event):
     if not url and textx.text:
         urls = extractor.find_urls(textx.text)
         for iurl in urls:
-            if ("pasty" in iurl) or ("spaceb" in iurl) or ("nekobin" in iurl) or ("catbin" in iurl):
+            if any(b in iurl for b in ("pasty", "spaceb", "nekobin", "catbin", "dpaste", "paste.rs")):
                 url = iurl
                 break
     if not url:
@@ -353,13 +353,17 @@ async def get_dogbin_content(event):
     catevent = await edit_or_reply(event, "`Getting Contents of pastebin.....`")
     rawurl = url if "raw" in url else None
     if rawurl is None:
-        fid = os.path.splitext((os.path.basename(url)))
+        fid = os.path.splitext((os.path.basename(url.rstrip("/"))))
         if "pasty" in url:
             rawurl = f"https://pasty.lus.pm/{fid[0]}/raw"
         elif "spaceb" in url:
             rawurl = f"https://spaceb.in/api/{fid[0]}/raw"
+        elif "dpaste" in url:
+            rawurl = f"https://dpaste.org/{fid[0]}/raw"
+        elif "paste.rs" in url:
+            rawurl = url
         elif "nekobin" in url:
-            rawurl = f"nekobin.com/raw/{fid[0]}"
+            rawurl = f"https://nekobin.com/raw/{fid[0]}"
         elif "catbin" in url:
             rawurl = f"http://catbin.up.railway.app/raw/{fid[0]}"
         else:
@@ -432,6 +436,15 @@ async def _(event):
             await event.client.send_read_acknowledge(conv.chat_id)
             if urls := extractor.find_urls(response.text):
                 result = f"The instant preview is [here]({urls[0]})"
-        if result == "":
-            result = "I can't make it as instant view"
+        if not result or result == "I can't make it as instant view":
+            from ..helpers.functions.functions import post_to_telegraph
+            import html
+            try:
+                page_url = await post_to_telegraph(
+                    page_title="Paster",
+                    html_format_content=f"<pre>{html.escape(text_to_print)}</pre>",
+                )
+                result = f"The instant preview is [here]({page_url})"
+            except Exception:
+                result = f"Paste link: {url}"
         await catevent.edit(result, link_preview=True)
