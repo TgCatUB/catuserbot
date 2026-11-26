@@ -237,7 +237,12 @@ async def getTranslate(text, **kwargs):
         translator = Translator()
         res = await asyncio.to_thread(translator.translate, text, **kwargs)
         if res and hasattr(res, "text") and res.text:
-            return res
+            # When googletrans is throttled / 429 on datacenter IPs, it returns res.text identical
+            # to input text without raising an exception. Fall through to mobile RPC fallback.
+            if res.text.strip().lower() == text.strip().lower() and not (src != "auto" and src == dest):
+                LOGS.warning("googletrans returned un-translated echo (likely rate-limited), falling back to mobile RPC...")
+            else:
+                return res
     except Exception as e:
         LOGS.warning(f"googletrans library failed ({e}), trying mobile RPC fallback...")
 
