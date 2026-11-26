@@ -335,19 +335,19 @@ async def _(event):
 )
 async def text_to_file(event):
     "text to file conversion"
-    name = event.text[5:]
-    if name is None:
-        await edit_or_reply(event, "reply to text message as `.ttf <file name>`")
-        return
+    name = event.pattern_match.group(1).strip()
+    if not name:
+        return await edit_or_reply(event, "`Reply to text message as .ttf <file name>`")
     m = await event.get_reply_message()
-    if m.text:
+    if m and m.text:
         async with aiofiles.open(name, "w") as f:
             await f.write(m.message)
         await event.delete()
         await event.client.send_file(event.chat_id, name, force_document=True)
-        os.remove(name)
+        if os.path.exists(name):
+            os.remove(name)
     else:
-        await edit_or_reply(event, "reply to text message as `.ttf <file name>`")
+        await edit_or_reply(event, "`Reply to text message as .ttf <file name>`")
 
 
 @catub.cat_cmd(
@@ -379,7 +379,10 @@ async def file_to_text(event):
         try:
             with fitz.open(file_loc) as doc:
                 for page in doc:
-                    file_content += page.getText()
+                    if hasattr(page, "get_text"):
+                        file_content += page.get_text()
+                    elif hasattr(page, "getText"):
+                        file_content += page.getText()
         except Exception as e:
             if os.path.exists(file_loc):
                 os.remove(file_loc)
