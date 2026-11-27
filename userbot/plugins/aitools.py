@@ -68,7 +68,8 @@ def _fetch_google_ai(query: str) -> str:
     opts.add_argument("--disable-blink-features=AutomationControlled")
     opts.add_argument(f"user-agent={_CHROME_USER_AGENT}")
 
-    url = f"https://www.google.com/search?udm=50&q={urllib.parse.quote_plus(query)}"
+    prompt = f"{query} (Hard rule: Reply strictly in the exact same language as this question.)"
+    url = f"https://www.google.com/search?udm=50&q={urllib.parse.quote_plus(prompt)}"
     driver = webdriver.Chrome(options=opts)
     try:
         driver.set_page_load_timeout(25)
@@ -168,7 +169,7 @@ async def gen_img(odi):
     command=("gentxt", plugin_category),
     info={
         "header": "Generate AI response using Google AI Mode (google.com/ai).",
-        "description": "Sends your question or prompt to Google AI Mode and posts the answer in chat.",
+        "description": "Sends your question or prompt to Google AI Mode and posts the answer in chat. By default, replies strictly in the same language as the question.",
         "usage": [
             "{tr}gentxt <text / reply>",
             "{tr}ask <text / reply>",
